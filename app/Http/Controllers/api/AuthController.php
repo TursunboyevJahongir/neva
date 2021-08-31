@@ -18,8 +18,8 @@ class AuthController extends Controller
     use ApiResponser;
     public function __construct(SendService $sendService)
     {
-       // $this->service = $sendService;
-       // $this->middleware('guest')->except('logout');
+        $this->service = $sendService;
+        $this->middleware('guest')->except('logout');
     }
     public function authenticate(LoginRequest $request)
     {
@@ -27,7 +27,7 @@ class AuthController extends Controller
         $user = User::query()->firstOrCreate(['phone' => $request->phone]);
         $code = rand(10000, 99999);
         $message = trans('auth.code', ['code' => $code]);
-
+        $message='Ваш код для авторизации'.$message.'В случае возникновения вопросов, свяжитесь пожалуйста по номеру +99878 148 80 08';
         $user->update([
             'full_name' => $request->name,
             'verify_code' => $code

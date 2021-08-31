@@ -42,6 +42,7 @@ class SendService
     {
         if ($this->token) {
             $options['headers']['Authorization'] = "Bearer {$this->token}";
+            $options['headers']['Content-Type'] = 'application/json';
         }
         if (in_array($method, ['GET', 'POST', 'PATCH', 'DELETE', 'PUT'])) {
             $res = $this->client->request($method, $uri, $options);
@@ -56,7 +57,7 @@ class SendService
 
     public function sendSMS($phone, $message)
     {
-        $res = $this->sendRequest('POST', '', [
+        $res = $this->sendRequest('POST', '/', [
             'login' => $this->login,
             'pwd' => $this->password,
             'CgPN' => $this->sender,

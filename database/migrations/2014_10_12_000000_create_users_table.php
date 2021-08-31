@@ -26,7 +26,7 @@ class CreateUsersTable extends Migration
             $table->string('interest')->nullable();
             $table->jsonb('kids')->nullable();
             $table->string('coupon')->nullable();
-            $table->string('password');
+            $table->string('password')->nullable();
             $table->unsignedInteger('verify_code')->default(12345);
 
             $table->foreignId('role_id')
