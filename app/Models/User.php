@@ -26,6 +26,11 @@ class User extends Authenticatable
     protected $fillable = [
         'name',
         'email',
+        'phone',
+        'gender',
+        'role_id',
+        'active',
+        'verify_code',
         'password',
     ];
 
@@ -48,6 +53,7 @@ class User extends Authenticatable
      */
     protected $casts = [
         'email_verified_at' => 'datetime',
+        'active' => 'boolean'
     ];
 
     /**
@@ -58,4 +64,45 @@ class User extends Authenticatable
     protected $appends = [
         'profile_photo_url',
     ];
+
+    public function setPasswordAttribute($value)
+    {
+        return $this->attributes['password'] = bcrypt($value);
+    }
+
+    public function shop()
+    {
+        return $this->belongsTo(Shop::class, 'id', 'user_id');
+    }
+
+    public function image()
+    {
+        return $this->morphOne(Image::class, 'imageable');
+    }
+
+    public function role()
+    {
+        return $this->belongsTo(Role::class, 'role_id', 'id');
+    }
+
+    public function hasPermission(string $type, string $permissions): bool
+    {
+        return $this->role->hasPermission($type, $permissions);
+    }
+
+    public function admin()
+    {
+        return $this->role_id === 1;
+    }
+
+    public function verifyCode(int $code): bool
+    {
+        return $this->verify_code === $code;
+    }
+
+    public function scopeRoleId($query, $role_id)
+    {
+        if (!$role_id)
+            return $query->whereNull('role_id');
+    }
 }

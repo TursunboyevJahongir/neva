@@ -1,9 +1,12 @@
 <?php
 
-namespace App\Http\Controllers\Api;
+namespace App\Http\Controllers\api;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\api\LoginRequest;
+use App\Http\Requests\api\VerifyRequest;
 use App\Models\User;
+use App\Services\Sms\SendService;
 use App\Traits\ApiResponser;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -11,43 +14,44 @@ use Illuminate\Support\Facades\Auth;
 class AuthController extends Controller
 {
 
-
+    private $service;
     use ApiResponser;
-
-    public function register(Request $request)
+    public function __construct(SendService $sendService)
     {
-        $attr = $request->validate([
-            'name' => 'required|string|max:255',
-            'email' => 'required|string|email|unique:users,email',
-            'password' => 'required|string|min:6|confirmed'
-        ]);
+        $this->service = $sendService;
+        $this->middleware('guest')->except('logout');
+    }
+    public function authenticate(LoginRequest $request)
+    {
+        $user = User::query()->firstOrCreate(['phone' => $request->phone]);
+        $code = rand(10000, 99999);
+        $message = trans('auth.code', ['code' => $code]);
 
-        $user = User::create([
-            'name' => $attr['name'],
-            'password' => bcrypt($attr['password']),
-            'email' => $attr['email']
+        $user->update([
+            'full_name' => $request->name,
+            'verify_code' => $code
         ]);
+        if (!empty($user) && !empty($user->phone))
+            $this->service->sendSMS(substr($user->phone,1), $message);
 
         return $this->success([
             'token' => $user->createToken('API Token')->plainTextToken
         ]);
     }
-
-    public function login(Request $request)
+    public function verify(VerifyRequest $request)
     {
-        $attr = $request->validate([
-            'email' => 'required|string|email|',
-            'password' => 'required|string|min:6'
-        ]);
+        $user = User::query()
+            ->firstOrCreate(['phone' => $request->phone]);
 
-        if (!Auth::attempt($attr)) {
-            return $this->error('Credentials not match', 401);
+        if ($user->verifyCode($request->verify_code)) {
+            Auth::login($user, true);
+            return response()->json([
+                'status' => true,
+            ]);
         }
-
-        return $this->success([
-            'token' => auth()->user()->createToken('API Token')->plainTextToken
-        ]);
     }
+
+
 
     public function logout()
     {
