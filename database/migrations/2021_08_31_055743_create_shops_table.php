@@ -15,6 +15,16 @@ class CreateShopsTable extends Migration
     {
         Schema::create('shops', function (Blueprint $table) {
             $table->id();
+            $table->foreignId('user_id')
+                ->constrained()
+                ->cascadeOnDelete();
+
+            $table->jsonb('name');
+            $table->string('slug');
+            $table->jsonb('description')->nullable();
+            $table->string('merchant_id')->nullable();
+            $table->boolean('active')->default(false);
+            $table->softDeletes();
             $table->timestamps();
         });
     }
