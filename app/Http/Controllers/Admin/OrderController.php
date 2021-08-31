@@ -1,11 +1,11 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\Admin;
 
-use App\Models\HistoryView;
+use App\Models\Order;
 use Illuminate\Http\Request;
 
-class HistoryViewController extends Controller
+class OrderController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -41,10 +41,10 @@ class HistoryViewController extends Controller
     /**
      * Display the specified resource.
      *
-     * @param  \App\Models\HistoryView  $historyView
+     * @param  \App\Models\Order  $order
      * @return \Illuminate\Http\Response
      */
-    public function show(HistoryView $historyView)
+    public function show(Order $order)
     {
         //
     }
@@ -52,10 +52,10 @@ class HistoryViewController extends Controller
     /**
      * Show the form for editing the specified resource.
      *
-     * @param  \App\Models\HistoryView  $historyView
+     * @param  \App\Models\Order  $order
      * @return \Illuminate\Http\Response
      */
-    public function edit(HistoryView $historyView)
+    public function edit(Order $order)
     {
         //
     }
@@ -64,10 +64,10 @@ class HistoryViewController extends Controller
      * Update the specified resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Models\HistoryView  $historyView
+     * @param  \App\Models\Order  $order
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, HistoryView $historyView)
+    public function update(Request $request, Order $order)
     {
         //
     }
@@ -75,10 +75,10 @@ class HistoryViewController extends Controller
     /**
      * Remove the specified resource from storage.
      *
-     * @param  \App\Models\HistoryView  $historyView
+     * @param  \App\Models\Order  $order
      * @return \Illuminate\Http\Response
      */
-    public function destroy(HistoryView $historyView)
+    public function destroy(Order $order)
     {
         //
     }

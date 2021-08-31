@@ -1,11 +1,11 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\Admin;
 
-use App\Models\Shop;
+use App\Models\Discount;
 use Illuminate\Http\Request;
 
-class ShopController extends Controller
+class DiscountController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -41,10 +41,10 @@ class ShopController extends Controller
     /**
      * Display the specified resource.
      *
-     * @param  \App\Models\Shop  $shop
+     * @param  \App\Models\Discount  $discount
      * @return \Illuminate\Http\Response
      */
-    public function show(Shop $shop)
+    public function show(Discount $discount)
     {
         //
     }
@@ -52,10 +52,10 @@ class ShopController extends Controller
     /**
      * Show the form for editing the specified resource.
      *
-     * @param  \App\Models\Shop  $shop
+     * @param  \App\Models\Discount  $discount
      * @return \Illuminate\Http\Response
      */
-    public function edit(Shop $shop)
+    public function edit(Discount $discount)
     {
         //
     }
@@ -64,10 +64,10 @@ class ShopController extends Controller
      * Update the specified resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Models\Shop  $shop
+     * @param  \App\Models\Discount  $discount
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, Shop $shop)
+    public function update(Request $request, Discount $discount)
     {
         //
     }
@@ -75,10 +75,10 @@ class ShopController extends Controller
     /**
      * Remove the specified resource from storage.
      *
-     * @param  \App\Models\Shop  $shop
+     * @param  \App\Models\Discount  $discount
      * @return \Illuminate\Http\Response
      */
-    public function destroy(Shop $shop)
+    public function destroy(Discount $discount)
     {
         //
     }

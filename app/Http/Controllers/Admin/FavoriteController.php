@@ -1,11 +1,11 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\Admin;
 
-use App\Models\Discount;
+use App\Models\Favorite;
 use Illuminate\Http\Request;
 
-class DiscountController extends Controller
+class FavoriteController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -41,10 +41,10 @@ class DiscountController extends Controller
     /**
      * Display the specified resource.
      *
-     * @param  \App\Models\Discount  $discount
+     * @param  \App\Models\Favorite  $favorite
      * @return \Illuminate\Http\Response
      */
-    public function show(Discount $discount)
+    public function show(Favorite $favorite)
     {
         //
     }
@@ -52,10 +52,10 @@ class DiscountController extends Controller
     /**
      * Show the form for editing the specified resource.
      *
-     * @param  \App\Models\Discount  $discount
+     * @param  \App\Models\Favorite  $favorite
      * @return \Illuminate\Http\Response
      */
-    public function edit(Discount $discount)
+    public function edit(Favorite $favorite)
     {
         //
     }
@@ -64,10 +64,10 @@ class DiscountController extends Controller
      * Update the specified resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Models\Discount  $discount
+     * @param  \App\Models\Favorite  $favorite
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, Discount $discount)
+    public function update(Request $request, Favorite $favorite)
     {
         //
     }
@@ -75,10 +75,10 @@ class DiscountController extends Controller
     /**
      * Remove the specified resource from storage.
      *
-     * @param  \App\Models\Discount  $discount
+     * @param  \App\Models\Favorite  $favorite
      * @return \Illuminate\Http\Response
      */
-    public function destroy(Discount $discount)
+    public function destroy(Favorite $favorite)
     {
         //
     }

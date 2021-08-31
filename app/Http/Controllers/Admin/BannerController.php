@@ -1,11 +1,11 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\Admin;
 
-use App\Models\Comment;
+use App\Models\Banner;
 use Illuminate\Http\Request;
 
-class CommentController extends Controller
+class BannerController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -41,10 +41,10 @@ class CommentController extends Controller
     /**
      * Display the specified resource.
      *
-     * @param  \App\Models\Comment  $comment
+     * @param  \App\Models\Banner  $banner
      * @return \Illuminate\Http\Response
      */
-    public function show(Comment $comment)
+    public function show(Banner $banner)
     {
         //
     }
@@ -52,10 +52,10 @@ class CommentController extends Controller
     /**
      * Show the form for editing the specified resource.
      *
-     * @param  \App\Models\Comment  $comment
+     * @param  \App\Models\Banner  $banner
      * @return \Illuminate\Http\Response
      */
-    public function edit(Comment $comment)
+    public function edit(Banner $banner)
     {
         //
     }
@@ -64,10 +64,10 @@ class CommentController extends Controller
      * Update the specified resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Models\Comment  $comment
+     * @param  \App\Models\Banner  $banner
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, Comment $comment)
+    public function update(Request $request, Banner $banner)
     {
         //
     }
@@ -75,10 +75,10 @@ class CommentController extends Controller
     /**
      * Remove the specified resource from storage.
      *
-     * @param  \App\Models\Comment  $comment
+     * @param  \App\Models\Banner  $banner
      * @return \Illuminate\Http\Response
      */
-    public function destroy(Comment $comment)
+    public function destroy(Banner $banner)
     {
         //
     }

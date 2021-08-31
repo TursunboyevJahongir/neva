@@ -1,11 +1,11 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\Admin;
 
-use App\Models\Banner;
+use App\Models\Notification;
 use Illuminate\Http\Request;
 
-class BannerController extends Controller
+class NotificationController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -41,10 +41,10 @@ class BannerController extends Controller
     /**
      * Display the specified resource.
      *
-     * @param  \App\Models\Banner  $banner
+     * @param  \App\Models\Notification  $notification
      * @return \Illuminate\Http\Response
      */
-    public function show(Banner $banner)
+    public function show(Notification $notification)
     {
         //
     }
@@ -52,10 +52,10 @@ class BannerController extends Controller
     /**
      * Show the form for editing the specified resource.
      *
-     * @param  \App\Models\Banner  $banner
+     * @param  \App\Models\Notification  $notification
      * @return \Illuminate\Http\Response
      */
-    public function edit(Banner $banner)
+    public function edit(Notification $notification)
     {
         //
     }
@@ -64,10 +64,10 @@ class BannerController extends Controller
      * Update the specified resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Models\Banner  $banner
+     * @param  \App\Models\Notification  $notification
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, Banner $banner)
+    public function update(Request $request, Notification $notification)
     {
         //
     }
@@ -75,10 +75,10 @@ class BannerController extends Controller
     /**
      * Remove the specified resource from storage.
      *
-     * @param  \App\Models\Banner  $banner
+     * @param  \App\Models\Notification  $notification
      * @return \Illuminate\Http\Response
      */
-    public function destroy(Banner $banner)
+    public function destroy(Notification $notification)
     {
         //
     }
