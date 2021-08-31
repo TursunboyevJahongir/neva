@@ -14,9 +14,8 @@ class SendService
 {
     public $baseUrl;
     private $token;
-    private $tokenLifetime;
     private $client;
-    private $email;
+    private $login;
     private $password;
     private $sender;
 
@@ -26,30 +25,18 @@ class SendService
         $this->client = new Client([
             'base_uri' => $this->baseUrl
         ]);
-        $this->login();
     }
 
     private function loadConfig()
     {
         $this->baseUrl = config('sms.api_url');
-        $this->tokenLifetime = config('sms.token_lifetime');
-        $this->email = config('sms.email');
+        $this->login = config('sms.login');
+        $this->sender = config('sms.sender');
         $this->password = config('sms.password');
+        $this->token = config('sms.token');
     }
 
-    private function login()
-    {
-        $this->token = cache()->remember('sms_auth_token', $this->tokenLifetime, function () {
-            $res = $this->sendRequest('POST', 'auth/login', [
-                'form_params' => [
-                    'email' => $this->email,
-                    'password' => $this->password
-                ]
-            ]);
-            return $res['data']['token'];
-        });
 
-    }
 
     private function sendRequest($method, $uri, $options = [])
     {
@@ -69,12 +56,12 @@ class SendService
 
     public function sendSMS($phone, $message)
     {
-        $res = $this->sendRequest('POST', 'message/sms/send', [
-            'form_params' => [
-                'mobile_phone' => $phone,
-                'message' => $message,
-                //'from' => $this->sender
-            ],
+        $res = $this->sendRequest('POST', '', [
+            'login' => $this->login,
+            'pwd' => $this->password,
+            'CgPN' => $this->sender,
+            'CdPN' => $phone,
+            'text' => $message,
         ]);
         return $res;
     }

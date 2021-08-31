@@ -16,7 +16,7 @@ class LoginRequest extends FormRequest
     {
         return [
             'phone' => ['required', 'string', new UzbekPhone],
-            'name' => 'required'
+            //'name' => 'required'
         ];
     }
 }

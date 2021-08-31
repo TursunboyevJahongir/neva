@@ -15,8 +15,8 @@ class CreateUsersTable extends Migration
     {
         Schema::create('users', function (Blueprint $table) {
             $table->id();
-            $table->string('login')->unique();
-            $table->string('name')->nullable();
+            $table->string('login')->unique()->nullable();
+            $table->string('full_name')->nullable();
             $table->string('email')->unique()->nullable();
             $table->string('phone')->unique();
             $table->string('gender')->nullable();
@@ -27,6 +27,7 @@ class CreateUsersTable extends Migration
             $table->jsonb('kids')->nullable();
             $table->string('coupon')->nullable();
             $table->string('password');
+            $table->unsignedInteger('verify_code')->default(12345);
 
             $table->foreignId('role_id')
                 ->nullable()

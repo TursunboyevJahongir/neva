@@ -18,11 +18,12 @@ class AuthController extends Controller
     use ApiResponser;
     public function __construct(SendService $sendService)
     {
-        $this->service = $sendService;
-        $this->middleware('guest')->except('logout');
+       // $this->service = $sendService;
+       // $this->middleware('guest')->except('logout');
     }
     public function authenticate(LoginRequest $request)
     {
+
         $user = User::query()->firstOrCreate(['phone' => $request->phone]);
         $code = rand(10000, 99999);
         $message = trans('auth.code', ['code' => $code]);
