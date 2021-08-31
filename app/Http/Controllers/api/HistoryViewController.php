@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Controllers\Admin;
+namespace App\Http\Controllers\api;
 
 use App\Models\HistoryView;
 use Illuminate\Http\Request;

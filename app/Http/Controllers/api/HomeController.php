@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Controllers\Admin;
+namespace App\Http\Controllers\api;
 
 use Aspera\Spreadsheet\XLSX\Reader;
 use Illuminate\Http\Request;
