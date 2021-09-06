@@ -28,7 +28,7 @@ return [
      |
      */
 
-    'middleware' => ['web'],
+    'middleware' => ['web','api'],
 
     /*
     |--------------------------------------------------------------------------
@@ -44,7 +44,7 @@ return [
     'features' => [
         // Features::termsAndPrivacyPolicy(),
         // Features::profilePhotos(),
-        // Features::api(),
+         Features::api(),
         // Features::teams(['invitations' => true]),
         Features::accountDeletion(),
     ],

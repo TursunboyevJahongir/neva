@@ -5,6 +5,7 @@
  * Date: 02.01.2021
  * Time: 19:37
  */
+
 namespace App\Services\User;
 
 
@@ -35,11 +36,11 @@ class UserService
     public function create(array $attributes)
     {
         $user = User::create($attributes);
-        if (array_key_exists('image', $attributes)){
+        if (array_key_exists('image', $attributes)) {
             $file = $this->image->uploadFile($attributes['image'], 'users');
 
             $user->image()->create([
-                'url' => '/'.$file
+                'url' => '/' . $file
             ]);
         }
 
@@ -49,6 +50,10 @@ class UserService
 
     public function update(array $attributes, User $user)
     {
+        $array = $user->kids ?: [];
+        if (array_key_exists('kids', $attributes))
+            $attributes['kids'] = array_merge_recursive_distinct($array, $attributes['kids']);
+
         $user->update($attributes);
 
         if (array_key_exists('image', $attributes)) {
@@ -60,7 +65,7 @@ class UserService
             $file = $this->image->uploadFile($attributes['image'], 'Users');
 
             $user->image()->create([
-                'url' => '/'.$file
+                'url' => '/' . $file
             ]);
         }
 

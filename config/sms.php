@@ -7,7 +7,7 @@
 
 return [
 
-    'api_url' => env('ETC_SMS_URL', 'http://sms.etc.uz:8084/json2sms'),
+    'api_url' => env('ETC_SMS_URL', 'http://sms.etc.uz:8083/'),
     'sender' => env('ETC_SMS_SENDER', 'KIDYA'),
     'login' => env('ETC_SMS_LOGIN', 'ist0002ts'),
     'password' => env('ETC_SMS_PASSWORD', '37nrr291'),

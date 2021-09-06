@@ -44,10 +44,12 @@ class SendService
             $options['headers']['Authorization'] = "Bearer {$this->token}";
             $options['headers']['Content-Type'] = 'application/json';
         }
+
         if (in_array($method, ['GET', 'POST', 'PATCH', 'DELETE', 'PUT'])) {
             $res = $this->client->request($method, $uri, $options);
             if ($res->getStatusCode() === 200) {
-                return json_decode($res->getBody()->getContents(), true);
+                //return json_decode($res->getBody()->getContents(), true);
+                return $res->getBody()->getContents();
             }
             throw new \Exception('Bad status code on response');
         } else {
@@ -57,12 +59,12 @@ class SendService
 
     public function sendSMS($phone, $message)
     {
-        $res = $this->sendRequest('POST', '/', [
-            'login' => $this->login,
+        $res = $this->sendRequest('POST', '/http2sms', [
+           'query'=> ['login' => $this->login,
             'pwd' => $this->password,
             'CgPN' => $this->sender,
             'CdPN' => $phone,
-            'text' => $message,
+            'text' => $message,]
         ]);
         return $res;
     }

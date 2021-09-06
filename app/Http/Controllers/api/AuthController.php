@@ -23,20 +23,24 @@ class AuthController extends Controller
     }
     public function authenticate(LoginRequest $request)
     {
-
-        $user = User::query()->firstOrCreate(['phone' => $request->phone]);
+        $login='user'.substr($request->phone,5);
+        $user = User::query()->firstOrCreate(
+            ['phone' => $request->phone],
+            ['login'=>$login,'email'=>$login."@neva.uz",'password'=>bcrypt('12345678')]
+            );
         $code = rand(10000, 99999);
-        $message = trans('auth.code', ['code' => $code]);
-        $message='Ваш код для авторизации'.$message.'В случае возникновения вопросов, свяжитесь пожалуйста по номеру +99878 148 80 08';
+        $message = /*trans('auth.code', ['code' =>*/ $code/*])*/;
+        $message='NEVA:Ваш код для авторизации - '.$message.PHP_EOL.'В случае возникновения вопросов, свяжитесь пожалуйста по номеру +998781488008';
         $user->update([
             'full_name' => $request->name,
             'verify_code' => $code
         ]);
+        $result='';
         if (!empty($user) && !empty($user->phone))
-            $this->service->sendSMS(substr($user->phone,1), $message);
+            $result=$this->service->sendSMS(substr($user->phone,1), $message);
 
-        return $this->success([
-            'token' => $user->createToken('API Token')->plainTextToken
+        return response()->json([
+            'status' => true,
         ]);
     }
     public function verify(VerifyRequest $request)
@@ -45,21 +49,28 @@ class AuthController extends Controller
             ->firstOrCreate(['phone' => $request->phone]);
 
         if ($user->verifyCode($request->verify_code)) {
-            Auth::login($user, true);
+            $token = $user->createToken(time())->plainTextToken;
+            $user->active=true;
             return response()->json([
                 'status' => true,
+                'token' => $token
             ]);
         }
+        return response()->json([
+            'status' => false,
+            'message' => 'Неправильный код'
+        ],401);
     }
 
 
-
-    public function logout()
+    public function logout(Request $request)
     {
-        auth()->user()->tokens()->delete();
+        $request->user()->currentAccessToken()->delete();
+       // auth()->user()->tokens()->delete();
 
-        return [
-            'message' => 'Tokens Revoked'
-        ];
+        return response()->json([
+            'status' => true,
+            'message' => 'Successfully logged out'
+        ]);
     }
 }
