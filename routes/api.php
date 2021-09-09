@@ -1,8 +1,10 @@
 <?php
 
 
-use App\Http\Controllers\api\AuthController;
-use App\Http\Controllers\api\UserController;
+use App\Http\Controllers\api\{
+    AuthController, BannerController, CommentController, UserController
+};
+
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -29,3 +31,6 @@ Route::group(['middleware' => ['auth:sanctum']], function () {
     Route::post('/logout', [AuthController::class, 'logout']);
 });
 
+Route::get('banners',[BannerController::class,'index']);
+Route::get('banners/{object}/{id}',[BannerController::class,'show']);
+Route::get('comments',[CommentController::class,'index']);

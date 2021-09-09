@@ -3,7 +3,10 @@
 namespace App\Services\Banner;
 
 use App\Models\Banner;
+use App\Models\Category;
 use App\Models\Image;
+use App\Models\News;
+use App\Models\Product;
 
 class BannerService
 {
@@ -12,6 +15,28 @@ class BannerService
         return Banner::with('image')
             ->latest('id')
             ->paginate(config('app.per_page'));
+    }
+
+    public function object($model, $id)
+    {
+        $object = null;
+        switch ($model) {
+            case 'news':
+                $object = News::find($id)->with('image')
+                    ->latest('id')
+                    ->paginate();
+                break;
+            case 'product':
+                $object = Product::find($id)->with('image')
+                    ->latest('id')
+                    ->paginate();
+                break;
+            case 'category':
+                $category_ids = Category::getDescendants($id);
+                Product::whereIn('category_id', $category_ids)->paginate(10);
+                break;
+        }
+        return $object;
     }
 
     public function create(array $attributes)
