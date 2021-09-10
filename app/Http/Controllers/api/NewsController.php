@@ -3,12 +3,12 @@
 namespace App\Http\Controllers\api;
 
 use App\Http\Controllers\Controller;
-use App\Models\Banner;
-use App\Services\Banner\BannerService;
+use App\Models\News;
+use App\Services\News\NewsService;
 use App\Traits\ApiResponser;
 use Illuminate\Http\Request;
 
-class BannerController extends Controller
+class NewsController extends Controller
 {
     /**
      * @var BannerService
@@ -16,7 +16,7 @@ class BannerController extends Controller
     private $service;
     use ApiResponser;
 
-    public function __construct(BannerService $service)
+    public function __construct(NewsService $service)
     {
         $this->service = $service;
     }
@@ -28,15 +28,12 @@ class BannerController extends Controller
      */
     public function index(Request $request)
     {
-        $banners = $this->service->all();
-     return $this->success($banners);
+        $news = $this->service->all();
+        return $this->success($news);
     }
 
-    public function show($model,$id=1)
+    public function show(News $news)
     {
-        $object = $this->service->object($model,$id);
-
-        $this->success($object);
+        $this->success($news);
     }
-
 }

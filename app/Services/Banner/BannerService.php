@@ -7,6 +7,8 @@ use App\Models\Category;
 use App\Models\Image;
 use App\Models\News;
 use App\Models\Product;
+use App\Services\Product\ProductService;
+use Illuminate\Database\Eloquent\Collection;
 
 class BannerService
 {
@@ -19,21 +21,21 @@ class BannerService
 
     public function object($model, $id)
     {
-        $object = null;
+        $object =null;
+
         switch ($model) {
             case 'news':
-                $object = News::find($id)->with('image')
-                    ->latest('id')
+                $object = News::findOrFail($id)->with('image')
                     ->paginate();
                 break;
             case 'product':
-                $object = Product::find($id)->with('image')
-                    ->latest('id')
+                $object = Product::findOrFail($id)->with('image')
                     ->paginate();
                 break;
             case 'category':
-                $category_ids = Category::getDescendants($id);
-                Product::whereIn('category_id', $category_ids)->paginate(10);
+                $category=Category::findOrFail($id);
+                $object=new ProductService();
+                $object=$object->render($category);
                 break;
         }
         return $object;

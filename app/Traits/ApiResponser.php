@@ -5,9 +5,8 @@
  * Date: 12.08.2021
  * Time: 11:06
  */
-namespace App\Traits;
 
-use Carbon\Carbon;
+namespace App\Traits;
 
 /*
 |--------------------------------------------------------------------------
@@ -23,26 +22,36 @@ trait ApiResponser
     /**
      * Return a success JSON response.
      *
-     * @param  array|string  $data
-     * @param  string  $message
-     * @param  int|null  $code
+     * @param  array|string $data
+     * @param  string $message
+     * @param  int|null $code
      * @return \Illuminate\Http\JsonResponse
      */
-    protected function success($data, string $message = null, int $code = 200)
+    protected function success($data, string $message = '', int $code = 200)
     {
-        return response()->json([
-            'status' => 'Success',
-            'message' => $message,
-            'data' => $data
-        ], $code);
+        try {
+            return response()->json([
+                    'status' => 'Success',
+                    'message' => $message,
+                ] + ($data->toArray()? :['data'=>[]] )
+                , $code);
+        }
+        catch (\Throwable $e) {
+            header('Content-Type: application/json');
+            die(json_encode([
+                    'status' => 'Success',
+                    'message' => $message,
+                    'data'=>$data ?? []
+                ], JSON_UNESCAPED_UNICODE));
+        }
     }
 
     /**
      * Return an error JSON response.
      *
-     * @param  string  $message
-     * @param  int  $code
-     * @param  array|string|null  $data
+     * @param  string $message
+     * @param  int $code
+     * @param  array|string|null $data
      * @return \Illuminate\Http\JsonResponse
      */
     protected function error(string $message = null, int $code, $data = null)
@@ -50,8 +59,7 @@ trait ApiResponser
         return response()->json([
             'status' => 'Error',
             'message' => $message,
-            'data' => $data
-        ], $code);
+        ]+ $data->toArray(), $code);
     }
 
 }

@@ -2,7 +2,7 @@
 
 
 use App\Http\Controllers\api\{
-    AuthController, BannerController, CommentController, UserController
+    AuthController, BannerController, CommentController, NewsController, UserController
 };
 
 use Illuminate\Http\Request;
@@ -32,5 +32,6 @@ Route::group(['middleware' => ['auth:sanctum']], function () {
 });
 
 Route::get('banners',[BannerController::class,'index']);
-Route::get('banners/{object}/{id}',[BannerController::class,'show']);
+Route::get('banners/{object}/{id?}',[BannerController::class,'show'])->where(['id' => '[0-9]+', 'object' => '[a-z]+']);
 Route::get('comments',[CommentController::class,'index']);
+Route::get('news/{id?}',[NewsController::class,'index'])->where(['id' => '[0-9]+']);
