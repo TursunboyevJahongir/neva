@@ -13,8 +13,10 @@ class CreateProductAttributesTable extends Migration
      */
     public function up()
     {
+        // Color, Size
         Schema::create('product_attributes', function (Blueprint $table) {
             $table->id();
+            $table->jsonb('name'); // translatable
             $table->timestamps();
         });
     }

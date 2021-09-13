@@ -22,6 +22,13 @@ class CreateShopsTable extends Migration
             $table->jsonb('name');
             $table->string('slug');
             $table->jsonb('description')->nullable();
+            $table->unsignedBigInteger('delivery_price')->default(0);
+            $table->unsignedBigInteger('delivery_time')->default(0);
+            $table->jsonb('work_day');
+            $table->time('open')->default('09:00');
+            $table->time('close')->default('18:00');
+            $table->boolean('pickup')->default(false);
+            $table->unsignedInteger('refund')->default(0); // days, 0 is unavailable
             $table->string('merchant_id')->nullable();
             $table->boolean('active')->default(false);
             $table->softDeletes();

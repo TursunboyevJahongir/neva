@@ -15,6 +15,26 @@ class CreateProductsTable extends Migration
     {
         Schema::create('products', function (Blueprint $table) {
             $table->id();
+            $table->jsonb('name');
+            $table->string('sku')->unique()->nullable();
+            $table->string('slug');
+
+            $table->foreignId('shop_id')->constrained()->cascadeOnDelete();
+            $table->foreignId('category_id')->constrained()->cascadeOnDelete();
+            $table->jsonb('collection_ids')->nullable();
+            $table->jsonb('product_attribute_ids')->nullable();
+
+            $table->jsonb('content')->nullable(); // translatable
+            $table->string('rating')->nullable();
+            $table->unsignedBigInteger('quantity')->default(0);
+
+
+
+            $table->unsignedBigInteger('min_price')->default(0);
+            $table->unsignedBigInteger('max_price')->default(0);
+
+            $table->boolean('active')->default(true);
+
             $table->timestamps();
         });
     }
