@@ -13,7 +13,9 @@ class Image extends Model
     protected $fillable = [
         'url', 'cover_image'
     ];
-
+    protected $casts = [
+        'cover_image' => 'boolean'
+        ];
     public static function uploadFile(UploadedFile $file, $model)
     {
         return Storage::putFile("uploads/$model", $file);

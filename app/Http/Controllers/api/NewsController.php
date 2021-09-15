@@ -4,7 +4,7 @@ namespace App\Http\Controllers\api;
 
 use App\Http\Controllers\Controller;
 use App\Models\News;
-use App\Services\News\NewsService;
+use App\Services\News\CommentService;
 use App\Traits\ApiResponser;
 use Illuminate\Http\Request;
 
@@ -16,7 +16,7 @@ class NewsController extends Controller
     private $service;
     use ApiResponser;
 
-    public function __construct(NewsService $service)
+    public function __construct(CommentService $service)
     {
         $this->service = $service;
     }
