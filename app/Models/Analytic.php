@@ -9,7 +9,7 @@ class Analytic extends Model
 {
     use HasFactory;
     protected $fillable = [
-        'ip_address', 'user_agent', 'url' ,'start_time','end_time'
+        'user_id', 'ip_address', 'user_agent', 'url' ,'start_time','end_time'
     ];
     protected $table='analytic_page';
 }

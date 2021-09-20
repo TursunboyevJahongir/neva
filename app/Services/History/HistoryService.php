@@ -10,6 +10,4 @@ use Illuminate\Http\Request;
 class HistoryService
 {
 
-
-   
 }
