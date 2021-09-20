@@ -46,9 +46,9 @@ class AuthController extends Controller
     public function verify(VerifyRequest $request)
     {
         $user = User::query()
-            ->firstOrCreate(['phone' => $request->phone]);
+            ->find(['phone' => $request->phone]);
 
-        if ($user->verifyCode($request->verify_code)) {
+        if ($user->isNotEmpty() && $user->verifyCode($request->verify_code)) {
             $token = $user->createToken(time())->plainTextToken;
             $user->active=true;
             return response()->json([

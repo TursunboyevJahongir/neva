@@ -4,8 +4,6 @@
 use App\Http\Controllers\api\{
     AuthController, BannerController, CategoryController, CommentController, NewsController, UserController
 };
-
-use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
 /*

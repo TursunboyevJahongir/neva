@@ -2,6 +2,7 @@
 
 namespace Database\Seeders;
 
+use App\Models\Shop;
 use Illuminate\Database\Seeder;
 
 class DatabaseSeeder extends Seeder
@@ -13,6 +14,12 @@ class DatabaseSeeder extends Seeder
      */
     public function run()
     {
-        \App\Models\User::factory(10)->create();
+
+        $this->call(UsersTableSeeder::class);
+        $this->call(ShopsTableSeeder::class);
+        $this->call(Categories::class);
+        $this->call(BannersTableSeeder::class);
+        $this->call(ProductAttributesTableSeeder::class);
+        $this->call(ProductsTableSeeder::class);
     }
 }

@@ -2,6 +2,7 @@
 
 namespace App\Http;
 
+use App\Http\Middleware\SessionRequests;
 use Illuminate\Foundation\Http\Kernel as HttpKernel;
 
 class Kernel extends HttpKernel
@@ -42,7 +43,11 @@ class Kernel extends HttpKernel
         'api' => [
             'throttle:api',
             \Illuminate\Routing\Middleware\SubstituteBindings::class,
+            SessionRequests::class
         ],
+        'sessions' => [
+            \Illuminate\Session\Middleware\StartSession::class,
+        ]
     ];
 
     /**
