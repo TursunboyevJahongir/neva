@@ -15,7 +15,8 @@ class AnalyticService
     public function record(Request $request)
     {
         $stories = Analytic::where('ip_address', $request->ip())
-            ->where('user_agent', $request->userAgent())->where('user_id' , (Auth::guest() ? null: Auth::id()))
+            ->where('user_agent', $request->userAgent())
+            ->where('user_id' , (Auth::guest() ? null: Auth::id()))
             ->orderByDesc('id')
             ->get();
 
@@ -23,6 +24,7 @@ class AnalyticService
         {
             $history = Analytic::where('ip_address', $request->ip())
                 ->where('user_agent', $request->userAgent())
+                ->where('user_id' , (Auth::guest() ? null: Auth::id()))
                 ->orderByDesc('id')
                 ->first();
                 if ($history->url !== $request->path()) {
