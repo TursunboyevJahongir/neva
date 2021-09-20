@@ -8,6 +8,7 @@
 
 namespace App\Http\Middleware;
 
+use App\Services\History\AnalyticService;
 use App\Services\History\HistoryService;
 use Closure;
 use Illuminate\Http\Request;
@@ -23,7 +24,7 @@ class SessionRequests
      */
     public function handle(Request $request, Closure $next)
     {
-        (new HistoryService())->record($request);
+        (new AnalyticService())->record($request);
         return $next($request);
     }
 }
