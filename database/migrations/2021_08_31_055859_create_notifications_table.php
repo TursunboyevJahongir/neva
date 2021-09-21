@@ -15,13 +15,15 @@ class CreateNotificationsTable extends Migration
     {
         Schema::create('notifications', function (Blueprint $table) {
             $table->id();
-            $table->string('from');
-            $table->string('send_to');
+            $table->jsonb('name');
+            $table->unsignedBigInteger('from');
+            $table->foreign('from')->references('id')->on('users');
+            $table->jsonb('send_to');
             $table->string('groups');
-            $table->string('type');
+            $table->enum('type',[]);
             $table->string('link');
-            $table->string('element');
-            $table->string('read');
+            $table->unsignedBigInteger('element');
+            $table->boolean('read')->default(false);
             $table->timestamps();
         });
     }
