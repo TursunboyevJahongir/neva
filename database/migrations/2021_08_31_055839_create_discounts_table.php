@@ -18,11 +18,9 @@ class CreateDiscountsTable extends Migration
             $table->foreignId('user_id')
                 ->constrained()
                 ->cascadeOnDelete();
-            $table->integer('active');
+            $table->boolean('active')->default(true);
             $table->string('name', 100);
             $table->string('coupon');
-            $table->timestamp('start_at')->nullable();
-            $table->timestamp('end_at')->nullable();
             $table->date('expire_date');
             $table->text('description')->nullable();
             $table->string('discount_type')->nullable();
