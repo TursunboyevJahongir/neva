@@ -20,7 +20,7 @@ class CreateCouponsTable extends Migration
             $table->foreignId('user_id')->nullable();
             $table->timestamp('start_at')->nullable();
             $table->timestamp('end_at')->nullable();
-            $table->enum('type',[])->nullable();
+            $table->json('type')->nullable();
             $table->unsignedBigInteger('count')->nullable();
             $table->timestamps();
         });

@@ -29,7 +29,7 @@ class CreateShopsTable extends Migration
             $table->time('close')->default('18:00');
             $table->boolean('pickup')->default(false);
             $table->unsignedInteger('refund')->default(0); // days, 0 is unavailable
-            $table->string('merchant_id')->nullable();
+           // $table->string('merchant_id')->nullable();
             $table->boolean('active')->default(false);
             $table->softDeletes();
             $table->timestamps();

@@ -20,7 +20,7 @@ class CreateNotificationsTable extends Migration
             $table->foreign('from')->references('id')->on('users');
             $table->jsonb('send_to');
             $table->string('groups');
-            $table->enum('type',[]);
+            $table->json('type')->nullable();
             $table->string('link');
             $table->unsignedBigInteger('element');
             $table->boolean('read')->default(false);

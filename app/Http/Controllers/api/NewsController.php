@@ -4,7 +4,8 @@ namespace App\Http\Controllers\api;
 
 use App\Http\Controllers\Controller;
 use App\Models\News;
-use App\Services\News\CommentService;
+
+use App\Services\Comment\CommentService;
 use App\Traits\ApiResponser;
 use Illuminate\Http\Request;
 

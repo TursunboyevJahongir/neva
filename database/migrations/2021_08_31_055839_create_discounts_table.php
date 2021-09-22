@@ -23,7 +23,7 @@ class CreateDiscountsTable extends Migration
             $table->string('coupon');
             $table->date('expire_date');
             $table->text('description')->nullable();
-            $table->string('discount_type')->nullable();
+            $table->json('discount_type')->nullable();
             $table->decimal('discount_amount', 22, 4)->default(0);
             $table->unsignedBigInteger('discount_price')->nullable();
             $table->unsignedBigInteger('discount_percent')->nullable();

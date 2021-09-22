@@ -17,8 +17,6 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-
-
 Route::post('authenticate', [AuthController::class, 'authenticate']);
 Route::post('verify', [AuthController::class, 'verify']);
 
