@@ -2,13 +2,14 @@
 
 namespace App\Http\Controllers\api;
 
+use App\Http\Controllers\ApiController;
 use App\Http\Controllers\Controller;
 use App\Models\Product;
 use App\Services\Product\ProductService;
 use App\Traits\ApiResponser;
 use Illuminate\Http\Request;
 
-class ProductController extends Controller
+class ProductController extends ApiController
 {
 
     /**

@@ -2,78 +2,79 @@
 
 namespace App\Http\Controllers\api;
 
-use App\Http\Controllers\Controller;
-
+use App\Http\Controllers\ApiController;
 use App\Http\Requests\api\CommentCreateRequest;
 use App\Http\Requests\api\CommentUpdateRequest;
 use App\Models\Comment;
 use App\Services\Comment\CommentService;
-use App\Traits\ApiResponser;
+use Illuminate\Http\JsonResponse;
+use Illuminate\Http\Request;
+use Illuminate\Http\Response;
 
-class CommentController extends Controller
+
+class CommentController extends ApiController
 {
     private $service;
-    use ApiResponser;
 
     public function __construct(CommentService $service)
     {
         $this->service = $service;
     }
 
-    public function index()
+    public function index(): JsonResponse
     {
         $comments = $this->service->all();
-        return $this->success($comments);
+        return $this->success(__('messages.success'), $comments);
     }
 
     /**
      * Store a newly created resource in storage.
      *
-     * @param  \Illuminate\Http\Request $request
-     * @return \Illuminate\Http\Response
+     * @param CommentCreateRequest $request
+     * @return JsonResponse
      */
-    public function store(CommentCreateRequest $request)
+    public function store(CommentCreateRequest $request): JsonResponse
     {
         $comment = $this->service->create($request->validated());
-        return $this->success($comment);
+        return $this->success(__('messages.success'), $comment);
     }
 
     /**
      * Display the specified resource.
      *
-     * @param  int $id
-     * @return \Illuminate\Http\Response
+     * @param Comment $id
+     * @return JsonResponse
      */
-    public function show(Comment $id)
+    public function show(Comment $id): JsonResponse
     {
-        return $this->success($id->load('images:url,imageable_id'));
+        return $this->success(__('messages.success'), $id->load('images:url,imageable_id'));
     }
 
     /**
      * Update the specified resource in storage.
      *
-     * @param  \Illuminate\Http\Request $request
-     * @param  int $id
-     * @return \Illuminate\Http\Response
+     * @param CommentUpdateRequest $request
+     * @param Comment $id
+     * @return JsonResponse
      */
-    public function edit(CommentUpdateRequest $request, Comment $id)
+    public function edit(CommentUpdateRequest $request, Comment $id): JsonResponse
     {
 
         $comment = $this->service->update($request->validated(), $id);
-        return $this->success($comment);
+        return $this->success(__('messages.success'), $comment);
     }
 
     /**
      * Remove the specified resource from storage.
      *
-     * @param  int $id
-     * @return \Illuminate\Http\Response
+     * @param Comment $comment
+     * @return JsonResponse
      */
-    public function destroy(Comment $comment)
+    public function destroy(Comment $comment): JsonResponse
     {
         $this->authorize('delete', 'comment');
         $comment = $this->service->delete($comment);
-        return $this->success($comment);
+        return $this->success(__('messages.success'), $comment);
 
     }
 }

@@ -2,10 +2,11 @@
 
 namespace App\Http\Controllers\api;
 
+use App\Http\Controllers\ApiController;
 use App\Models\HistorySearch;
 use Illuminate\Http\Request;
 
-class HistorySearchController extends Controller
+class HistorySearchController extends ApiController
 {
     /**
      * Display a listing of the resource.

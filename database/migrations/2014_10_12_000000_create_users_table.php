@@ -15,28 +15,19 @@ class CreateUsersTable extends Migration
     {
         Schema::create('users', function (Blueprint $table) {
             $table->id();
-            $table->string('login')->unique()->nullable();
             $table->string('full_name')->nullable();
-            $table->string('email')->unique()->nullable();
             $table->string('phone')->unique();
-            $table->string('gender')->nullable();
-            $table->string('address')->nullable();
-            $table->string('district')->nullable();
-            $table->string('birthday')->nullable();
-            $table->string('interest')->nullable();
-            $table->jsonb('kids')->nullable();
-            $table->string('coupon')->nullable();
+            $table->enum('gender', \App\Enums\GenderEnum::toArray())->nullable();
+            $table->date('birthday')->nullable();
+            $table->timestamp('phone_verified_at')->nullable();
+            $table->string('email')->unique()->nullable();
+            $table->string('login')->unique()->nullable();
             $table->string('password')->nullable();
-            $table->unsignedInteger('verify_code')->default(12345);
-
-            $table->foreignId('role_id')
-                ->nullable()
-                ->constrained()
-                ->cascadeOnDelete();
-            $table->boolean('active')->default(true);
-            $table->rememberToken();
-            $table->foreignId('current_team_id')->nullable();
-            $table->string('profile_photo_path', 2048)->nullable();
+            $table->string('district_id')->nullable();
+            $table->string('interests')->nullable();
+            $table->text('address')->nullable();
+            $table->enum('status', \App\Enums\UserStatusEnum::toArray());
+            $table->string('firebase')->nullable()->comment('firebase push token');
             $table->timestamps();
         });
     }

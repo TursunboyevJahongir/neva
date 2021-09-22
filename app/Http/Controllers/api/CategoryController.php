@@ -2,20 +2,19 @@
 
 namespace App\Http\Controllers\api;
 
-use App\Http\Controllers\Controller;
+use App\Http\Controllers\ApiController;
 use App\Models\Category;
 use App\Services\Category\CategoryService;
 use App\Services\Product\ProductService;
 use App\Traits\ApiResponser;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
+use Illuminate\Http\Response;
 
-class CategoryController extends Controller
+class CategoryController extends ApiController
 {
-    /**
-     * @var BannerService
-     */
+
     private $service;
-    use ApiResponser;
 
     public function __construct(CategoryService $service)
     {
@@ -25,18 +24,19 @@ class CategoryController extends Controller
     /**
      * Display a listing of the resource.
      *
-     * @return \Illuminate\Http\Response
+     * @param Request $request
+     * @return JsonResponse
      */
-    public function index(Request $request)
+    public function index(Request $request): JsonResponse
     {
         $categories = $this->service->all();
-        return $this->success($categories);
+        return $this->success(__('messages.success'), $categories);
     }
 
     public function show(Category $category)
     {
-        $data=new ProductService();
-        $data=$data->render($category);
-        $this->success($data);
+        $data = new ProductService();
+        $data = $data->render($category);
+        $this->success(__('messages.success'), $data);
     }
 }

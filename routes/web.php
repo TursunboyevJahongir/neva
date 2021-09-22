@@ -1,7 +1,6 @@
 <?php
 
 use App\Http\Controllers\admin\AuthController;
-use App\Http\Controllers\HomeController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -16,7 +15,7 @@ use Illuminate\Support\Facades\Route;
 */
 
 //Route::get('/',[HomeController::class,'index']);
-Auth::routes();
+//Auth::routes();
 Route::get('/auth/social', [App\Http\Controllers\Auth\LoginController::class ,'show'])->name('social.login');
 Route::get('/oauth/{driver}', [App\Http\Controllers\Auth\LoginController::class,'redirectToProvider'])->name('social.oauth');
 Route::get('/oauth/{driver}/callback', [App\Http\Controllers\Auth\LoginController::class,'handleProviderCallback'])->name('social.callback');

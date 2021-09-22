@@ -2,47 +2,75 @@
 
 namespace App\Http\Controllers\api;
 
-use App\Http\Controllers\Controller;
-use App\Http\Requests\api\LoginRequest;
+use App\Enums\UserStatusEnum;
+use App\Http\Controllers\ApiController;
+use App\Http\Requests\api\Auth\LoginRequest;
+use App\Http\Requests\api\Auth\ResendSmsConfirmRequest;
+use App\Http\Requests\api\Auth\SmsConfirmRequest;
 use App\Http\Requests\api\VerifyRequest;
 use App\Models\User;
-use App\Services\Sms\SendService;
-use App\Traits\ApiResponser;
+use App\Services\Sms\SmsService;
+use App\Services\User\UserService;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Auth;
 
-class AuthController extends Controller
+class AuthController extends ApiController
 {
 
-    private $service;
-    use ApiResponser;
-    public function __construct(SendService $sendService)
+    public function authenticate(LoginRequest $request, SmsService $smsService): JsonResponse
     {
-        $this->service = $sendService;
-        $this->middleware('guest')->except('logout');
-    }
-    public function authenticate(LoginRequest $request)
-    {
-        $login='user'.substr($request->phone,5);
-        $user = User::query()->firstOrCreate(
-            ['phone' => $request->phone],
-            ['login'=>$login,'email'=>$login."@neva.uz",'password'=>bcrypt('12345678')]
-            );
-        $code = rand(10000, 99999);
-        $message = /*trans('auth.code', ['code' =>*/ $code/*])*/;
-        $message='NEVA:Ваш код для авторизации - '.$message.PHP_EOL.'В случае возникновения вопросов, свяжитесь пожалуйста по номеру +998781488008';
-        $user->update([
-            'full_name' => $request->name,
-            'verify_code' => $code
-        ]);
-        $result='';
-        if (!empty($user) && !empty($user->phone))
-            $result=$this->service->sendSMS(substr($user->phone,1), $message);
 
-        return response()->json([
-            'status' => true,
-        ]);
+        $user = User::query()->firstOrCreate(
+            ['phone' => $request->validated()['phone']],
+            ['status' => UserStatusEnum::PENDING,
+//                'firebase' => $request->validated()['firebase']
+            ]
+        );
+        try {
+            $smsService->sendConfirm($request->validated()['phone']);
+
+            return $this->success(__('sms.confirmation_sent', ['attribute' => $request->validated()['phone']]));
+        } catch (\Throwable $e) {
+            return $this->error($e->getMessage());
+        }
     }
+
+
+    /**
+     * @param SmsConfirmRequest $request
+     * @param SmsService $smsService
+     * @param UserService $userService
+     * @return JsonResponse
+     */
+    public function authConfirm(SmsConfirmRequest $request, SmsService $smsService, UserService $userService): JsonResponse
+    {
+        try {
+            if ($smsService->confirm($request->json('phone'), $request->json('code'))) {
+                $userWithToken = $userService->generateToken($request->json('phone'));
+                return $this->success('', $userWithToken);
+            }
+            return $this->error(__('sms.invalid_code'));
+        } catch (\Throwable $e) {
+            return $this->error($e->getMessage());
+        }
+    }
+
+
+    /**
+     * @param ResendSmsConfirmRequest $request
+     * @param SmsService $smsService
+     * @return JsonResponse
+     */
+    public function resendSms(ResendSmsConfirmRequest $request, SmsService $smsService): JsonResponse
+    {
+        try {
+            $smsService->sendConfirm($request->json('phone'));
+            return $this->success(__('sms.confirmation_sent', ['attribute' => $request->json('phone')]));
+        } catch (\Throwable $e) {
+            return $this->error($e->getMessage());
+        }
+    }
+
     public function verify(VerifyRequest $request)
     {
         $user = User::query()
@@ -50,7 +78,7 @@ class AuthController extends Controller
 
         if ($user && $user->verifyCode($request->verify_code)) {
             $token = $user->createToken(time())->plainTextToken;
-            $user->active=true;
+            $user->active = true;
             return response()->json([
                 'status' => true,
                 'token' => $token
@@ -59,18 +87,15 @@ class AuthController extends Controller
         return response()->json([
             'status' => false,
             'message' => 'Неправильный код'
-        ],401);
+        ], 401);
     }
 
 
     public function logout(Request $request)
     {
         $request->user()->currentAccessToken()->delete();
-       // auth()->user()->tokens()->delete();
+        // auth()->user()->tokens()->delete();
 
-        return response()->json([
-            'status' => true,
-            'message' => 'Successfully logged out'
-        ]);
+        return $this->success();
     }
 }

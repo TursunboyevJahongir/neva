@@ -2,25 +2,13 @@
 
 namespace App\Http\Controllers\api;
 
-use App\Http\Controllers\Controller;
+use App\Http\Controllers\ApiController;
 use App\Models\News;
-use App\Services\News\CommentService;
 use App\Traits\ApiResponser;
 use Illuminate\Http\Request;
 
-class NewsController extends Controller
+class NewsController extends ApiController
 {
-    /**
-     * @var BannerService
-     */
-    private $service;
-    use ApiResponser;
-
-    public function __construct(CommentService $service)
-    {
-        $this->service = $service;
-    }
-
     /**
      * Display a listing of the resource.
      *
