@@ -70,9 +70,12 @@ class User extends Authenticatable
     {
         return $this->attributes['password'] = bcrypt($value);
     }
-
-    public function avater(): MorphOne
+    public function avatar(): MorphOne
     {
         return $this->morphOne(Image::class, 'imageable');
+    }
+    public function shop()
+    {
+        return $this->belongsTo(Shop::class, 'id', 'user_id');
     }
 }
