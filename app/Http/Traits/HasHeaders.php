@@ -68,7 +68,7 @@ trait HasHeaders
         /**
          * @var Request|FormRequest $this
          */
-        return $this->headers->get(DeviceHeadersEnum::deviceLang());
+        return $this->headers->get(DeviceHeadersEnum::deviceLang(),'ru');
     }
 
     /**

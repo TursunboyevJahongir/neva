@@ -4,6 +4,7 @@ namespace App\Models;
 
 use App\Casts\TranslatableJson;
 use App\Traits\HasHeaders;
+use App\Traits\HasTranslatableJson;
 use Illuminate\Database\Eloquent\Casts\AsCollection;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
@@ -11,7 +12,7 @@ use Illuminate\Database\Eloquent\Model;
 class Shop extends Model
 {
     use HasFactory,
-        HasHeaders;
+        HasTranslatableJson;
 
     protected $fillable = [
         'user_id',

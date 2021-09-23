@@ -24,6 +24,10 @@ use Spatie\Permission\Traits\HasRoles;
  * @property int $district_id
  * @property string $address
  * @property District $district
+ *  * @OA\Schema(
+ *     title="User model",
+ *     description="User model",
+ * )
  */
 class User extends Authenticatable
 {
