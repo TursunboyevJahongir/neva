@@ -1,7 +1,8 @@
 <?php
 
-namespace App\Http\Requests\api;
+namespace App\Http\Requests\api\Auth;
 
+use App\Rules\PhoneRule;
 use App\Rules\UzbekPhone;
 use Illuminate\Foundation\Http\FormRequest;
 
@@ -15,8 +16,11 @@ class LoginRequest extends FormRequest
     public function rules()
     {
         return [
-            'phone' => ['required', 'string', new UzbekPhone],
-            //'name' => 'required'
+            'phone' => [
+                'required',
+                new PhoneRule()
+            ],
+//            'firebase' => 'required|string'
         ];
     }
 }
