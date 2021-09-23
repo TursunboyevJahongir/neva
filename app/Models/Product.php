@@ -3,14 +3,14 @@
 namespace App\Models;
 
 use App\Casts\TranslatableJson;
-use App\Traits\HasTranslatableJson;
+use App\Traits\HasHeaders;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
 class Product extends Model
 {
     use HasFactory,
-        HasTranslatableJson;
+        HasHeaders;
 
     protected $fillable = [
         'name',
