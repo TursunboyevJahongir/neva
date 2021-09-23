@@ -2,11 +2,12 @@
 
 namespace App\Http\Controllers\api;
 
+use App\Http\Controllers\ApiController;
 use App\Http\Controllers\Controller;
 use App\Models\Basket;
 use Illuminate\Http\Request;
 
-class BasketController extends Controller
+class BasketController extends ApiController
 {
     /**
      * Display a listing of the resource.

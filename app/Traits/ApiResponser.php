@@ -17,49 +17,49 @@ namespace App\Traits;
 |
 */
 
+use App\Http\Resources\PaginationResourceCollection;
+use Illuminate\Http\JsonResponse;
+
 trait ApiResponser
 {
     /**
-     * Return a success JSON response.
-     *
-     * @param  array|string $data
-     * @param  string $message
-     * @param  int|null $code
-     * @return \Illuminate\Http\JsonResponse
+     * @param string $message
+     * @param mixed|null $data
+     * @param mixed|null $append
+     * @param int $code
+     * @return JsonResponse
      */
-    protected function success($data, string $message = '', int $code = 200)
+    protected function success(string $message = '', mixed $data = null, mixed $append = null, int $code = 200): JsonResponse
     {
-        try {
-            return response()->json([
-                    'status' => 'Success',
-                    'message' => $message,
-                ] + ($data->toArray()? :['data'=>[]] )
-                , $code);
+        $resp = [
+            'status' => true,
+            'message' => $message,
+            'data' => $data ?? new \stdClass(),
+            'append' => $append ?? new \stdClass(),
+            'errors' => []
+        ];
+        if ($data instanceof PaginationResourceCollection) {
+            $data = $data->toResponse(null)->getData(true);
+            unset($data['meta'], $data['links']);
+            $resp = array_merge($resp, $data);
         }
-        catch (\Throwable $e) {
-            header('Content-Type: application/json');
-            die(json_encode([
-                    'status' => 'Success',
-                    'message' => $message,
-                    'data'=>$data ?? []
-                ], JSON_UNESCAPED_UNICODE));
-        }
+        return response()->json($resp, $code);
     }
 
     /**
-     * Return an error JSON response.
-     *
-     * @param  string $message
-     * @param  int $code
-     * @param  array|string|null $data
-     * @return \Illuminate\Http\JsonResponse
+     * @param string $message
+     * @param mixed|null $errors
+     * @param int $code
+     * @return JsonResponse
      */
-    protected function error(string $message = null, int $code, $data = null)
+    protected function error(mixed $errors = null, string $message = '', int $code = 404): JsonResponse
     {
         return response()->json([
-            'status' => 'Error',
+            'status' => false,
             'message' => $message,
-        ]+ $data->toArray(), $code);
+            'data' => new \stdClass(),
+            'append' => new \stdClass(),
+            'errors' => $errors ?? []
+        ], $code);
     }
-
 }

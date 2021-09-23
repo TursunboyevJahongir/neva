@@ -57,7 +57,7 @@ class SendService
         }
     }
 
-    public function sendSMS($phone, $message)
+    public function sendSMS(string $phone,string $message)
     {
         $res = $this->sendRequest('POST', '/http2sms', [
            'query'=> ['login' => $this->login,

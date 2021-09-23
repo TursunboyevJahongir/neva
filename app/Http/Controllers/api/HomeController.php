@@ -2,10 +2,11 @@
 
 namespace App\Http\Controllers\api;
 
+use App\Http\Controllers\ApiController;
 use Aspera\Spreadsheet\XLSX\Reader;
 use Illuminate\Http\Request;
 
-class HomeController extends Controller
+class HomeController extends ApiController
 {
     public function index()
     {

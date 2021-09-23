@@ -2,11 +2,12 @@
 
 namespace App\Http\Controllers\api;
 
-use App\Http\Controllers\Controller;
+use App\Http\Controllers\ApiController;
+
 use App\Models\Shop;
 use Illuminate\Http\Request;
 
-class ShopController extends Controller
+class ShopController extends ApiController
 {
 
     public function show(Shop $id)

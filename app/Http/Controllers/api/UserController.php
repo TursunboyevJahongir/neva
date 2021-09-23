@@ -2,14 +2,14 @@
 
 namespace App\Http\Controllers\api;
 
-use App\Http\Controllers\Controller;
+use App\Http\Controllers\ApiController;
 use App\Http\Requests\api\UserUpdateRequest;
 use App\Models\Kids;
 use App\Models\User;
 use  App\Services\User\UserService;
 use Illuminate\Http\Request;
 
-class UserController extends Controller
+class UserController extends ApiController
 {
     /**
      * @var ShopService
@@ -21,20 +21,20 @@ class UserController extends Controller
         $this->service = $service;
     }
 
-    /**
-     * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function index(Request $request)
-    {
-        if (auth()->user()->active)
-            return auth()->user();
-        else
-            return response()->json([
-                'message' => 'Пользователь заблокирован'
-            ], 403);
-    }
+//    /**
+//     * Display a listing of the resource.
+//     *
+//     * @return \Illuminate\Http\Response
+//     */
+//    public function index(Request $request)
+//    {
+//        if (auth()->user()->active)
+//            return auth()->user();
+////        else
+////            return response()->json([__('message.user_block')
+////                'message' => 'Пользователь заблокирован'
+////            ], 403);
+//    }
 
 
     public function update(UserUpdateRequest $request)

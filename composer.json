@@ -15,10 +15,13 @@
         "laravel/framework": "^8.40",
         "laravel/sanctum": "^2.6",
         "laravel/socialite": "^5.2",
+        "laravel/telescope": "^4.6",
         "laravel/tinker": "^2.5",
         "livewire/livewire": "^2.5",
         "ph7jack/wireui": "^0.11.0",
-        "zircote/swagger-php": "^3.2"
+        "zircote/swagger-php": "^3.2",
+        "spatie/enum": "^3.9",
+        "spatie/laravel-permission": "^5.1"
     },
     "require-dev": {
         "facade/ignition": "^2.5",

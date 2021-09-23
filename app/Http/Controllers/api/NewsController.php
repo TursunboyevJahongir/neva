@@ -9,13 +9,15 @@ use App\Services\Comment\CommentService;
 use App\Traits\ApiResponser;
 use Illuminate\Http\Request;
 
-class NewsController extends Controller
+class NewsController extends ApiController
 {
     /**
-     * @var BannerService
+     * Display a listing of the resource.
+     *
+     * @return \Illuminate\Http\Response
      */
     private $service;
-    use ApiResponser;
+
 
     public function __construct(CommentService $service)
     {

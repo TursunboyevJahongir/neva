@@ -2,10 +2,11 @@
 
 namespace App\Http\Controllers\api;
 
+use App\Http\Controllers\ApiController;
 use App\Models\Discount;
 use Illuminate\Http\Request;
 
-class DiscountController extends Controller
+class DiscountController extends ApiController
 {
     /**
      * Display a listing of the resource.

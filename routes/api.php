@@ -17,8 +17,15 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::post('authenticate', [AuthController::class, 'authenticate']);
-Route::post('verify', [AuthController::class, 'verify']);
+Route::middleware('verify.device_headers')->prefix('v1')->group(static function () {
+    /**
+     * Login / Register
+     */
+    Route::prefix('auth')->group(static function () {
+        Route::post('/', [AuthController::class, 'authenticate']);
+        Route::post('confirm', [AuthController::class, 'authConfirm']);
+        Route::post('resend-sms', [AuthController::class, 'resendSms']);
+    });
 
 Route::group(['middleware' => ['auth:sanctum']], function () {
     Route::get('/user', [UserController::class,'index']);
@@ -40,3 +47,4 @@ Route::get('news',[NewsController::class,'index']);
 Route::get('news/{id?}',[NewsController::class,'show'])->where(['id' => '[0-9]+']);
 Route::get('category',[CategoryController::class,'index']);
 
+});

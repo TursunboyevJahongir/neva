@@ -9,6 +9,8 @@
 namespace App\Services\User;
 
 
+use App\Enums\RoleEnum;
+use App\Enums\UserStatusEnum;
 use App\Models\Image;
 use App\Models\User;
 
@@ -70,6 +72,44 @@ class UserService
         }
 
         return $user;
+    }
+
+    /**
+     * @param string $phone
+     * @param string $deviceUID
+     * @return User
+     * @throws UserNotFoundException
+     */
+    public function generateToken(string $phone): User
+    {
+        /**
+         * @var User $user
+         */
+        $user = User::query()->where(['phone' => $phone])->get()->first();
+        if ($user === null) {
+            throw new UserNotFoundException(__('messages.not_found'));
+        }
+//        $token = $user->tokens()->where(['name' => $deviceUID])->get()->first();
+//        if ($token !== null) {
+//            $token->delete();
+//        }
+        $this->confirmUser($user);
+        $token = $user->createToken($phone);
+        $user->auth_token = $token->plainTextToken;
+        return $user;
+    }
+
+    /**
+     * @param User $user
+     */
+    private function confirmUser(User $user): void
+    {
+        if (!in_array($user->status, [UserStatusEnum::ACTIVE, UserStatusEnum::BLOCKED], true)) {
+            //todo bu yerda birinchi registratsiyadagi cupon beriladi
+            $user->status = UserStatusEnum::ACTIVE;
+            $user->phone_verified_at = now();
+            $user->update();
+        }
     }
 
     public function delete(User $user)

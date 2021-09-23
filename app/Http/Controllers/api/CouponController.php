@@ -2,11 +2,11 @@
 
 namespace App\Http\Controllers\api;
 
-use App\Http\Controllers\Controller;
+use App\Http\Controllers\ApiController;
 use App\Models\Coupon;
 use Illuminate\Http\Request;
 
-class CouponController extends Controller
+class CouponController extends ApiController
 {
     /**
      * Display a listing of the resource.
