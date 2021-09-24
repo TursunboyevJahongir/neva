@@ -3,9 +3,11 @@
 namespace App\Http\Resources\Api\v1;
 
 use App\Http\Resources\Api\v1\DistrictParentResource;
+use App\Models\Interest;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
+use Illuminate\Support\Facades\Auth;
 
 class UserResource extends JsonResource
 {
@@ -32,6 +34,7 @@ class UserResource extends JsonResource
             "email" => $this->email ?? null,
             "address" => $this->address ?? null,
             'district' => $this->district_id ? new DistrictParentResource($this->district) : null,
+            'interests' => $this->interests ? InterestResource::collection(Interest::query()->whereIn('id', [$this->interests])->get()) : null,
         ];
     }
 }

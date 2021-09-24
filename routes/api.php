@@ -1,9 +1,13 @@
 <?php
 
 
-use App\Http\Controllers\api\{
-    AuthController, BannerController, CategoryController, CommentController, NewsController, UserController
-};
+use App\Http\Controllers\api\{AuthController,
+    BannerController,
+    CategoryController,
+    CommentController,
+    InterestController,
+    NewsController,
+    UserController};
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -30,6 +34,8 @@ Route::middleware('verify.device_headers')->prefix('v1')->group(static function 
 Route::group(['middleware' => ['auth:sanctum']], function () {
     Route::get('/me', [UserController::class,'me']);
     Route::post('/me', [UserController::class, 'update']);
+
+    Route::get('/interests', [InterestController::class, 'index']);
 
     Route::post('/comment',[CommentController::class,'store']);
     Route::put('comment/{id}',[CommentController::class,'edit'])->where(['id' => '[0-9]+']);

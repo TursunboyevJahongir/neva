@@ -24,7 +24,7 @@ class CreateUsersTable extends Migration
             $table->string('login')->unique()->nullable();
             $table->string('password')->nullable();
             $table->unsignedBigInteger('district_id')->nullable();
-            $table->string('interests')->nullable();
+            $table->json('interests')->nullable();
             $table->text('address')->nullable();
             $table->enum('status', \App\Enums\UserStatusEnum::toArray());
             $table->string('firebase')->nullable()->comment('firebase push token');

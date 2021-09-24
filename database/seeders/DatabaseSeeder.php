@@ -24,5 +24,7 @@ class DatabaseSeeder extends Seeder
         $this->call(BannersTableSeeder::class);
 //        $this->call(ProductAttributesTableSeeder::class);
 //        $this->call(ProductsTableSeeder::class);
+
+        \App\Models\Interest::factory(30)->create();
     }
 }

@@ -4,16 +4,15 @@ namespace App\Models;
 
 use App\Enums\GenderEnum;
 use App\Enums\UserStatusEnum;
+use App\Http\Resources\Api\v1\InterestResource;
 use Carbon\Carbon;
-use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\MorphOne;
 use Illuminate\Foundation\Auth\User as Authenticatable;
+use Illuminate\Http\Resources\Json\AnonymousResourceCollection;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Support\Facades\URL;
-use Laravel\Fortify\TwoFactorAuthenticatable;
-use Laravel\Jetstream\HasProfilePhoto;
 use Laravel\Sanctum\HasApiTokens;
 use Spatie\Permission\Traits\HasRoles;
 
@@ -25,6 +24,7 @@ use Spatie\Permission\Traits\HasRoles;
  * @property string $phone
  * @property string $email
  * @property GenderEnum $gender
+ * @property array interests
  * @property UserStatusEnum $status
  * @property Carbon $birthday
  * @property int $district_id
@@ -54,6 +54,7 @@ class User extends Authenticatable
         'gender',
         'status',
         'password',
+        'interests',
     ];
 
     /**
@@ -68,16 +69,12 @@ class User extends Authenticatable
 
     protected $casts = [
         'birthday' => 'datetime:Y-m-d',
+        'interests' => 'array',
     ];
 
     public function getAgeAttribute(): ?int
     {
         return $this->birthday ? date_diff($this->birthday, Carbon::now())->y : null;
-    }
-
-    public function getAvatarPathAttribute(): ?string
-    {
-        return $this->avatar ? URL::to('/uploads/' . $this->avatar) : null;
     }
 
     public function setPasswordAttribute($value)
