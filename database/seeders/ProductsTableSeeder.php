@@ -16,7 +16,7 @@ class ProductsTableSeeder extends Seeder
      */
     public function run()
     {
-         Product::create([
+        /* Product::create([
             'name' => [
                 'ru' => 'Наволочка 2119',
                 'uz' => 'Наволочка 2119'
@@ -35,9 +35,9 @@ class ProductsTableSeeder extends Seeder
             'category_id' => 1,
             'min_price' => 15000,
             'max_price' => 15000
-        ]);
+        ]);*/
          ProductVariation::create([
-             'product_id'=>1,
+             'product_id'=>3,
              'product_attribute_value_ids'=>[1,2],
              'quantity'=>14,
              'price'=>15000,

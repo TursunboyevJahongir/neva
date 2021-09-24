@@ -17,7 +17,7 @@ class CommentCreateRequest extends FormRequest
     public function rules()
     {
         return [
-            //'product_id'=> 'required|numeric',//|exists:products,id
+            'product_id'=> 'required|numeric',//|exists:products,id
             'text' => 'required|string',
             'rating' => 'required|integer|min:1|max:5',
             'images.*' => 'nullable|image',

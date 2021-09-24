@@ -18,12 +18,12 @@ class CreateProductsTable extends Migration
             $table->jsonb('name');
             $table->jsonb('content')->nullable(); // translatable
             $table->string('sku')->unique()->nullable();
-            $table->string('slug');
-            $table->foreignId('shop_id')->constrained()->cascadeOnDelete();
-            $table->foreignId('category_id')->constrained()->cascadeOnDelete();
+            $table->string('slug')->unique();
+            $table->foreignId('shop_id')->nullable();
+            $table->foreignId('category_id')->nullable();
             $table->jsonb('collection_ids')->nullable();
             $table->jsonb('product_attribute_ids')->nullable();
-            $table->string('rating')->nullable();
+            $table->double('rating')->default(0)->comment("ratings tablitsadan avg olinib yozib qo'yiladi");
             $table->unsignedBigInteger('quantity')->default(0);
             $table->unsignedBigInteger('min_price')->default(0);
             $table->unsignedBigInteger('max_price')->default(0);

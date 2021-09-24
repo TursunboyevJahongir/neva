@@ -34,6 +34,7 @@ class CreateOrdersTable extends Migration
             $table->string('address')->nullable();
             $table->string('city')->nullable();
             $table->string('street')->nullable();
+            $table->text('note')->nullable();
 
             $table->foreign('shop_id')
                 ->references('id')

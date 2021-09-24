@@ -9,6 +9,13 @@ use Illuminate\Http\Request;
 
 class BasketController extends ApiController
 {
+
+    private $service;
+
+    public function __construct(BasketService $service)
+    {
+        $this->service = $service;
+    }
     /**
      * Display a listing of the resource.
      *
@@ -16,18 +23,11 @@ class BasketController extends ApiController
      */
     public function index()
     {
-        //
+        $comments = $this->service->all();
+        return $this->success(__('messages.success'), $comments);
     }
 
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function create()
-    {
-        //
-    }
+
 
     /**
      * Store a newly created resource in storage.
@@ -35,9 +35,10 @@ class BasketController extends ApiController
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store(BasketCreateRequest $request)
     {
-        //
+        $comment = $this->service->create($request->validated());
+        return $this->success(__('messages.success'), $comment);
     }
 
     /**
@@ -46,20 +47,9 @@ class BasketController extends ApiController
      * @param  \App\Models\Basket  $basket
      * @return \Illuminate\Http\Response
      */
-    public function show(Basket $basket)
+    public function show(Basket $id)
     {
-        //
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  \App\Models\Basket  $basket
-     * @return \Illuminate\Http\Response
-     */
-    public function edit(Basket $basket)
-    {
-        //
+        return $this->success(__('messages.success'), $id->load('images:url,imageable_id'));
     }
 
     /**
@@ -69,9 +59,10 @@ class BasketController extends ApiController
      * @param  \App\Models\Basket  $basket
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, Basket $basket)
+    public function update(BasketUpdateRequest $request, Basket $id)
     {
-        //
+        $comment = $this->service->update($request->validated(), $id);
+        return $this->success(__('messages.success'), $comment);
     }
 
     /**
@@ -80,8 +71,10 @@ class BasketController extends ApiController
      * @param  \App\Models\Basket  $basket
      * @return \Illuminate\Http\Response
      */
-    public function destroy(Basket $basket)
+    public function destroy(Basket $id)
     {
-        //
+        $this->authorize('delete', 'comment');
+        $comment = $this->service->delete($comment);
+        return $this->success(__('messages.success'), $comment);
     }
 }

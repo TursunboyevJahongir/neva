@@ -38,7 +38,6 @@ class CategoryController extends ApiController
     {
         $data = new ProductService();
         $data = $data->render($id);
-       // dd($data);
         return $this->success(__('pages.RoadReport'), new PaginationResourceCollection($data['products'], ProductsResourse::class),$data['appends']);
        return $this->success(__('messages.success'), new PaginationResourceCollection());
     }

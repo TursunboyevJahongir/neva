@@ -16,7 +16,9 @@ class CreateHistoryViewsTable extends Migration
         Schema::create('history_views', function (Blueprint $table) {
             $table->id();
             $table->string('element');
-            $table->string('user_id');
+            $table->foreignId('user_id')
+                ->constrained()
+                ->cascadeOnDelete();
             $table->timestamps();
         });
     }
