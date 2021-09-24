@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\api;
 
 use App\Http\Controllers\ApiController;
+use App\Http\Resources\PaginationResourceCollection;
 use App\Models\Category;
 use App\Services\Category\CategoryService;
 use App\Services\Product\ProductService;
@@ -37,6 +38,8 @@ class CategoryController extends ApiController
     {
         $data = new ProductService();
         $data = $data->render($id);
-        $this->success(__('messages.success'), $data);
+       // dd($data);
+        return $this->success(__('pages.RoadReport'), new PaginationResourceCollection($data['products'], ProductsResourse::class),$data['appends']);
+       return $this->success(__('messages.success'), new PaginationResourceCollection());
     }
 }

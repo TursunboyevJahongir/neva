@@ -20,9 +20,9 @@ class ProductService
             ->paginate(config('app.per_page'));
     }
 
-    public function render(Category $category,$subcategory='all',$shop=0,$sort= 'asc',$brand=0,$minPrice=0,$maxPrice=0)
+    public function render(Category $category, $subcategory = 'all', $shop = 0, $sort = 'asc', $brand = 0, $minPrice = 0, $maxPrice = 0)
     {
-       $data=[];
+        $data = [];
         if ($shop) {
             $query = $shop->products();
             if ($subcategory != "all") {
@@ -75,13 +75,17 @@ class ProductService
                 ->distinct()->get('brands.*');*/
             $categories = $category->children;
         }
-        $data['products' ]=$query->paginate(10);
-        $data['categories' ]=$categories;
-        $data['minimal' ]=$minimal;
-        $data['maximal' ]=$maximal;
+        $data['products'] = $query->paginate(10);
+        $data['append'] =
+            [
+                'categories' => $categories,
+                'minimal' => $minimal,
+                'maximal' => $maximal,
+            ];
 
         return $data;
     }
+
     public function create(array $attributes)
     {
         $product = new Product([
