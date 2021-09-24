@@ -46,5 +46,7 @@ Route::get('comments/{id?}',[CommentController::class,'show'])->where(['id' => '
 Route::get('news',[NewsController::class,'index']);
 Route::get('news/{id?}',[NewsController::class,'show'])->where(['id' => '[0-9]+']);
 Route::get('category',[CategoryController::class,'index']);
+Route::get('category/{id?}',[CategoryController::class,'show'])->where(['id' => '[0-9]+']);
+
 
 });

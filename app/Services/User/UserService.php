@@ -69,6 +69,7 @@ class UserService
             $user->image()->create([
                 'url' => '/' . $file
             ]);
+            $user->load('image');
         }
 
         return $user;

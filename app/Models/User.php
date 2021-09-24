@@ -74,7 +74,7 @@ class User extends Authenticatable
     {
         return $this->attributes['password'] = bcrypt($value);
     }
-    public function avatar(): MorphOne
+    public function image(): MorphOne
     {
         return $this->morphOne(Image::class, 'imageable');
     }

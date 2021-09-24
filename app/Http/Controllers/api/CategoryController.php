@@ -33,10 +33,10 @@ class CategoryController extends ApiController
         return $this->success(__('messages.success'), $categories);
     }
 
-    public function show(Category $category)
+    public function show(Category $id)
     {
         $data = new ProductService();
-        $data = $data->render($category);
+        $data = $data->render($id);
         $this->success(__('messages.success'), $data);
     }
 }
