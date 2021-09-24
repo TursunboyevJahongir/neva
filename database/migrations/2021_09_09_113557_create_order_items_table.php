@@ -26,8 +26,8 @@ class CreateOrderItemsTable extends Migration
                 ->nullOnDelete(); // order item
 
             $table->unsignedInteger('quantity');
-            $table->unsignedBigInteger('sum');
-            $table->unsignedBigInteger('price');
+            $table->unsignedDouble('sum');
+            $table->unsignedDouble('price');
 
             $table->timestamps();
         });

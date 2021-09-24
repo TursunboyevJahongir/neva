@@ -24,7 +24,7 @@ class CreateShopsTable extends Migration
             $table->string('postcode');
             $table->string('address');
             $table->jsonb('description')->nullable();
-            $table->unsignedBigInteger('delivery_price')->default(0);
+            $table->unsignedDouble('delivery_price')->default(0);
             $table->string('delivery_time')->default('+2 hours');
             $table->jsonb('work_day');
             $table->time('open')->default('09:00');

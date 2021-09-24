@@ -25,7 +25,7 @@ class CreateDiscountsTable extends Migration
             $table->text('description')->nullable();
             $table->json('discount_type')->nullable();
             $table->decimal('discount_amount', 22, 4)->default(0);
-            $table->unsignedBigInteger('discount_price')->nullable();
+            $table->unsignedDouble('discount_price')->nullable();
             $table->unsignedBigInteger('discount_percent')->nullable();
             $table->softDeletes();
             $table->timestamps();

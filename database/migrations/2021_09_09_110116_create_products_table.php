@@ -25,9 +25,10 @@ class CreateProductsTable extends Migration
             $table->jsonb('product_attribute_ids')->nullable();
             $table->double('rating')->default(0)->comment("ratings tablitsadan avg olinib yozib qo'yiladi");
             $table->unsignedBigInteger('quantity')->default(0);
-            $table->unsignedBigInteger('min_price')->default(0);
-            $table->unsignedBigInteger('max_price')->default(0);
+            $table->unsignedDouble('min_price')->default(0);
+            $table->unsignedDouble('max_price')->default(0);
             $table->bigInteger('position')->nullable();
+            $table->string('tag')->nullable();
             $table->boolean('active')->default(true);
 
             $table->timestamps();
