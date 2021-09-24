@@ -2,6 +2,7 @@
 
 namespace App\Http\Requests\api;
 
+use App\Rules\GenderRule;
 use Illuminate\Foundation\Http\FormRequest;
 
 class UserUpdateRequest extends FormRequest
@@ -15,16 +16,13 @@ class UserUpdateRequest extends FormRequest
     public function rules()
     {
         return [
-            'email' => 'nullable|email',
-            'birthday' => 'nullable|date',
-            'kids' => 'nullable|array',
-            'address' => 'nullable|string',
-            'district' => 'nullable|string',
-            'phone' => 'nullable|string',
             'full_name' => 'nullable|string',
-            'password' => 'nullable',
-            'image' => 'nullable|image',
-            'gender' => 'nullable|string',
+            'birthday' => 'nullable|date',
+            'avatar' => 'nullable|image|max:1000',
+            'email' => 'nullable|email',
+            'gender' => ['nullable', new GenderRule()],
+            'address' => 'nullable|string',
+            'district_id' => 'nullable|exists:districts,id',
         ];
     }
 }

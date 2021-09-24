@@ -28,8 +28,8 @@ Route::middleware('verify.device_headers')->prefix('v1')->group(static function 
     });
 
 Route::group(['middleware' => ['auth:sanctum']], function () {
-    Route::get('/user', [UserController::class,'index']);
-    Route::post('/user', [UserController::class, 'update']);
+    Route::get('/me', [UserController::class,'me']);
+    Route::post('/me', [UserController::class, 'update']);
 
     Route::post('/comment',[CommentController::class,'store']);
     Route::put('comment/{id}',[CommentController::class,'edit'])->where(['id' => '[0-9]+']);

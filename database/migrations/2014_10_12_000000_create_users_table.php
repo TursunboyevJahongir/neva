@@ -23,7 +23,7 @@ class CreateUsersTable extends Migration
             $table->string('email')->unique()->nullable();
             $table->string('login')->unique()->nullable();
             $table->string('password')->nullable();
-            $table->string('district_id')->nullable();
+            $table->unsignedBigInteger('district_id')->nullable();
             $table->string('interests')->nullable();
             $table->text('address')->nullable();
             $table->enum('status', \App\Enums\UserStatusEnum::toArray());

@@ -2,12 +2,16 @@
 
 namespace App\Models;
 
+use App\Enums\GenderEnum;
+use App\Enums\UserStatusEnum;
 use Carbon\Carbon;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\MorphOne;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
+use Illuminate\Support\Facades\URL;
 use Laravel\Fortify\TwoFactorAuthenticatable;
 use Laravel\Jetstream\HasProfilePhoto;
 use Laravel\Sanctum\HasApiTokens;
@@ -20,14 +24,19 @@ use Spatie\Permission\Traits\HasRoles;
  * @property string $full_name
  * @property string $phone
  * @property string $email
+ * @property GenderEnum $gender
+ * @property UserStatusEnum $status
  * @property Carbon $birthday
  * @property int $district_id
  * @property string $address
  * @property District $district
+ * @property Image $avatar
  */
 class User extends Authenticatable
 {
     use HasApiTokens, HasFactory, Notifiable, HasRoles;
+
+    public const CUSTOMER = 'customer';
 
     /**
      * The attributes that are mass assignable.
@@ -66,6 +75,11 @@ class User extends Authenticatable
         return $this->birthday ? date_diff($this->birthday, Carbon::now())->y : null;
     }
 
+    public function getAvatarPathAttribute(): ?string
+    {
+        return $this->avatar ? URL::to('/uploads/' . $this->avatar) : null;
+    }
+
     public function setPasswordAttribute($value)
     {
         return $this->attributes['password'] = bcrypt($value);
@@ -74,6 +88,12 @@ class User extends Authenticatable
     {
         return $this->morphOne(Image::class, 'imageable');
     }
+
+    public function district(): BelongsTo
+    {
+        return $this->belongsTo(District::class);
+    }
+
     public function shop()
     {
         return $this->belongsTo(Shop::class, 'id', 'user_id');

@@ -9,14 +9,16 @@
 namespace App\Services\User;
 
 
-use App\Enums\RoleEnum;
 use App\Enums\UserStatusEnum;
 use App\Models\Image;
 use App\Models\User;
+use Illuminate\Http\UploadedFile;
 
 
 class UserService
 {
+
+    private const AVATARS_PATH = 'avatar';
     /**
      * @var Image
      */
@@ -52,31 +54,25 @@ class UserService
 
     public function update(array $attributes, User $user)
     {
-        $array = $user->kids ?: [];
-        if (array_key_exists('kids', $attributes))
-            $attributes['kids'] = array_merge_recursive_distinct($array, $attributes['kids']);
-
         $user->update($attributes);
-
-        if (array_key_exists('image', $attributes)) {
-            if ($user->image()->exists()) {
-                $user->image->removeFile();
-                $user->image()->delete();
+        if (array_key_exists('avatar', $attributes)) {
+            if ($user->avatar()->exists()) {
+                $user->avatar->removeFile();
+                $user->avatar()->delete();
             }
 
-            $file = $this->image->uploadFile($attributes['image'], 'Users');
+            $file = $this->image->uploadFile($attributes['avatar'], User::CUSTOMER);
 
-            $user->image()->create([
+            $user->avatar()->create([
                 'url' => '/' . $file
             ]);
+            $user->load('avatar');
         }
-
         return $user;
     }
 
     /**
      * @param string $phone
-     * @param string $deviceUID
      * @return User
      * @throws UserNotFoundException
      */
@@ -112,9 +108,40 @@ class UserService
         }
     }
 
+    /**
+     * @param UploadedFile $avatar
+     * @return false|string
+     */
+    public function saveAvatar(UploadedFile $avatar)
+    {
+        $name = md5(time() . $avatar->getFilename()) . '.' . $avatar->extension();
+        return $avatar->storePubliclyAs(self::AVATARS_PATH, $name);
+    }
+
     public function delete(User $user)
     {
         return $user->delete();
+    }
+
+
+    /**
+     * @param UploadedFile $file
+     * @param User $user
+     * @param string $identifier
+     */
+    private function saveImage(UploadedFile $file, User $user, string $identifier): void
+    {
+
+
+        $fileName = md5(time() . $file->getFilename()) . '.' . $file->getClientOriginalExtension();
+        $file->storeAs('images', $fileName);
+
+        $user->resources()->create([
+            'name' => $fileName,
+            'type' => $file->getExtension(),
+            'full_url' => public_path('uploads/' . $fileName),
+            'additional_identifier' => $identifier
+        ]);
     }
 
 }
