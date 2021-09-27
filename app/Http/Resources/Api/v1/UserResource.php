@@ -34,7 +34,7 @@ class UserResource extends JsonResource
             "email" => $this->email ?? null,
             "address" => $this->address ?? null,
             'district' => $this->district_id ? new DistrictParentResource($this->district) : null,
-            'interests' => $this->interests ? InterestResource::collection(Interest::query()->whereIn('id', [$this->interests])->get()) : null,
+            'interests' => $this->interests ? InterestResource::collection(Interest::query()->whereIn('id', $this->interests)->get()) : null,
         ];
     }
 }

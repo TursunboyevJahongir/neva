@@ -26,7 +26,7 @@ class UserUpdateRequest extends FormRequest
     protected function prepareForValidation()
     {
         $this->merge([
-            'interests' => json_decode($this->interests,true),
+            'interests' => json_decode($this->interests),
         ]);
     }
 
