@@ -37,7 +37,7 @@ class CommentService
                     ]);
                 }
             }
-            $comment->load('images');
+            $comment->load('image');
         }
 
         return $comment;
@@ -59,7 +59,7 @@ class CommentService
             ]);
         }
 
-        $comment->load('images');
+
         return $comment;
     }
 

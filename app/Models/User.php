@@ -2,14 +2,17 @@
 
 namespace App\Models;
 
+use App\Enums\GenderEnum;
+use App\Enums\UserStatusEnum;
+use App\Http\Resources\Api\v1\InterestResource;
 use Carbon\Carbon;
-use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\MorphOne;
 use Illuminate\Foundation\Auth\User as Authenticatable;
+use Illuminate\Http\Resources\Json\AnonymousResourceCollection;
 use Illuminate\Notifications\Notifiable;
-use Laravel\Fortify\TwoFactorAuthenticatable;
-use Laravel\Jetstream\HasProfilePhoto;
+use Illuminate\Support\Facades\URL;
 use Laravel\Sanctum\HasApiTokens;
 use Spatie\Permission\Traits\HasRoles;
 
@@ -20,6 +23,9 @@ use Spatie\Permission\Traits\HasRoles;
  * @property string $full_name
  * @property string $phone
  * @property string $email
+ * @property GenderEnum $gender
+ * @property array interests
+ * @property UserStatusEnum $status
  * @property Carbon $birthday
  * @property int $district_id
  * @property string $address
@@ -32,6 +38,8 @@ use Spatie\Permission\Traits\HasRoles;
 class User extends Authenticatable
 {
     use HasApiTokens, HasFactory, Notifiable, HasRoles;
+
+    public const CUSTOMER = 'customer';
 
     /**
      * The attributes that are mass assignable.
@@ -49,6 +57,7 @@ class User extends Authenticatable
         'gender',
         'status',
         'password',
+        'interests',
     ];
 
     /**
@@ -63,6 +72,7 @@ class User extends Authenticatable
 
     protected $casts = [
         'birthday' => 'datetime:Y-m-d',
+        'interests' => 'array',
     ];
 
     public function getAgeAttribute(): ?int
@@ -74,10 +84,16 @@ class User extends Authenticatable
     {
         return $this->attributes['password'] = bcrypt($value);
     }
-    public function image(): MorphOne
+    public function avatar(): MorphOne
     {
         return $this->morphOne(Image::class, 'imageable');
     }
+
+    public function district(): BelongsTo
+    {
+        return $this->belongsTo(District::class);
+    }
+
     public function shop()
     {
         return $this->belongsTo(Shop::class, 'id', 'user_id');

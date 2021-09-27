@@ -5,7 +5,7 @@ namespace App\Http\Controllers\api;
 use App\Models\Notification;
 use Illuminate\Http\Request;
 
-class NotificationController extends Controller
+class NotificationController extends Notification
 {
     /**
      * Display a listing of the resource.

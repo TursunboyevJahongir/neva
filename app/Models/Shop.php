@@ -3,7 +3,6 @@
 namespace App\Models;
 
 use App\Casts\TranslatableJson;
-use App\Traits\HasHeaders;
 use App\Traits\HasTranslatableJson;
 use Illuminate\Database\Eloquent\Casts\AsCollection;
 use Illuminate\Database\Eloquent\Factories\HasFactory;

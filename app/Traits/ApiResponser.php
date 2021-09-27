@@ -17,7 +17,7 @@ namespace App\Traits;
 |
 */
 
-use App\Http\Resources\PaginationResourceCollection;
+use App\Http\Resources\Api\PaginationResourceCollection;
 use Illuminate\Http\JsonResponse;
 
 trait ApiResponser
