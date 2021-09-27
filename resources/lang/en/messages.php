@@ -20,4 +20,6 @@ return [
     'not_your_sms' => 'this is not your SMS',
     'phone_invalid' => 'Invalid phone number !',
     'change_report_time_expired' => 'You can change the report up to 3 days !',
+    'not_enough_product' => 'Not enough product',
+    'basket_not_enough_quantity' => 'There is not enough quantity in the basket',
 ];

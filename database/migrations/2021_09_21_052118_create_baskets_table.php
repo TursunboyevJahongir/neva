@@ -15,8 +15,8 @@ class CreateBasketsTable extends Migration
     {
         Schema::create('baskets', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('user_id')->constrained()->cascadeOnDelete();
-            $table->foreignId('product_variation_id')->constrained()->cascadeOnDelete();
+            $table->foreignId('user_id')->constrained();
+            $table->foreignId('product_variation_id')->constrained();
             $table->unsignedBigInteger('quantity')->default(0);
             $table->timestamps();
         });

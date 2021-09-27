@@ -20,20 +20,16 @@ class UserController extends ApiController
         $this->service = $service;
     }
 
-//    /**
-//     * Display a listing of the resource.
-//     *
-//     * @return \Illuminate\Http\Response
-//     */
-//    public function index(Request $request)
-//    {
-//        if (auth()->user()->active)
-//            return auth()->user();
-////        else
-////            return response()->json([__('message.user_block')
-////                'message' => 'Пользователь заблокирован'
-////            ], 403);
-//    }
+    /**
+     * Display a listing of the resource.
+     *
+     * @param Request $request
+     * @return JsonResponse
+     */
+    public function me(Request $request): JsonResponse
+    {
+        return $this->success(__('messages.success'), new UserResource(auth()->user()));
+    }
 
 
     public function update(UserUpdateRequest $request): JsonResponse
