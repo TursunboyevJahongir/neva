@@ -17,7 +17,10 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::middleware('verify.device_headers')->prefix('v1')->group(static function () {
+Route::middleware('verify.device_headers')->prefix('v1')->group(/**
+ *
+ */
+    static function () {
     /**
      * Login / Register
      */
