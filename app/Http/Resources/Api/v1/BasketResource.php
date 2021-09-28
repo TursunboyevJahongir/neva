@@ -20,7 +20,6 @@ class BasketResource extends JsonResource
         /**
          * @var Basket $this
          */
-//        dd();
         return [
             "id" => $this->id,
             "product" => [
