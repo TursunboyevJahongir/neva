@@ -4,13 +4,12 @@ namespace App\Http\Controllers\api;
 
 use App\Http\Controllers\ApiController;
 use App\Http\Resources\Api\PaginationResourceCollection;
+use App\Http\Resources\Api\v1\ProductResource;
 use App\Models\Category;
 use App\Services\Category\CategoryService;
 use App\Services\Product\ProductService;
-use App\Traits\ApiResponser;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
-use Illuminate\Http\Response;
 
 class CategoryController extends ApiController
 {
@@ -38,7 +37,8 @@ class CategoryController extends ApiController
     {
         $data = new ProductService();
         $data = $data->render($id);
-     //   return $this->success(__('pages.RoadReport'), new PaginationResourceCollection($data['products'], ProductsResourse::class),$data['appends']);
+        return $this->success(__('pages.RoadReport'), new PaginationResourceCollection($data['products'],
+            ProductResource::class),$data['appends']);
     //   return $this->success(__('messages.success'), new PaginationResourceCollection());
     }
 }
