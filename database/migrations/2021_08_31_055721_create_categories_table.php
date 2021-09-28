@@ -24,6 +24,7 @@ class CreateCategoriesTable extends Migration
                 ->references('id')
                 ->on('categories')
                 ->cascadeOnDelete();
+            $table->bigInteger('position')->nullable();
             $table->timestamps();
         });
     }

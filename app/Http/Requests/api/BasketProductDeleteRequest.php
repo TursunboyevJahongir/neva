@@ -2,11 +2,14 @@
 
 namespace App\Http\Requests\api;
 
+use App\Models\Basket;
+use App\Models\ProductVariation;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Support\Facades\Auth;
 
-class CommentUpdateRequest extends FormRequest
+class BasketProductDeleteRequest extends FormRequest
 {
+
     public function authorize(): bool
     {
         return Auth::check();
@@ -20,10 +23,7 @@ class CommentUpdateRequest extends FormRequest
     public function rules()
     {
         return [
-            //'product_id'=> 'required|numeric|exists:products,id',
-            'text' => 'required|string',
-            'rating' => 'required|integer|min:1|max:5',
-            'images.*' => 'nullable|image',
+            'basket_id.*' => 'required|exists:baskets,id',
         ];
     }
 }

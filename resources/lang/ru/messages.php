@@ -18,4 +18,6 @@ return [
     'phone_invalid' => 'Неправильный номер телефона!',
     'change_report_time_expired' => 'Вы можете изменить отчет до 3-х дней !',
     'invalid_format' => 'Формат :attribute недействителен',
+    'not_enough_product' => 'Недостаточно товара',
+    'basket_not_enough_quantity' => 'Недостаточно количества в корзине',
 ];

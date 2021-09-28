@@ -13,4 +13,8 @@ class Basket extends Model
         'product_variation_id',
         'quantity'
     ];
+    public function product()
+    {
+        return $this->hasOne(ProductVariation::class, 'id', 'product_variation_id');
+    }
 }

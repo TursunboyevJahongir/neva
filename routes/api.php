@@ -1,14 +1,8 @@
 <?php
 
 
-use App\Http\Controllers\api\{AuthController,
-    BannerController,
-    CategoryController,
-    CommentController,
-    InterestController,
-    KidController,
-    NewsController,
-    UserController
+use App\Http\Controllers\api\{
+    AuthController, BannerController, CategoryController, CommentController, NewsController, UserController
 };
 use Illuminate\Support\Facades\Route;
 
@@ -45,9 +39,13 @@ Route::middleware('verify.device_headers')->prefix('v1')->group(static function 
         Route::put('/kid/{id}', [KidController::class, 'update']);
         Route::delete('/kid/{id}', [KidController::class, 'delete']);
 
-        Route::post('/comment', [CommentController::class, 'store']);
-        Route::put('comment/{id}', [CommentController::class, 'edit'])->where(['id' => '[0-9]+']);
-        Route::delete('comment/{id}', [CommentController::class, 'destroy'])->where(['id' => '[0-9]+']);
+    Route::post('/comment',[CommentController::class,'store']);
+    Route::put('comment/{id}',[CommentController::class,'edit'])->where(['id' => '[0-9]+']);
+    Route::delete('comment/{id}',[CommentController::class,'destroy'])->where(['id' => '[0-9]+']);
+
+        Route::get('/basket', [BasketController::class, 'index']);
+        Route::post('/basket', [BasketController::class, 'store']);
+        Route::delete('/basket', [BasketController::class, 'delete']);
     });
 
     Route::get('banners', [BannerController::class, 'index']);
@@ -56,6 +54,8 @@ Route::middleware('verify.device_headers')->prefix('v1')->group(static function 
     Route::get('comments/{id?}', [CommentController::class, 'show'])->where(['id' => '[0-9]+']);
     Route::get('news', [NewsController::class, 'index']);
     Route::get('news/{id?}', [NewsController::class, 'show'])->where(['id' => '[0-9]+']);
-    Route::get('categories', [CategoryController::class, 'index']);
+    Route::get('category', [CategoryController::class, 'index']);
+    Route::get('category/{id?}', [CategoryController::class, 'show'])->where(['id' => '[0-9]+']);
+
 
 });

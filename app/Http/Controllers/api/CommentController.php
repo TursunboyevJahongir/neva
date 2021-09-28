@@ -70,10 +70,10 @@ class CommentController extends ApiController
      * @param Comment $comment
      * @return JsonResponse
      */
-    public function destroy(Comment $comment): JsonResponse
+    public function destroy(Comment $id): JsonResponse
     {
         $this->authorize('delete', 'comment');
-        $comment = $this->service->delete($comment);
+        $comment = $this->service->delete($id);
         return $this->success(__('messages.success'), $comment);
 
     }

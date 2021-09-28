@@ -23,8 +23,8 @@ class CreateOrdersTable extends Migration
                 ->cascadeOndelete();
 
             $table->unsignedInteger('quantity');
-            $table->unsignedBigInteger('total_price');
-            $table->unsignedBigInteger('price_delivery');
+            $table->unsignedDouble('total_price');
+            $table->unsignedDouble('price_delivery');
             $table->string('delivery');
             $table->string('status')->default(Order::STATUS_NEW);
             $table->string('name')->nullable();
@@ -34,6 +34,7 @@ class CreateOrdersTable extends Migration
             $table->string('address')->nullable();
             $table->string('city')->nullable();
             $table->string('street')->nullable();
+            $table->text('note')->nullable();
 
             $table->foreign('shop_id')
                 ->references('id')

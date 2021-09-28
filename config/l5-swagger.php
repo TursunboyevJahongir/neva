@@ -241,7 +241,7 @@ return [
          * Uncomment to add constants which can be used in annotations
          */
          'constants' => [
-             'L5_SWAGGER_CONST_HOST' => env('L5_SWAGGER_CONST_HOST', 'http://symf.uz/api'),
+             'L5_SWAGGER_CONST_HOST' => env('L5_SWAGGER_CONST_HOST', 'http://symf.uz/api/v1'),
         ],
     ],
 ];

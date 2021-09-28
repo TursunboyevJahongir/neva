@@ -18,8 +18,9 @@ class CreateProductVariationsTable extends Migration
             $table->foreignId('product_id')->constrained()->cascadeOnDelete();
             $table->jsonb('product_attribute_value_ids')->nullable();
             $table->unsignedInteger('quantity');
-            $table->unsignedBigInteger('old_price');
-            $table->unsignedBigInteger('price');
+            $table->unsignedDouble('old_price')->nullable();
+            $table->unsignedDouble('percent')->nullable();
+            $table->unsignedDouble('price');
             $table->timestamps();
         });
     }

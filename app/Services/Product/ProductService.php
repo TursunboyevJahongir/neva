@@ -82,6 +82,7 @@ class ProductService
 
         return $data;
     }
+
     public function create(array $attributes)
     {
         $product = new Product([

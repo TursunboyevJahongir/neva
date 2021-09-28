@@ -2,6 +2,10 @@
 
 namespace App\Providers;
 
+use App\Models\Basket;
+use App\Models\Shop;
+use App\Observers\Basket\BasketObserver;
+use App\Observers\Shop\ShopObserver;
 use Illuminate\Auth\Events\Registered;
 use Illuminate\Auth\Listeners\SendEmailVerificationNotification;
 use Illuminate\Foundation\Support\Providers\EventServiceProvider as ServiceProvider;
@@ -27,6 +31,12 @@ class EventServiceProvider extends ServiceProvider
      */
     public function boot()
     {
-        //
+      //  Shop::observe(ShopObserver::class);
+       /// Category::observe(CategoryObserver::class);
+       // Product::observe(ProductObserver::class);
+       // ProductVariation::observe(ProductVariationObserver::class);
+      //  News::observe(NewsObserver::class);
+       // Banner::observe(BannerObserver::class);
+        Basket::observe(BasketObserver::class);
     }
 }

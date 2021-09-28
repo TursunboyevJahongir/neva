@@ -12,13 +12,10 @@ namespace App\Services\User;
 use App\Enums\UserStatusEnum;
 use App\Models\Image;
 use App\Models\User;
-use Illuminate\Http\UploadedFile;
 
 
 class UserService
 {
-
-    private const AVATARS_PATH = 'avatar';
     /**
      * @var Image
      */
@@ -108,40 +105,9 @@ class UserService
         }
     }
 
-    /**
-     * @param UploadedFile $avatar
-     * @return false|string
-     */
-    public function saveAvatar(UploadedFile $avatar)
-    {
-        $name = md5(time() . $avatar->getFilename()) . '.' . $avatar->extension();
-        return $avatar->storePubliclyAs(self::AVATARS_PATH, $name);
-    }
-
     public function delete(User $user)
     {
         return $user->delete();
-    }
-
-
-    /**
-     * @param UploadedFile $file
-     * @param User $user
-     * @param string $identifier
-     */
-    private function saveImage(UploadedFile $file, User $user, string $identifier): void
-    {
-
-
-        $fileName = md5(time() . $file->getFilename()) . '.' . $file->getClientOriginalExtension();
-        $file->storeAs('images', $fileName);
-
-        $user->resources()->create([
-            'name' => $fileName,
-            'type' => $file->getExtension(),
-            'full_url' => public_path('uploads/' . $fileName),
-            'additional_identifier' => $identifier
-        ]);
     }
 
 }
