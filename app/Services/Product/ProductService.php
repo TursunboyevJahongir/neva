@@ -2,6 +2,7 @@
 
 namespace App\Services\Product;
 
+use App\Http\Resources\Api\v1\CategoryResource;
 use App\Models\Category;
 use App\Models\Image;
 use App\Models\Product;
@@ -76,9 +77,9 @@ class ProductService
             $categories = $category->children;
         }
         $data['products' ]=$query->paginate(10);
-        $data['categories' ]=$categories;
-        $data['minimal' ]=$minimal;
-        $data['maximal' ]=$maximal;
+        $data['appends']['categories' ]=CategoryResource::collection($categories);
+        $data['appends']['minimal' ]=$minimal;
+        $data['appends']['maximal' ]=$maximal;
 
         return $data;
     }

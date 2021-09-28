@@ -15,7 +15,7 @@ class CategoryController extends ApiController
 {
 
     private $service;
-
+    
     public function __construct(CategoryService $service)
     {
         $this->service = $service;
@@ -37,7 +37,7 @@ class CategoryController extends ApiController
     {
         $data = new ProductService();
         $data = $data->render($id);
-        return $this->success(__('pages.RoadReport'), new PaginationResourceCollection($data['products'],
+        return $this->success(__('messages.success'), new PaginationResourceCollection($data['products'],
             ProductResource::class),$data['appends']);
     //   return $this->success(__('messages.success'), new PaginationResourceCollection());
     }
