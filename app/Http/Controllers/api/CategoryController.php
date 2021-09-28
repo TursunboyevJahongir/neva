@@ -15,7 +15,7 @@ class CategoryController extends ApiController
 {
 
     private $service;
-    
+
     public function __construct(CategoryService $service)
     {
         $this->service = $service;
