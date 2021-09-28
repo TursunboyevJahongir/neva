@@ -10,7 +10,7 @@ use App\Http\Requests\api\Auth\SmsConfirmRequest;
 use App\Http\Requests\api\VerifyRequest;
 use App\Models\User;
 use App\Services\Sms\SmsService;
-use App\Services\User\UserService;
+use App\Services\User\KidsService;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 
@@ -39,10 +39,10 @@ class AuthController extends ApiController
     /**
      * @param SmsConfirmRequest $request
      * @param SmsService $smsService
-     * @param UserService $userService
+     * @param KidsService $userService
      * @return JsonResponse
      */
-    public function authConfirm(SmsConfirmRequest $request, SmsService $smsService, UserService $userService): JsonResponse
+    public function authConfirm(SmsConfirmRequest $request, SmsService $smsService, KidsService $userService): JsonResponse
     {
         try {
             if ($smsService->confirm($request->json('phone'), $request->json('code'))) {
@@ -71,31 +71,11 @@ class AuthController extends ApiController
         }
     }
 
-    public function verify(VerifyRequest $request)
-    {
-        $user = User::query()
-            ->firstWhere('phone', $request->phone);
-
-        if ($user && $user->verifyCode($request->verify_code)) {
-            $token = $user->createToken(time())->plainTextToken;
-            $user->active = true;
-            return response()->json([
-                'status' => true,
-                'token' => $token
-            ]);
-        }
-        return response()->json([
-            'status' => false,
-            'message' => 'Неправильный код'
-        ], 401);
-    }
-
-
     public function logout(Request $request): JsonResponse
     {
         $request->user()->currentAccessToken()->delete();
         // auth()->user()->tokens()->delete();
 
-        return $this->success();
+        return $this->success(__('messages.success'));
     }
 }

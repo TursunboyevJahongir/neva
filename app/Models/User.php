@@ -8,6 +8,7 @@ use App\Http\Resources\Api\v1\InterestResource;
 use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\MorphOne;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Http\Resources\Json\AnonymousResourceCollection;
@@ -81,6 +82,7 @@ class User extends Authenticatable
     {
         return $this->attributes['password'] = bcrypt($value);
     }
+
     public function avatar(): MorphOne
     {
         return $this->morphOne(Image::class, 'imageable');
@@ -91,8 +93,13 @@ class User extends Authenticatable
         return $this->belongsTo(District::class);
     }
 
-    public function shop()
+    public function shop(): BelongsTo
     {
         return $this->belongsTo(Shop::class, 'id', 'user_id');
+    }
+
+    public function kids(): HasMany
+    {
+        return $this->hasMany(Kids::class, 'parent_id');
     }
 }

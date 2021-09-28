@@ -6,6 +6,7 @@ use App\Http\Controllers\api\{AuthController,
     CategoryController,
     CommentController,
     InterestController,
+    KidController,
     NewsController,
     UserController
 };
@@ -39,6 +40,11 @@ Route::middleware('verify.device_headers')->prefix('v1')->group(static function 
 
         Route::get('/interests', [InterestController::class, 'index']);
 
+        Route::get('/kids', [KidController::class, 'index']);
+        Route::post('/kid', [KidController::class, 'store']);
+        Route::put('/kid/{id}', [KidController::class, 'update']);
+        Route::delete('/kid/{id}', [KidController::class, 'delete']);
+
         Route::post('/comment', [CommentController::class, 'store']);
         Route::put('comment/{id}', [CommentController::class, 'edit'])->where(['id' => '[0-9]+']);
         Route::delete('comment/{id}', [CommentController::class, 'destroy'])->where(['id' => '[0-9]+']);
@@ -50,6 +56,6 @@ Route::middleware('verify.device_headers')->prefix('v1')->group(static function 
     Route::get('comments/{id?}', [CommentController::class, 'show'])->where(['id' => '[0-9]+']);
     Route::get('news', [NewsController::class, 'index']);
     Route::get('news/{id?}', [NewsController::class, 'show'])->where(['id' => '[0-9]+']);
-    Route::get('category', [CategoryController::class, 'index']);
+    Route::get('categories', [CategoryController::class, 'index']);
 
 });

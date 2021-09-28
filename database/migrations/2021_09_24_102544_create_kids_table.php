@@ -15,9 +15,9 @@ class CreateKidsTable extends Migration
     {
         Schema::create('kids', function (Blueprint $table) {
             $table->id();
-            $table->unsignedBigInteger('parent_id')->nullable();
+            $table->unsignedBigInteger('parent_id');
             $table->json('interests')->nullable();
-            $table->string('full_name')->nullable();
+            $table->string('full_name');
             $table->enum('gender', \App\Enums\GenderEnum::toArray())->nullable();
             $table->date('birthday')->nullable();
             $table->timestamps();
