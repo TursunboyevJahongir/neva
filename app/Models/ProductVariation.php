@@ -13,7 +13,8 @@ class ProductVariation extends Model
         'product_attribute_value_ids',
         'quantity',
         'old_price',
-        'price'
+        'price',
+        'percent',
     ];
 
     protected $casts = [

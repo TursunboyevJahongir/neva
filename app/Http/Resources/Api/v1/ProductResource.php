@@ -26,6 +26,8 @@ class ProductResource extends JsonResource
             "description" => $this->content,
             "rating" => $this->rating ?? 0,
             "price" => $this->min_price,
+            "old_price" => $this->min_old_price,
+            "percent" => $this->max_percent,
             "preview" => $this->image->image_url,
 
         ];

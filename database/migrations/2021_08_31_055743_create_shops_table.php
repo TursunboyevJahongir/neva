@@ -16,12 +16,11 @@ class CreateShopsTable extends Migration
         Schema::create('shops', function (Blueprint $table) {
             $table->id();
             $table->foreignId('user_id')
-                ->constrained()
-                ->cascadeOnDelete();
+                ->constrained();
 
-            $table->jsonb('name');
+            $table->string('name');
             $table->string('slug');
-            $table->string('postcode');
+            $table->string('postcode')->nullable();
             $table->string('address');
             $table->jsonb('description')->nullable();
             $table->unsignedDouble('delivery_price')->default(0);

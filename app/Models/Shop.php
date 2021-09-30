@@ -31,8 +31,7 @@ class Shop extends Model
     protected $casts = [
         'active' => 'boolean',
         'work_day'=>'array',
-        'name' => TranslatableJson::class,
         'description' => TranslatableJson::class
     ];
-    
+
 }

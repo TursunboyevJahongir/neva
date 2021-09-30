@@ -3,28 +3,39 @@
 namespace App\Casts;
 
 
-
+use App\Http\Request;
 use Illuminate\Contracts\Database\Eloquent\CastsAttributes;
+use Illuminate\Database\Eloquent\Model;
+use stdClass;
 
 class TranslatableJson implements CastsAttributes
 {
 
-    public function get($model, $key, $value, $attributes)
+    /**
+     * Transform the resource into an array.
+     *
+     * @param $model
+     * @param $key
+     * @param $value
+     * @param $attributes
+     * @return mixed
+     */
+    public function get($model, $key, $value, $attributes): mixed
     {
         $arr = json_decode($value, true);
-        return $arr[app()->getLocale()] ?? $arr['ru'] ?? $arr['uz'] ?? new \stdClass();
+        return $arr[app()->getLocale()] ?? $arr['ru'] ?? $arr['uz'] ?? new stdClass();
     }
 
     /**
      * Prepare the given value for storage.
      *
-     * @param  \Illuminate\Database\Eloquent\Model  $model
-     * @param  string  $key
-     * @param  mixed  $value
-     * @param  array  $attributes
-     * @return mixed
+     * @param Model $model
+     * @param string $key
+     * @param mixed $value
+     * @param $attributes
+     * @return false|string
      */
-    public function set($model, $key, $value, $attributes)
+    public function set($model, string $key, $value, $attributes)
     {
         return json_encode($value);
     }
@@ -32,10 +43,10 @@ class TranslatableJson implements CastsAttributes
     /**
      * Get the serialized representation of the value.
      *
-     * @param  \Illuminate\Database\Eloquent\Model  $model
-     * @param  string  $key
-     * @param  mixed  $value
-     * @param  array  $attributes
+     * @param $model
+     * @param string $key
+     * @param mixed $value
+     * @param array $attributes
      * @return mixed
      */
     public function serialize($model, string $key, $value, array $attributes)

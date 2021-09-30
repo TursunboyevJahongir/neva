@@ -19,14 +19,16 @@ class CreateProductsTable extends Migration
             $table->jsonb('content')->nullable(); // translatable
             $table->string('sku')->unique()->nullable();
             $table->string('slug')->unique();
-            $table->foreignId('shop_id')->nullable();
-            $table->foreignId('category_id')->nullable();
+            $table->foreignId('shop_id')->nullable()->constrained();
+            $table->foreignId('category_id')->nullable()->constrained();
             $table->jsonb('collection_ids')->nullable();
             $table->jsonb('product_attribute_ids')->nullable();
             $table->double('rating')->default(0)->comment("ratings tablitsadan avg olinib yozib qo'yiladi");
             $table->unsignedBigInteger('quantity')->default(0);
-            $table->unsignedDouble('min_price')->default(0);
-            $table->unsignedDouble('max_price')->default(0);
+            $table->unsignedDouble('min_old_price')->nullable()->comment('voretionlar ichidagi eng arzon tovarning old price');
+            $table->unsignedDouble('min_price')->default(0)->comment('voretionlar ichidagi eng arzon price');
+            $table->unsignedDouble('max_price')->default(0)->comment('voretionlar ichidagi eng qimmat price');
+            $table->unsignedInteger('max_percent')->nullable();
             $table->bigInteger('position')->nullable();
             $table->string('tag')->nullable();
             $table->boolean('active')->default(true);
