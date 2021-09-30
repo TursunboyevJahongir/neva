@@ -17,10 +17,7 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::middleware('verify.device_headers')->prefix('v1')->group(/**
- *
- */
-    static function () {
+Route::middleware('verify.device_headers')->prefix('v1')->group(static function () {
     /**
      * Login / Register
      */
@@ -31,10 +28,16 @@ Route::middleware('verify.device_headers')->prefix('v1')->group(/**
     });
 
     Route::group(['middleware' => ['auth:sanctum']], function () {
+        Route::post('/logout', [AuthController::class, 'logout']);
         Route::get('/me', [UserController::class, 'me']);
         Route::post('/me', [UserController::class, 'update']);
 
         Route::get('/interests', [InterestController::class, 'index']);
+
+        Route::get('/kids', [KidController::class, 'index']);
+        Route::post('/kid', [KidController::class, 'store']);
+        Route::put('/kid/{id}', [KidController::class, 'update']);
+        Route::delete('/kid/{id}', [KidController::class, 'delete']);
 
         Route::post('/comment', [CommentController::class, 'store']);
         Route::put('comment/{id}', [CommentController::class, 'edit'])->where(['id' => '[0-9]+']);

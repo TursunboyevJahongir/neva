@@ -10,7 +10,7 @@ use App\Http\Requests\api\Auth\SmsConfirmRequest;
 use App\Http\Requests\api\VerifyRequest;
 use App\Models\User;
 use App\Services\Sms\SmsService;
-use App\Services\User\UserService;
+use App\Services\User\KidsService;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -89,10 +89,10 @@ class AuthController extends ApiController
     /**
      * @param SmsConfirmRequest $request
      * @param SmsService $smsService
-     * @param UserService $userService
+     * @param KidsService $userService
      * @return JsonResponse
      */
-    public function authConfirm(SmsConfirmRequest $request, SmsService $smsService, UserService $userService): JsonResponse
+    public function authConfirm(SmsConfirmRequest $request, SmsService $smsService, KidsService $userService): JsonResponse
     {
         try {
             if ($smsService->confirm($request->json('phone'), $request->json('code'))) {
@@ -141,11 +141,11 @@ class AuthController extends ApiController
     }
 
 
-    public function logout(Request $request)
+    public function logout(Request $request): JsonResponse
     {
         $request->user()->currentAccessToken()->delete();
         // auth()->user()->tokens()->delete();
 
-        return $this->success();
+        return $this->success(__('messages.success'));
     }
 }

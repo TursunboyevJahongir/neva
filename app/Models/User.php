@@ -8,6 +8,8 @@ use App\Http\Resources\Api\v1\InterestResource;
 use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Database\Eloquent\Relations\MorphOne;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Http\Resources\Json\AnonymousResourceCollection;
@@ -30,6 +32,7 @@ use Spatie\Permission\Traits\HasRoles;
  * @property int $district_id
  * @property string $address
  * @property District $district
+ * @property Image $avatar
  *  * @OA\Schema(
  *     title="User model",
  *     description="User model",
@@ -94,8 +97,13 @@ class User extends Authenticatable
         return $this->belongsTo(District::class);
     }
 
-    public function shop()
+    public function shop(): HasOne
     {
-        return $this->belongsTo(Shop::class, 'id', 'user_id');
+        return $this->hasOne(Shop::class, 'user_id');
+    }
+
+    public function kids(): HasMany
+    {
+        return $this->hasMany(Kids::class, 'parent_id');
     }
 }

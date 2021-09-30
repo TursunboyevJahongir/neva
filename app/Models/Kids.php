@@ -4,6 +4,7 @@ namespace App\Models;
 
 
 use App\Enums\GenderEnum;
+use App\Models\User;
 use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;

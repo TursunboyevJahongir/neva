@@ -22,7 +22,7 @@ class CategoryService
     public function all()
     {
         return Category::query()
-            ->latest('id')
+            ->where('parent_id', '=', null)
             ->get();
     }
 
