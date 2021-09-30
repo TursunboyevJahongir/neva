@@ -4,9 +4,15 @@ namespace App\Http\Controllers\api;
 
 use App\Http\Controllers\ApiController;
 
+use App\Http\Requests\api\SearchRequest;
+use App\Http\Resources\Api\PaginationResourceCollection;
+use App\Http\Resources\Api\v1\ProductResource;
 use App\Models\Product;
 use App\Services\Product\ProductService;
 use App\Traits\ApiResponser;
+use Exception;
+use Illuminate\Http\JsonResponse;
+use Illuminate\Http\Request;
 
 
 class ProductController extends ApiController
@@ -21,6 +27,16 @@ class ProductController extends ApiController
     public function __construct(ProductService $service)
     {
         $this->service = $service;
+    }
+
+    /**
+     * @throws Exception
+     */
+    public function search(string $search, Request $request): JsonResponse
+    {
+        $data = $this->service->search($search, $request);
+        return $this->success(__('messages.success'), new PaginationResourceCollection($data['products'],
+            ProductResource::class), $data['append']);
     }
 
 
@@ -38,7 +54,7 @@ class ProductController extends ApiController
     /**
      * Display the specified resource.
      *
-     * @param  \App\Models\Product  $product
+     * @param \App\Models\Product $product
      * @return \Illuminate\Http\Response
      */
     public function show(Product $id)

@@ -18,7 +18,6 @@ class CreateCategoriesTable extends Migration
             $table->unsignedBigInteger('parent_id')->nullable();
             $table->jsonb('name');
             $table->string('slug');
-            $table->jsonb('description')->nullable();
             $table->boolean('active')->default(true);
             $table->foreign('parent_id')
                 ->references('id')

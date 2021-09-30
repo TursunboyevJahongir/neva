@@ -2,17 +2,28 @@
 
 namespace App\Services\Product;
 
+use App\Http\Resources\Api\v1\CategoryNameResource;
 use App\Http\Resources\Api\v1\CategoryResource;
 use App\Models\Category;
 use App\Models\Image;
 use App\Models\Product;
 use App\Models\ProductVariation;
+use App\Services\LatinToCyrillic;
+use Carbon\Carbon;
+use Illuminate\Http\Request;
 use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Facades\Storage;
-use Arr;
+use Illuminate\Support\Str;
 
 class ProductService
 {
+
+    public function __construct(
+        private LatinToCyrillic $latinToCyrillic
+    )
+    {
+    }
+
     public function all($shop_id = false)
     {
         return Product::with('image')
@@ -21,9 +32,123 @@ class ProductService
             ->paginate(config('app.per_page'));
     }
 
-    public function render(Category $category,$subcategory='all',$shop=0,$sort= 'asc',$brand=0,$minPrice=0,$maxPrice=0)
+    public function categoryProducts(Category $category, Request $request): array
     {
-       $data=[];
+        $size = $request->per_page ?? 10;
+        $orderBy = $request->orderby ?? "position";
+
+        $orderBy = $orderBy === 'price' ? "min_price" : $orderBy;
+        $orderBy = $orderBy === 'percent' ? "max_percent" : $orderBy;
+        $sort = $request->sort ?? "DESC";
+        $minimal = $request->min_price;
+        $maximal = $request->max_price;
+        $sale = $request->sale == 1;
+
+        $search = $request->search ? trim($request->search) : null;
+
+        $childrenIds = $category->children()->active()->pluck('id')->toArray();
+        array_push($childrenIds, $category->id);
+
+        $query = Product::query()->active()->whereIn('category_id', $childrenIds)
+            ->when($minimal, function ($query) use ($minimal) {
+                return $query->where('min_price', '>=', $minimal);
+            })
+            ->when($maximal, function ($query, $maximal) {
+                return $query->where('min_price', '<=', $maximal);
+            })
+            ->when($sale, function ($query) use ($sale) {
+                return $query->where('max_percent', '!=', null);
+            })
+            ->orderBy($orderBy, $sort);
+//        if ($brand != 0) {
+//            $query->where('brand_id', $brand);
+//        }
+
+        $minimal = $query->min('min_price');
+        $maximal = $query->max('min_price');
+
+        /*$brands = Brand::join('products', 'brands.id', '=', 'products.brand_id')
+            ->whereIn('products.category_id', $category->getDescendants($category))
+            ->distinct()->get('brands.*');*/
+        $categories = $category->children;
+
+        $data['products'] = $query->paginate($size);
+        $data['append'] = [
+            'categories' => CategoryNameResource::collection($categories),
+            'minimal' => $minimal,
+            'maximal' => $maximal
+        ];
+
+        return $data;
+    }
+
+    public function search(string $search, Request $request): array
+    {
+        $size = $request->per_page ?? 10;
+        $orderBy = $request->orderby ?? "position";
+        $orderBy = $orderBy === 'price' ? "min_price" : $orderBy;
+        $orderBy = $orderBy === 'percent' ? "max_percent" : $orderBy;
+        $sort = $request->sort ?? "DESC";
+        $minimal = $request->min_price;
+        $maximal = $request->max_price;
+        $sale = $request->sale == 1;
+
+        $search = trim($search);
+        $cyrillic = $this->latinToCyrillic->LatinToCyrillic($search);
+        $latin = $this->latinToCyrillic->CyrillicToLatin($search);
+
+
+        $query = Product::query()
+            ->where('name->uz', 'like', "%$latin%")
+            ->orWhere('name->ru', 'like', "%$latin%")
+            ->orWhere('name->en', 'like', "%$latin%")
+            ->orWhere('content->uz', 'like', "%$latin%")
+            ->orWhere('content->ru', 'like', "%$latin%")
+            ->orWhere('content->en', 'like', "%$latin%")
+            ->orWhere('name->uz', 'like', "%$cyrillic%")
+            ->orWhere('name->ru', 'like', "%$cyrillic%")
+            ->orWhere('name->en', 'like', "%$cyrillic%")
+            ->orWhere('content->uz', 'like', "%$cyrillic%")
+            ->orWhere('content->ru', 'like', "%$cyrillic%")
+            ->orWhere('content->en', 'like', "%$cyrillic%")
+            ->orWhereHas('shop', function ($query) use ($latin, $cyrillic) {
+                $query->where('name', 'like', '%' . $latin . '%')
+                    ->orWhere('name', 'like', "%$cyrillic%");
+            })
+            ->orWhereHas('category', function ($query) use ($latin, $cyrillic) {
+                $query->where('name->uz', 'like', "%$latin%")
+                    ->orWhere('name->ru', 'like', "%$latin%")
+                    ->orWhere('name->en', 'like', "%$latin%")
+                    ->orWhere('name->uz', 'like', "%$cyrillic%")
+                    ->orWhere('name->ru', 'like', "%$cyrillic%")
+                    ->orWhere('name->en', 'like', "%$cyrillic%");
+            })
+            ->when($minimal, function ($query) use ($minimal) {
+                return $query->where('min_price', '>=', $minimal);
+            })
+            ->when($maximal, function ($query, $maximal) {
+                return $query->where('min_price', '<=', $maximal);
+            })
+            ->when($sale, function ($query) use ($sale) {
+                return $query->where('max_percent', '!=', null);
+            })
+            ->orderBy($orderBy, $sort);
+
+        $minimal = $query->min('min_price');
+        $maximal = $query->max('min_price');
+
+        $data['products'] = $query->paginate($size);
+        $data['append'] = [
+            'minimal' => $minimal,
+            'maximal' => $maximal
+        ];
+        return $data;
+    }
+
+    public
+    function render(Category $category, $subcategory = 'all', $shop = 0, $sort = 'asc', $brand = 0, $minPrice = 0, $maxPrice = 0)
+    {
+        $data = [];
         if ($shop) {
             $query = $shop->products();
             if ($subcategory != "all") {
@@ -76,15 +201,16 @@ class ProductService
                 ->distinct()->get('brands.*');*/
             $categories = $category->children;
         }
-        $data['products' ]=$query->paginate(10);
-        $data['appends']['categories' ]=CategoryResource::collection($categories);
-        $data['appends']['minimal' ]=$minimal;
-        $data['appends']['maximal' ]=$maximal;
+        $data['products'] = $query->paginate(10);
+        $data['appends']['categories'] = CategoryResource::collection($categories);
+        $data['appends']['minimal'] = $minimal;
+        $data['appends']['maximal'] = $maximal;
 
         return $data;
     }
 
-    public function create(array $attributes)
+    public
+    function create(array $attributes)
     {
         $product = new Product([
             'shop_id' => $attributes['shop_id'],

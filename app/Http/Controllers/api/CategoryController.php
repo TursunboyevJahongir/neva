@@ -4,10 +4,12 @@ namespace App\Http\Controllers\api;
 
 use App\Http\Controllers\ApiController;
 use App\Http\Resources\Api\PaginationResourceCollection;
+use App\Http\Resources\Api\v1\CategoryResource;
 use App\Http\Resources\Api\v1\ProductResource;
 use App\Models\Category;
 use App\Services\Category\CategoryService;
 use App\Services\Product\ProductService;
+use Exception;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 
@@ -27,18 +29,22 @@ class CategoryController extends ApiController
      * @param Request $request
      * @return JsonResponse
      */
-    public function index(Request $request): JsonResponse
+    public function parents(Request $request): JsonResponse
     {
-        $categories = $this->service->all();
-        return $this->success(__('messages.success'), $categories);
+        $orderBy = $request->orderby ?? "position";
+        $sort = $request->sort ?? "DESC";
+        $categories = $this->service->Parents($orderBy, $sort);
+        return $this->success(__('messages.success'), CategoryResource::collection($categories));
     }
 
-    public function show(Category $id)
+    /**
+     * @throws Exception
+     */
+    public function show(Category $id, ProductService $data,Request $request): JsonResponse
     {
-        $data = new ProductService();
-        $data = $data->render($id);
+        $data = $data->categoryProducts($id,$request);
         return $this->success(__('messages.success'), new PaginationResourceCollection($data['products'],
-            ProductResource::class),$data['appends']);
-    //   return $this->success(__('messages.success'), new PaginationResourceCollection());
+            ProductResource::class), $data['append']);
+        //   return $this->success(__('messages.success'), new PaginationResourceCollection());
     }
 }

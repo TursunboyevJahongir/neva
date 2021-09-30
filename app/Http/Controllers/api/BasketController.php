@@ -10,7 +10,10 @@ use App\Http\Resources\Api\PaginationResourceCollection;
 use App\Http\Resources\Api\v1\BasketResource;
 use App\Models\Basket;
 use App\Services\Basket\BasketService;
+use Exception;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
+use Illuminate\Http\Response;
 
 class BasketController extends ApiController
 {
@@ -25,10 +28,11 @@ class BasketController extends ApiController
     /**
      * Display a listing of the resource.
      *
-     * @return \Illuminate\Http\Response
+     * @param Request $request
+     * @return JsonResponse
+     * @throws Exception
      */
-    public
-    function index(Request $request)
+    public function index(Request $request): JsonResponse
     {
         $size = $request->per_page ?? 10;
         $orderBy = $request->orderby ?? "created_at";
@@ -41,18 +45,16 @@ class BasketController extends ApiController
     /**
      * Store a newly created resource in storage.
      *
-     * @param  \Illuminate\Http\Request $request
-     * @return \Illuminate\Http\Response
+     * @param BasketRequest $request
+     * @return JsonResponse
      */
-    public
-    function store(BasketRequest $request)
+    public function store(BasketRequest $request): JsonResponse
     {
         $this->service->cart($request->validated());
         return $this->success(__('messages.success'));
     }
 
-    public
-    function delete(BasketProductDeleteRequest $request)
+    public function delete(BasketProductDeleteRequest $request): JsonResponse
     {
         Basket::whereIn('id', $request->basket_id)->delete();
         return $this->success(__('messages.success'));

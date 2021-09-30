@@ -18,13 +18,21 @@ class DatabaseSeeder extends Seeder
         $this->call(PermissionsSeeder::class);
 
 
-//        $this->call(ShopsTableSeeder::class);
+        $this->call(ShopsTableSeeder::class);
         $this->call(DistrictSeeder::class);
         $this->call(Categories::class);
         $this->call(BannersTableSeeder::class);
+        \App\Models\Category::factory(10)->create();
+        \App\Models\Category::factory(10)->create();
+        \App\Models\Category::factory(10)->create();
         $this->call(ProductAttributesTableSeeder::class);
-        $this->call(ProductsTableSeeder::class);
+//        $this->call(ProductsTableSeeder::class);
         \App\Models\Interest::factory(30)->create();
+//        \App\Models\Product::factory(15)->create()->each(function ($currency) {
+//            $currency->variations()->save(\App\Models\ProductVariation::factory(2)->make());
+//        });
+        \App\Models\Product::factory(50)->create();
+        \App\Models\ProductVariation::factory(150)->create();
 
     }
 }

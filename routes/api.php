@@ -2,7 +2,7 @@
 
 
 use App\Http\Controllers\api\{
-    AuthController, BannerController, BasketController, CategoryController, CommentController, FavoriteController, InterestController, KidController, NewsController, UserController
+    AuthController, BannerController, BasketController, CategoryController, CommentController, FavoriteController, InterestController, KidController, NewsController, ProductController, UserController
 };
 use Illuminate\Support\Facades\Route;
 
@@ -35,9 +35,9 @@ Route::middleware('verify.device_headers')->prefix('v1')->group(static function 
         Route::get('/interests', [InterestController::class, 'index']);
 
         Route::get('/kids', [KidController::class, 'index']);
-        Route::post('/kid', [KidController::class, 'store']);
-        Route::put('/kid/{id}', [KidController::class, 'update']);
-        Route::delete('/kid/{id}', [KidController::class, 'delete']);
+        Route::post('/kids', [KidController::class, 'store']);
+        Route::put('/kids/{id}', [KidController::class, 'update']);
+        Route::delete('/kids/{id}', [KidController::class, 'delete']);
 
         Route::post('/comment', [CommentController::class, 'store']);
         Route::put('comment/{id}', [CommentController::class, 'edit'])->where(['id' => '[0-9]+']);
@@ -60,8 +60,8 @@ Route::middleware('verify.device_headers')->prefix('v1')->group(static function 
     Route::get('comments/{id?}', [CommentController::class, 'show'])->where(['id' => '[0-9]+']);
     Route::get('news', [NewsController::class, 'index']);
     Route::get('news/{id?}', [NewsController::class, 'show'])->where(['id' => '[0-9]+']);
-    Route::get('category', [CategoryController::class, 'index']);
-    Route::get('category/{id?}', [CategoryController::class, 'show'])->where(['id' => '[0-9]+']);
 
-
+    Route::get('category', [CategoryController::class, 'parents']);
+    Route::get('category/{id}/product', [CategoryController::class, 'show']);
+    Route::get('search/{string}', [ProductController::class, 'search']);
 });

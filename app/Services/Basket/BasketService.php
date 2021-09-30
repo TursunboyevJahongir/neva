@@ -3,8 +3,6 @@
 namespace App\Services\Basket;
 
 use App\Models\Basket;
-use App\Models\Favorite;
-use App\Models\Product;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
@@ -57,14 +55,6 @@ class BasketService
         session()->put('cart', $cart);
     }
 
-    //WishList
-    public function addToWish(Product $product)
-    {
-       Favorite::query()->updateOrCreate(
-           ['user_id' => Auth::id(), 'product_id' => $product]
 
-       );
-       return true;
-    }
 
 }

@@ -18,10 +18,8 @@ class ShopsTableSeeder extends Seeder
     {
         Shop::create([
             'user_id' => 1,
-            'name' => [
-                'ru' =>'Diva_Kids',
-                'uz'=>'d'
-            ],
+            'name' => 'Diva_Kids',
+            'address' => "Toshkent ",
             'slug' => Str::slug('DivaKids'),
             'delivery_price' => 15000,
             'work_day' => [

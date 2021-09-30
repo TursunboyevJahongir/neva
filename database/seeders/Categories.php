@@ -22,12 +22,8 @@ class Categories extends Seeder
                 'ru' => 'Питание',
                 'uz' => ''
             ],
-            'description' => [
-                'ru' => 'Питание',
-                'uz' => ''
-            ],
             'slug' => Str::slug('Питание'),
-        ])->image()->create([
+        ])->ico()->create([
             'url' => '/images/bg-01.jpg'
         ]);
         Category::create([
@@ -35,12 +31,8 @@ class Categories extends Seeder
                 'ru' => 'Игрушки и игры',
                 'uz' => ''
             ],
-            'description' => [
-                'ru' => 'Игрушки и игры',
-                'uz' => ''
-            ],
             'slug' => Str::slug('Игрушки и игры'),
-        ])->image()->create([
+        ])->ico()->create([
             'url' => '/images/bg-01.jpg'
         ]);
 
@@ -49,12 +41,8 @@ class Categories extends Seeder
                 'ru' => 'Гигиена и уход',
                 'uz' => ''
             ],
-            'description' => [
-                'ru' => 'Гигиена и уход',
-                'uz' => ''
-            ],
             'slug' => Str::slug('Гигиена и уход'),
-        ])->image()->create([
+        ])->ico()->create([
             'url' => '/images/bg-01.jpg'
         ]);
 
