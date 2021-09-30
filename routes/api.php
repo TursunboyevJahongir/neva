@@ -49,7 +49,6 @@ Route::middleware('verify.device_headers')->prefix('v1')->group(static function 
 
         Route::get('/favorite', [FavoriteController::class, 'index']);
         Route::post('/favorite', [FavoriteController::class, 'store']);
-        Route::delete('/favorite', [FavoriteController::class, 'delete']);
 
         Route::post('/logout', [AuthController::class, 'logout']);
     });

@@ -17,13 +17,15 @@ class FavoriteService
         return $favorite->paginate($size);
     }
 
-
     //WishList
-    public function add(Product $product)
+    public function add(array $product)
     {
-        Favorite::query()->updateOrCreate(
-            ['user_id' => Auth::id(), 'product_id' => $product]
-        );
+        $array = ['user_id' => Auth::id(), 'product_id' => $product['product_id']];
+        $model = Favorite::query()->where($array);
+        if (!is_null($model->first())) {
+            $model->delete();
+        } else
+            Favorite::create($array);
         return true;
     }
 

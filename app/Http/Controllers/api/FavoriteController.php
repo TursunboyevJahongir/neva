@@ -30,6 +30,7 @@ class FavoriteController extends ApiController
         $orderBy = $request->orderby ?? "created_at";
         $sort = $request->sort ?? "DESC";
         $favorites = $this->service->all($orderBy, $sort, $size);
+        //dd($favorites);
         return $this->success(__('messages.success'), new PaginationResourceCollection($favorites, FavoriteResource::class));
     }
 
@@ -40,18 +41,12 @@ class FavoriteController extends ApiController
      * @param  \Illuminate\Http\Request $request
      * @return \Illuminate\Http\Response
      */
-    public
-    function store(FavoriteRequest $request)
+    public function store(FavoriteRequest $request)
     {
         $this->service->add($request->validated());
         return $this->success(__('messages.success'));
     }
 
-    public
-    function delete(FavoriteRequest $request)
-    {
-        Favorite::whereIn('id', $request->id)->delete();
-        return $this->success(__('messages.success'));
-    }
+
 
 }

@@ -21,12 +21,12 @@ class FavoriteResource extends JsonResource
          */
         return [
             "id" => $this->id,
-            "product" => [
+         /*   "product" => [
                 "id" => $this->product->id,
                 'name' => $this->product->name,
                 'price' => $this->product->min_price,
                 'image' => $this->product->image->image_url,
-            ],
+            ],*/
             "count" => Favorite::query()->select('id')->where('product_id',$this->product->id)->count(),
         ];
     }
