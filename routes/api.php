@@ -2,7 +2,7 @@
 
 
 use App\Http\Controllers\api\{
-    AuthController, BannerController, BasketController, CategoryController, CommentController, InterestController, NewsController, UserController
+    AuthController, BannerController, BasketController, CategoryController, CommentController, FavoriteController, InterestController, KidController, NewsController, UserController
 };
 use Illuminate\Support\Facades\Route;
 
@@ -46,6 +46,10 @@ Route::middleware('verify.device_headers')->prefix('v1')->group(static function 
         Route::get('/basket', [BasketController::class, 'index']);
         Route::post('/basket', [BasketController::class, 'store']);
         Route::delete('/basket', [BasketController::class, 'delete']);
+
+        Route::get('/favorite', [FavoriteController::class, 'index']);
+        Route::post('/favorite', [FavoriteController::class, 'store']);
+        Route::delete('/favorite', [FavoriteController::class, 'delete']);
 
         Route::post('/logout', [AuthController::class, 'logout']);
     });
