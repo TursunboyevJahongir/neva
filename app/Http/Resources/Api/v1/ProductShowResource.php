@@ -3,10 +3,11 @@
 namespace App\Http\Resources\Api\v1;
 
 use App\Models\Product;
+use App\Models\ProductAttributeValue;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
 
-class ProductResource extends JsonResource
+class ProductShowResource extends JsonResource
 {
     /**
      * Transform the resource into an array.
@@ -23,13 +24,14 @@ class ProductResource extends JsonResource
             "id" => $this->id,
             "sku" => $this->sku,
             "name" => $this->name,
-            "description" => $this->content,
+            "content" => $this->content,
             "rating" => $this->rating,
-            "price" => $this->min_price,
-            "old_price" => $this->min_old_price,
+            "min_price" => $this->min_price,
+            "max_price" => $this->max_price,
             "percent" => $this->max_percent,
-            "preview" => $this->image->image_url,
-
+            "images" => $this->image->image_url,
+//            "product_attribute" => ProductAttributeValueResource::collection(ProductAttributeValue::query()->whereIn('id', $this->product_attribute_ids)->get()) ?? null,
+            "variations" => ProductVariationResource::collection($this->variations),
         ];
     }
 }

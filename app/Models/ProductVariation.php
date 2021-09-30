@@ -4,6 +4,8 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\MorphOne;
 
 class ProductVariation extends Model
 {
@@ -21,7 +23,7 @@ class ProductVariation extends Model
         'product_attribute_value_ids' => 'array'
     ];
 
-    public function product()
+    public function product(): BelongsTo
     {
         return $this->belongsTo(Product::class, 'product_id', 'id');
     }
@@ -31,7 +33,7 @@ class ProductVariation extends Model
         return ProductAttributeValue::whereIn('id', $this->product_attribute_value_ids)->get();
     }
 
-    public function image()
+    public function image(): MorphOne
     {
         return $this->morphOne(Image::class, 'imageable')->withDefault(['url'=>'/img/no-icon.png']);
     }

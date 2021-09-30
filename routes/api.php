@@ -66,4 +66,7 @@ Route::middleware('verify.device_headers')->prefix('v1')->group(static function 
     Route::get('category', [CategoryController::class, 'parents']);
     Route::get('category/{id}/product', [CategoryController::class, 'show']);
     Route::get('search/{string}', [ProductController::class, 'search']);
+    Route::get('product/{id}', [ProductController::class, 'show']);
+
+//    Route::get('search/{string}', [ProductController::class, 'search']);
 });
