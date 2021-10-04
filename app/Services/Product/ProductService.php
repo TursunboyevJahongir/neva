@@ -5,15 +5,15 @@ namespace App\Services\Product;
 use App\Http\Resources\Api\v1\CategoryNameResource;
 use App\Http\Resources\Api\v1\CategoryResource;
 use App\Models\Category;
+use App\Models\HistorySearch;
+use App\Models\HistoryView;
 use App\Models\Image;
 use App\Models\Product;
 use App\Models\ProductVariation;
 use App\Services\LatinToCyrillic;
-use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Facades\Storage;
-use Illuminate\Support\Str;
 
 class ProductService
 {
@@ -97,6 +97,7 @@ class ProductService
         $cyrillic = $this->latinToCyrillic->LatinToCyrillic($search);
         $latin = $this->latinToCyrillic->CyrillicToLatin($search);
 
+
         $query = Product::query()
             ->where('name->uz', 'like', "%$latin%")
             ->orWhere('name->ru', 'like', "%$latin%")
@@ -146,8 +147,7 @@ class ProductService
         return $data;
     }
 
-    public
-    function render(Category $category, $subcategory = 'all', $shop = 0, $sort = 'asc', $brand = 0, $minPrice = 0, $maxPrice = 0)
+    public function render(Category $category, $subcategory = 'all', $shop = 0, $sort = 'asc', $brand = 0, $minPrice = 0, $maxPrice = 0)
     {
         $data = [];
         if ($shop) {
@@ -210,8 +210,7 @@ class ProductService
         return $data;
     }
 
-    public
-    function create(array $attributes)
+    public function create(array $attributes)
     {
         $product = new Product([
             'shop_id' => $attributes['shop_id'],
@@ -263,8 +262,7 @@ class ProductService
         return $product;
     }
 
-    public
-    function update(array $attributes, Product $product)
+    public function update(array $attributes, Product $product)
     {
         $product->fill([
             'shop_id' => $attributes['shop_id'],
@@ -334,16 +332,14 @@ class ProductService
         return $product;
     }
 
-    public
-    function addImage(Product $product, UploadedFile $image)
+    public function addImage(Product $product, UploadedFile $image)
     {
         $product->images()->create([
             'url' => Image::uploadFile($image, 'products')
         ]);
     }
 
-    public
-    function getImages(Product $product)
+    public function getImages(Product $product)
     {
         $images = array();
         foreach ($product->images as $image) {
@@ -355,16 +351,14 @@ class ProductService
         return $images;
     }
 
-    public
-    function deleteImage(Product $product, string $fileUrl)
+    public function deleteImage(Product $product, string $fileUrl)
     {
         $image = $product->images()->where('url', $fileUrl)->firstOrFail();
         $image->removeFile();
         $image->delete();
     }
 
-    public
-    function calculateMinMaxPrice(Product $product)
+    public function calculateMinMaxPrice(Product $product)
     {
         $max = 0;
         $min = 999999999;
@@ -379,5 +373,18 @@ class ProductService
         $product->min_price = $min;
         $product->max_price = $max;
         return $product;
+    }
+
+    public function historyView($id)
+    {
+        if (auth('sanctum')->check())
+            HistoryView::query()->updateOrCreate(
+                ['user_id' => auth('sanctum')->id(), 'product_id' => $id]
+            )->increment('count');
+    }
+    public function historySearch($query){
+            HistorySearch::query()->updateOrCreate(
+                ['user_id' => auth('sanctum')->id(), 'query' => $query]
+            )->increment('count');
     }
 }

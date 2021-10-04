@@ -12,7 +12,7 @@ use App\Services\Product\ProductService;
 use Exception;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
-use Illuminate\Http\Response;
+use Illuminate\Support\Facades\Auth;
 
 
 class ProductController extends ApiController
@@ -27,6 +27,7 @@ class ProductController extends ApiController
     public function search(string $search, Request $request): JsonResponse
     {
         $data = $this->service->search($search, $request);
+        $this->service->historySearch($search);
         return $this->success(__('messages.success'), new PaginationResourceCollection($data['products'],
             ProductShowResource::class), $data['append']);
     }
@@ -39,7 +40,8 @@ class ProductController extends ApiController
      */
     public function show(Product $id): JsonResponse
     {
-        return $this->success(__('messages.success'),new ProductShowResource($id));
+        $this->service->historyView($id->id);
+        return $this->success(__('messages.success'), new ProductShowResource($id));
     }
 
 }

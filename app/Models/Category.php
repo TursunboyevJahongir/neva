@@ -83,8 +83,19 @@ class Category extends Model
     {
         return $q->where('active', '=', true);
     }
-//    public function getSubDescriptionAttribute(): string
-//    {
-//        return Str::limit($this->description, 20, '...');
-//    }
+
+    public function findDescendants(Category $category){
+        $this->descendants[] = $category->id;
+
+        if($category->hasChildren()){
+            foreach($category->children as $child){
+                $this->findDescendants($child);
+            }
+        }
+    }
+
+    public function getDescendants(Category $category){
+        $this->findDescendants($category);
+        return $this->descendants;
+    }
 }

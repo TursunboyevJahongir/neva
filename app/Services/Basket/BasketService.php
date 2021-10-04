@@ -54,32 +54,6 @@ class BasketService
         session()->put('cart', $cart);
     }
 
-    //WishList
-    public function addToWish($product)
-    {
-        $wish_list = [];
-        $getWish = session()->get('wishList');
-        $id = $product->id;
-        if (is_array($getWish)) {
-            if (!in_array($id, $getWish)) {
-                $wish_list = $getWish;
-                array_push($wish_list, $id);
-                session()->put('wishList', $wish_list);
-            } else {
-                $wish_list = $getWish;
-                $key = array_search($id, $wish_list, true);
-                unset($wish_list[$key]);
-                session()->put('wishList', $wish_list);
-            }
-        } else {
-            array_push($wish_list, $id);
-            session()->put('wishList', $wish_list);
-        }
-        if (empty(session()->get('wishList'))) {
-            return 0;
-        } else {
-            return count(session()->get('wishList'));
-        }
-    }
+
 
 }

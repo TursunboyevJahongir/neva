@@ -41,8 +41,8 @@ class SmsService
             throw new PhoneBlockedException(__('sms.phone_blocked', ['time' => $time]));
         }
 
-//        $code = random_int(1000, 9999);
-        $code = 1122;
+//        $code = random_int(100000, 999999);
+        $code = 112233;
         $smsConfirm->fill([
             'code' => $code,
             'try_count' => 0,

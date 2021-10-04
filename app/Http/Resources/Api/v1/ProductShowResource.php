@@ -26,6 +26,7 @@ class ProductShowResource extends JsonResource
             "name" => $this->name,
             "content" => $this->content,
             "rating" => $this->rating,
+            "in_favorite"=> $this->in_favorite,
             "min_price" => $this->min_price,
             "max_price" => $this->max_price,
             "percent" => $this->max_percent,

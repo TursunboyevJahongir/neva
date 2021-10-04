@@ -18,6 +18,7 @@ class CreateHistorySearchesTable extends Migration
             $table->string('query');
             $table->foreignId('user_id')
                 ->nullable();
+            $table->bigInteger('count')->default(0);
             $table->timestamps();
         });
     }

@@ -131,4 +131,14 @@ class Product extends Model
     {
         return "$this->min_price - $this->max_price";
     }
+
+    public function favorite()
+    {
+        return $this->hasMany(Favorite::class);
+    }
+
+    public function getInFavoriteAttribute(): bool
+    {
+        return $this->favorite()->where('user_id',auth('sanctum')->id())->exists();
+    }
 }

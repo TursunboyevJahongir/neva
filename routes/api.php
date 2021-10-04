@@ -54,6 +54,11 @@ Route::middleware('verify.device_headers')->prefix('v1')->group(static function 
         Route::get('/basket', [BasketController::class, 'index']);
         Route::post('/basket', [BasketController::class, 'store']);
         Route::delete('/basket', [BasketController::class, 'delete']);
+
+        Route::get('/favorite', [FavoriteController::class, 'index']);
+        Route::post('/favorite', [FavoriteController::class, 'store']);
+        //Route::get('/product/{id}', [ProductController::class, 'show']);
+        Route::post('/logout', [AuthController::class, 'logout']);
     });
 
     Route::get('banners', [BannerController::class, 'index']);
