@@ -7,6 +7,7 @@ use App\Http\Controllers\ApiController;
 use App\Http\Resources\Api\PaginationResourceCollection;
 use App\Http\Resources\Api\v1\ProductResource;
 use App\Http\Resources\Api\v1\ProductShowResource;
+use App\Http\Resources\Api\v1\SearchLikeTestResource;
 use App\Models\Product;
 use App\Services\Product\ProductService;
 use Exception;
@@ -20,18 +21,6 @@ class ProductController extends ApiController
     public function __construct(private ProductService $service)
     {
     }
-
-    /**
-     * @throws Exception
-     */
-    public function search(string $search, Request $request): JsonResponse
-    {
-        $data = $this->service->search($search, $request);
-        $this->service->historySearch($search);
-        return $this->success(__('messages.success'), new PaginationResourceCollection($data['products'],
-            ProductShowResource::class), $data['append']);
-    }
-
     /**
      * Display the specified resource.
      *

@@ -5,16 +5,17 @@ namespace App\Services\Favorite;
 
 use App\Models\Favorite;
 use App\Models\Product;
+use Illuminate\Contracts\Pagination\LengthAwarePaginator;
 use Illuminate\Support\Facades\Auth;
 
 class FavoriteService
 {
-    public function all($orderBy = 'created_at', $sort = 'DESC', $size = 10)
+    public function all($size = 10): LengthAwarePaginator
     {
-        $favorite = Favorite::query()
+        $favoriteIds = Favorite::query()
             ->where('user_id', Auth::id())
-            ->orderBy($orderBy, $sort);
-        return $favorite->paginate($size);
+            ->pluck('id');
+        return Product::query()->whereIn('id', $favoriteIds)->paginate($size);
     }
 
     //WishList

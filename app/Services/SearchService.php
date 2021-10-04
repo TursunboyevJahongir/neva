@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Services\Product;
+namespace App\Services;
 
 use App\Http\Resources\Api\v1\CategoryNameResource;
 use App\Http\Resources\Api\v1\CategoryResource;
@@ -14,23 +14,22 @@ use App\Services\LatinToCyrillic;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Http\Request;
 use Illuminate\Http\UploadedFile;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Storage;
 
-class ProductService
+class SearchService
 {
-    public function all($shop_id = false)
+
+    public function __construct(
+        private LatinToCyrillic $latinToCyrillic
+    )
     {
-        return Product::with('image')
-            ->latest('id')
-            ->shopOwner($shop_id)
-            ->paginate(config('app.per_page'));
     }
 
-    public function categoryProducts(Category $category, Request $request): array
+    public function search(string $search, Request $request): array
     {
         $size = $request->per_page ?? 10;
         $orderBy = $request->orderby ?? "position";
-
         $orderBy = $orderBy === 'price' ? "min_price" : $orderBy;
         $orderBy = $orderBy === 'percent' ? "max_percent" : $orderBy;
         $sort = $request->sort ?? "DESC";
@@ -38,12 +37,37 @@ class ProductService
         $maximal = $request->max_price;
         $sale = $request->sale == 1;
 
-        $search = $request->search ? trim($request->search) : null;
+        $cyrillic = $this->latinToCyrillic->LatinToCyrillic($search);
+        $latin = $this->latinToCyrillic->CyrillicToLatin($search);
 
-        $childrenIds = $category->children()->active()->pluck('id')->toArray();
-        array_push($childrenIds, $category->id);
 
-        $query = Product::query()->active()->whereIn('category_id', $childrenIds)
+        $query = Product::query()
+            ->where('name->uz', 'like', "%$latin%")
+            ->orWhere('name->ru', 'like', "%$latin%")
+            ->orWhere('name->en', 'like', "%$latin%")
+            ->orWhere('content->uz', 'like', "%$latin%")
+            ->orWhere('content->ru', 'like', "%$latin%")
+            ->orWhere('content->en', 'like', "%$latin%")
+            ->orWhere('name->uz', 'like', "%$cyrillic%")
+            ->orWhere('name->ru', 'like', "%$cyrillic%")
+            ->orWhere('name->en', 'like', "%$cyrillic%")
+            ->orWhere('content->uz', 'like', "%$cyrillic%")
+            ->orWhere('content->ru', 'like', "%$cyrillic%")
+            ->orWhere('content->en', 'like', "%$cyrillic%")
+            ->orWhere('tag', 'like', "%$latin%")
+            ->orWhere('tag', 'like', "%$cyrillic%")
+            ->orWhereHas('shop', function ($query) use ($latin, $cyrillic) {
+                $query->where('name', 'like', '%' . $latin . '%')
+                    ->orWhere('name', 'like', "%$cyrillic%");
+            })
+            ->orWhereHas('category', function ($query) use ($latin, $cyrillic) {
+                $query->where('name->uz', 'like', "%$latin%")
+                    ->orWhere('name->ru', 'like', "%$latin%")
+                    ->orWhere('name->en', 'like', "%$latin%")
+                    ->orWhere('name->uz', 'like', "%$cyrillic%")
+                    ->orWhere('name->ru', 'like', "%$cyrillic%")
+                    ->orWhere('name->en', 'like', "%$cyrillic%");
+            })
             ->when($minimal, function ($query) use ($minimal) {
                 return $query->where('min_price', '>=', $minimal);
             })
@@ -54,25 +78,15 @@ class ProductService
                 return $query->where('max_percent', '!=', null);
             })
             ->orderBy($orderBy, $sort);
-//        if ($brand != 0) {
-//            $query->where('brand_id', $brand);
-//        }
 
         $minimal = $query->min('min_price');
         $maximal = $query->max('min_price');
 
-        /*$brands = Brand::join('products', 'brands.id', '=', 'products.brand_id')
-            ->whereIn('products.category_id', $category->getDescendants($category))
-            ->distinct()->get('brands.*');*/
-        $categories = $category->children;
-
         $data['products'] = $query->paginate($size);
         $data['append'] = [
-            'categories' => CategoryNameResource::collection($categories),
             'minimal' => $minimal,
             'maximal' => $maximal
         ];
-
         return $data;
     }
 
@@ -310,5 +324,52 @@ class ProductService
             HistoryView::query()->firstOrCreate(
                 ['user_id' => auth('sanctum')->id(), 'product_id' => $id]
             )->increment('count');
+    }
+
+    public function userSearchDelete($string)
+    {
+        return HistorySearch::query()
+            ->where('user_id', Auth::id())
+            ->where('query', $string)
+            ->first();
+    }
+
+    public function userSearch()
+    {
+        return HistorySearch::query()
+            ->where('user_id', Auth::id())
+            ->orderBy('updated_at', 'DESC')
+            ->limit(10)
+            ->get();
+    }
+
+    public function LikeText($query): Collection|array
+    {
+        return HistorySearch::withTrashed()
+            ->selectRaw('sum(count) as count,query')
+            ->groupBy('query')
+            ->where('query', 'like', "%$query%")
+            ->orderBy('count', 'DESC')
+            ->orderBy('query', 'ASC')
+            ->limit(10)
+            ->get();
+    }
+
+    public function Popular(): Collection|array
+    {
+        return HistorySearch::withTrashed()
+            ->selectRaw('sum(count) as count,query')
+            ->groupBy('query')
+            ->orderBy('count', 'DESC')
+            ->orderBy('query', 'ASC')
+            ->limit(10)
+            ->get();
+    }
+
+    public function historySearch($query)
+    {
+        HistorySearch::query()->firstOrCreate(
+            ['query' => $query, 'user_id' => auth('sanctum')->id()]
+        )->increment('count');
     }
 }
