@@ -13,20 +13,15 @@ use Illuminate\Http\Request;
 
 class OrderController extends ApiController
 {
-    private $orders;
-    private $invoice;
 
     /**
      * OrderController constructor.
-     * @param OrderService $orderService
-     * @param InvoiceService $invoiceService
-     * @param PageService $pageService
+     * @param OrderService $orders
      */
-    public function __construct(OrderService $orderService, InvoiceService $invoiceService, PageService $pageService)
+    public function __construct(private OrderService $orders)
     {
-        $this->invoice = $invoiceService;
-        $this->orders = $orderService;
     }
+
     /**
      * Display a listing of the resource.
      *
@@ -35,40 +30,38 @@ class OrderController extends ApiController
     public function index()
     {
         abort_if(!auth()->check(), 403);
-        $orderList = $this->orders->getOrder();
-        $shop = Shop::find($orderList['shop_id']);
-        return view('front.order', compact('orderList', 'shop'));
+        $orderList = $this->orders->all();
     }
 
 
     /**
      * Store a newly created resource in storage.
      *
-     * @param  \Illuminate\Http\Request $request
+     * @param \Illuminate\Http\Request $request
      * @return \Illuminate\Http\Response
      */
     public function store(Request $request)
     {
         abort_if(!auth()->check(), 403);
-
-        if (request()->has('cart')) {
-            $order = $this->orders->setOrderCart();
-
-        }
-        if (request()->has('product')) {
-            $this->orders->setOrderProduct(
-                ProductVariation::find(request()->input('product')),
-                request()->input('qty')
-            );
-
-        }
+        $orders = $this->orders->setOrderBasket();
+        $this->orders->save([
+            'city' => 'fsrf',
+            'region' => 'fsrf',
+            'street' => 'fsrf',
+            'delivery' => 'idcourier',
+        ]+$orders, $orders['items']);
         return [];
+    }
+
+    public function orderProduct(ProductVariation $id)
+    {
+
     }
 
     /**
      * Display the specified resource.
      *
-     * @param  \App\Models\Order $order
+     * @param \App\Models\Order $order
      * @return \Illuminate\Http\Response
      */
     public function show(Order $order)
@@ -78,21 +71,9 @@ class OrderController extends ApiController
 
 
     /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request $request
-     * @param  \App\Models\Order $order
-     * @return \Illuminate\Http\Response
-     */
-    public function update(Request $request, Order $order)
-    {
-        //
-    }
-
-    /**
      * Remove the specified resource from storage.
      *
-     * @param  \App\Models\Order $order
+     * @param \App\Models\Order $order
      * @return \Illuminate\Http\Response
      */
     public function destroy(Order $order)

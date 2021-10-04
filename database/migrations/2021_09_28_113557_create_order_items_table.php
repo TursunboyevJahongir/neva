@@ -15,7 +15,11 @@ class CreateOrderItemsTable extends Migration
     {
         Schema::create('order_items', function (Blueprint $table) {
             $table->id();
+
             $table->foreignId('order_id')
+                ->constrained()
+                ->cascadeOnDelete();
+            $table->foreignId('shop_id')
                 ->constrained()
                 ->cascadeOnDelete();
 
@@ -24,6 +28,7 @@ class CreateOrderItemsTable extends Migration
                 ->constrained()
                 ->nullOnDelete(); // order item
 
+            $table->string('sku');
             $table->unsignedInteger('quantity');
             $table->unsignedDouble('sum');
             $table->unsignedDouble('price');

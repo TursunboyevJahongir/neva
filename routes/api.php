@@ -1,9 +1,18 @@
 <?php
 
 
-use App\Http\Controllers\api\{
-    AuthController, BannerController, BasketController, CategoryController, CommentController, FavoriteController, InterestController, KidController, NewsController, ProductController, UserController
-};
+use App\Http\Controllers\api\{AuthController,
+    BannerController,
+    BasketController,
+    CategoryController,
+    CommentController,
+    FavoriteController,
+    InterestController,
+    KidController,
+    NewsController,
+    OrderController,
+    ProductController,
+    UserController};
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -50,7 +59,13 @@ Route::middleware('verify.device_headers')->prefix('v1')->group(static function 
 
         Route::get('/favorite', [FavoriteController::class, 'index']);
         Route::post('/favorite', [FavoriteController::class, 'store']);
-        //Route::get('/product/{id}', [ProductController::class, 'show']);
+
+        Route::get('/order', [OrderController::class, 'index']);
+        Route::get('/order/{id}', [OrderController::class, 'show']);
+        Route::post('/order', [OrderController::class, 'store']);
+        Route::put('/order/product/{id}', [OrderController::class, 'order']);
+
+
         Route::post('/logout', [AuthController::class, 'logout']);
     });
 
