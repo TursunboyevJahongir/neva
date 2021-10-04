@@ -14,23 +14,23 @@ class AnalyticService
 
     public function record(Request $request)
     {
+
         $stories = Analytic::where('ip_address', $request->ip())
             ->where('user_agent', $request->userAgent())
-            ->where('user_id' , (Auth::guest() ? null: Auth::id()))
+            ->where('user_id' , auth('sanctum')->id())
             ->orderByDesc('id')
             ->get();
-
         if($stories->isNotEmpty())
         {
             $history = Analytic::where('ip_address', $request->ip())
                 ->where('user_agent', $request->userAgent())
-                ->where('user_id' , (Auth::guest() ? null: Auth::id()))
+                ->where('user_id' , auth('sanctum')->id())
                 ->orderByDesc('id')
                 ->first();
                 if ($history->url !== $request->path()) {
                     Analytic::create([
                         'ip_address' => $request->ip(),
-                        'user_id' => Auth::guest() ? null: Auth::id(),
+                        'user_id' => auth('sanctum')->id(),
                         'user_agent' => $request->userAgent(),
                         'url' => $request->path(),
                         'start_time' => \Carbon\Carbon::now(),//date('Y-m-d H:i:s'),
@@ -43,6 +43,7 @@ class AnalyticService
         else
             Analytic::create([
                 'ip_address' => $request->ip(),
+                'user_id' => auth('sanctum')->id(),
                 'user_agent' => $request->userAgent(),
                 'url' => $request->path(),
                 'start_time' =>\Carbon\Carbon::now(), //date('Y-m-d H:i:s'),

@@ -4,29 +4,21 @@ namespace App\Http\Controllers\api;
 
 use App\Http\Controllers\ApiController;
 
-use App\Http\Requests\api\SearchRequest;
 use App\Http\Resources\Api\PaginationResourceCollection;
 use App\Http\Resources\Api\v1\ProductResource;
+use App\Http\Resources\Api\v1\ProductShowResource;
 use App\Models\Product;
 use App\Services\Product\ProductService;
-use App\Traits\ApiResponser;
 use Exception;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 
 class ProductController extends ApiController
 {
-
-    /**
-     * @var BannerService
-     */
-    private $service;
-    use ApiResponser;
-
-    public function __construct(ProductService $service)
+    public function __construct(private ProductService $service)
     {
-        $this->service = $service;
     }
 
     /**
@@ -35,31 +27,21 @@ class ProductController extends ApiController
     public function search(string $search, Request $request): JsonResponse
     {
         $data = $this->service->search($search, $request);
+        $this->service->historySearch($search);
         return $this->success(__('messages.success'), new PaginationResourceCollection($data['products'],
-            ProductResource::class), $data['append']);
-    }
-
-
-    /**
-     * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function index()
-    {
-        $products = $this->service->all();
-        return $this->success($products);
+            ProductShowResource::class), $data['append']);
     }
 
     /**
      * Display the specified resource.
      *
-     * @param \App\Models\Product $product
-     * @return \Illuminate\Http\Response
+     * @param Product $id
+     * @return JsonResponse
      */
-    public function show(Product $id)
+    public function show(Product $id): JsonResponse
     {
-        return $this->success($id->load('images:url,imageable_id'));
+        $this->service->historyView($id->id);
+        return $this->success(__('messages.success'), new ProductShowResource($id));
     }
 
 }

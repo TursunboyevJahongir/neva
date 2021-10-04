@@ -6,6 +6,7 @@ use App\Casts\TranslatableJson;
 use App\Traits\HasTranslatableJson;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Facades\Auth;
 
 /**
  * Class Product
@@ -130,5 +131,15 @@ class Product extends Model
     public function getSalePriceAttribute()
     {
         return "$this->min_price - $this->max_price";
+    }
+
+    public function favorite()
+    {
+        return $this->hasMany(Favorite::class);
+    }
+
+    public function getInFavoriteAttribute(): bool
+    {
+        return $this->favorite()->where('user_id',auth('sanctum')->id())->exists();
     }
 }

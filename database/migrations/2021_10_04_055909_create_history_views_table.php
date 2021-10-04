@@ -15,10 +15,11 @@ class CreateHistoryViewsTable extends Migration
     {
         Schema::create('history_views', function (Blueprint $table) {
             $table->id();
-            $table->string('element');
+            $table->foreignId('product_id')->constrained();
             $table->foreignId('user_id')
                 ->constrained()
                 ->cascadeOnDelete();
+            $table->bigInteger('count')->default(0);
             $table->timestamps();
         });
     }

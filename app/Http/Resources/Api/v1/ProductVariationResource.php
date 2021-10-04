@@ -3,6 +3,7 @@
 namespace App\Http\Resources\Api\v1;
 
 use App\Models\Basket;
+use App\Models\ProductAttributeValue;
 use App\Models\ProductVariation;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;

@@ -6,6 +6,7 @@ use App\Models\Product;
 use App\Models\ProductAttributeValue;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
+use Illuminate\Support\Facades\Auth;
 
 class ProductShowResource extends JsonResource
 {
@@ -26,6 +27,7 @@ class ProductShowResource extends JsonResource
             "name" => $this->name,
             "content" => $this->content,
             "rating" => $this->rating,
+            "in_favorite"=> $this->in_favorite,
             "min_price" => $this->min_price,
             "max_price" => $this->max_price,
             "percent" => $this->max_percent,

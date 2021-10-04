@@ -23,7 +23,7 @@ class TranslatableJson implements CastsAttributes
     public function get($model, $key, $value, $attributes): mixed
     {
         $arr = json_decode($value, true);
-        return $arr[app()->getLocale()] ?? $arr['ru'] ?? $arr['uz'];
+        return $arr[app()->getLocale()] ?? $arr['ru'] ?? $arr['uz'] ?? new stdClass();
     }
 
     /**

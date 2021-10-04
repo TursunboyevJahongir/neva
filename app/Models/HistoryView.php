@@ -9,7 +9,7 @@ use Illuminate\Database\Eloquent\Model;
 class HistoryView extends Model
 {
     use HasFactory;
-    protected $fillable = ['user_id', 'element'];
+    protected $fillable = ['user_id', 'product_id'];
 
 
 }
