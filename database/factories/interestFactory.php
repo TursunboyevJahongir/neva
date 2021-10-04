@@ -2,6 +2,7 @@
 
 namespace Database\Factories;
 
+use App\Models\Category;
 use App\Models\Interest;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
@@ -32,7 +33,7 @@ class interestFactory extends Factory
                 'ru' => $this->faker->text(150),
                 'en' => $this->faker->text(150),
             ],
-            'categories' => null
+
         ];
     }
 }

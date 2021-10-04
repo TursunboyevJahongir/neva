@@ -4,6 +4,8 @@ namespace App\Services\Category;
 
 use App\Models\Category;
 use App\Models\Image;
+use Illuminate\Database\Eloquent\Collection;
+use Illuminate\Support\Facades\Auth;
 
 class CategoryService
 {
@@ -24,6 +26,18 @@ class CategoryService
         return Category::query()
             ->where('parent_id', '=', null)
             ->get();
+    }
+
+    public function Parents($orderBy, $sort): Collection|array
+    {
+        return Category::query()
+//            ->where('parent_id', '=', null)
+            ->parents()
+            ->active()
+            ->orderBy($orderBy, $sort)
+            ->orderBy('name', 'Asc')
+            ->get();
+
     }
 
     public function create(array $attributes)

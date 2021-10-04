@@ -22,8 +22,12 @@ class ProductVariationResource extends JsonResource
          */
         return [
             "id" => $this->id,
-            "product" => new ProductResource($this->product),
             "quantity" => $this->quantity,
+            "old_price" => $this->old_price,
+            "price" => $this->price,
+            "image" => $this->image->image_url,
+            "percent" => $this->percent ?? null,
+            "product_attribute" => ProductAttributeValueResource::collection(ProductAttributeValue::query()->whereIn('id', $this->product_attribute_value_ids)->get()) ?? null,
         ];
     }
 }

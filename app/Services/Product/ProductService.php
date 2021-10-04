@@ -111,6 +111,8 @@ class ProductService
             ->orWhere('content->uz', 'like', "%$cyrillic%")
             ->orWhere('content->ru', 'like', "%$cyrillic%")
             ->orWhere('content->en', 'like', "%$cyrillic%")
+            ->orWhere('tag', 'like', "%$latin%")
+            ->orWhere('tag', 'like', "%$cyrillic%")
             ->orWhereHas('shop', function ($query) use ($latin, $cyrillic) {
                 $query->where('name', 'like', '%' . $latin . '%')
                     ->orWhere('name', 'like', "%$cyrillic%");
