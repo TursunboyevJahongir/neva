@@ -35,6 +35,20 @@ class OrderController extends ApiController
         $orderList = $this->orders->all();
     }
 
+    public function saveData($request)
+    {
+        return [
+            'name' => $request['name'] ?? Auth::user()->full_name,
+            'phone' => $request['phone']?? Auth::user()->phone,
+            'location' => $request['location'],
+            'city' => $request['city']?? Auth::user()->full_name,
+            'region' => $request['region'],
+            'address' => $request['street']?? Auth::user()->address,
+            'street' => $request['street']?? Auth::user()->full_name,
+            'comment' => $request['comment'],
+            'delivery' => 'idcourier',
+        ];
+    }
 
     /**
      * Store a newly created resource in storage.
@@ -46,23 +60,15 @@ class OrderController extends ApiController
     {
         abort_if(!auth()->check(), 403);
         $orders = $this->orders->setOrderBasket();
-        $this->orders->save([
-            'name' => $request['name'] ?? Auth::user()->full_name,
-            'phone' => $request['phone']?? Auth::user()->phone,
-            'location' => $request['location'],
-            'city' => $request['city']?? Auth::user()->full_name,
-            'region' => $request['region'],
-            'address' => $request['street']?? Auth::user()->address,
-            'street' => $request['street']?? Auth::user()->full_name,
-            'comment' => $request['comment'],
-            'delivery' => 'idcourier',
-        ]+$orders, $orders['items']);
-        return [];
+        $this->orders->save($this->saveData($request)+$orders, $orders['items']);
+        return $this->success(__('messages.success'));
     }
 
-    public function orderProduct(ProductVariation $id)
+    public function orderProduct(Request $request,ProductVariation $id)
     {
-
+        $orders = $this->orders->setOrderProduct($id,$request->qty ?? 1);
+        $this->orders->save($this->saveData($request)+$orders, $orders['items']);
+        return $this->success(__('messages.success'));
     }
 
     /**
