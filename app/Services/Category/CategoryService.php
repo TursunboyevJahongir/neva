@@ -2,6 +2,7 @@
 
 namespace App\Services\Category;
 
+use App\Http\Request;
 use App\Models\Category;
 use App\Models\Image;
 use Illuminate\Database\Eloquent\Collection;
@@ -21,21 +22,18 @@ class CategoryService
         $this->icon = new Image();
     }
 
-    public function all()
+    public function all($lang = 'ru')
     {
-        return Category::query()
-            ->where('parent_id', '=', null)
-            ->get();
+        return Category::query()->parents()->orderBy("name->$lang)", 'Asc')->get();
     }
 
-    public function Parents($orderBy, $sort): Collection|array
+    public function Parents($orderBy, $sort, $lang = 'ru'): Collection|array
     {
         return Category::query()
-//            ->where('parent_id', '=', null)
             ->parents()
             ->active()
             ->orderBy($orderBy, $sort)
-            ->orderBy('name', 'Asc')
+            ->orderBy("name->$lang", 'Asc')
             ->get();
 
     }

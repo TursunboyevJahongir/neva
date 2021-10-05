@@ -5,13 +5,11 @@ namespace App\Services\Product;
 use App\Http\Resources\Api\v1\CategoryNameResource;
 use App\Http\Resources\Api\v1\CategoryResource;
 use App\Models\Category;
-use App\Models\HistorySearch;
 use App\Models\HistoryView;
 use App\Models\Image;
 use App\Models\Product;
 use App\Models\ProductVariation;
-use App\Services\LatinToCyrillic;
-use Illuminate\Database\Eloquent\Collection;
+use Illuminate\Contracts\Pagination\LengthAwarePaginator;
 use Illuminate\Http\Request;
 use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Facades\Storage;
@@ -310,5 +308,20 @@ class ProductService
             HistoryView::query()->firstOrCreate(
                 ['user_id' => auth('sanctum')->id(), 'product_id' => $id]
             )->increment('count');
+    }
+
+    public function similar(Product $id, $size = 10, $lang = "ru"): LengthAwarePaginator
+    {
+        $tags = explode(',', $id->tag);
+
+        return Product::query()
+            ->where('id', '!=', $id->id)
+            ->where(function ($query) use ($tags) {
+                foreach ($tags as $tag)
+                    $query->orWhere('tag', 'LIKE', "%$tag%");
+            })
+            ->orderBy('position', 'DESC')
+            ->orderBy("name->$lang", 'ASC')
+            ->paginate($size);
     }
 }

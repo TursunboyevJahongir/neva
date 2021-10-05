@@ -14,20 +14,19 @@ class FavoriteService
     {
         $favoriteIds = Favorite::query()
             ->where('user_id', Auth::id())
-            ->pluck('id');
-        return Product::query()->whereIn('id', $favoriteIds)->paginate($size);
+            ->orderBy('created_at', "DESC")
+            ->pluck('product_id')
+            ->toArray();
+
+        $ids_ordered = implode(',', $favoriteIds);
+        return Product::query()->whereIn('id', $favoriteIds)->orderByRaw("FIELD(id, $ids_ordered)")->paginate($size);
     }
 
-    //WishList
-    public function add(array $product)
+    public function add($data)
     {
-        $array = ['user_id' => Auth::id(), 'product_id' => $product['product_id']];
-        $model = Favorite::query()->where($array);
-        if (!is_null($model->first())) {
-            $model->delete();
-        } else
-            Favorite::create($array);
-        return true;
+        $data['user_id'] = Auth::id();
+        $model = Favorite::query()->where($data);
+//        dd($model->delete());
+        $model->exists() ? $model->delete() : Favorite::create($data);
     }
-
 }

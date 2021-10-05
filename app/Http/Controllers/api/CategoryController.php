@@ -33,18 +33,18 @@ class CategoryController extends ApiController
     {
         $orderBy = $request->orderby ?? "position";
         $sort = $request->sort ?? "DESC";
-        $categories = $this->service->Parents($orderBy, $sort);
+        $lang = $request->getDeviceLang();
+        $categories = $this->service->Parents($orderBy, $sort, $lang);
         return $this->success(__('messages.success'), CategoryResource::collection($categories));
     }
 
     /**
      * @throws Exception
      */
-    public function show(Category $id, ProductService $data,Request $request): JsonResponse
+    public function show(Category $id, ProductService $data, Request $request): JsonResponse
     {
-        $data = $data->categoryProducts($id,$request);
+        $data = $data->categoryProducts($id, $request);
         return $this->success(__('messages.success'), new PaginationResourceCollection($data['products'],
             ProductResource::class), $data['append']);
-        //   return $this->success(__('messages.success'), new PaginationResourceCollection());
     }
 }

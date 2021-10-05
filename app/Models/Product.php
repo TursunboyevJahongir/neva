@@ -6,6 +6,7 @@ use App\Casts\TranslatableJson;
 use App\Traits\HasTranslatableJson;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Str;
 
 /**
  * Class Product
@@ -52,6 +53,8 @@ class Product extends Model
         'max_percent',
         'active',
         'delivery_price',
+        'position',
+        'tag',
     ];
 
     protected $casts = [
@@ -139,6 +142,11 @@ class Product extends Model
 
     public function getInFavoriteAttribute(): bool
     {
-        return $this->favorite()->where('user_id',auth('sanctum')->id())->exists();
+        return $this->favorite()->where('user_id', auth('sanctum')->id())->exists();
+    }
+
+    public function getSubContentAttribute(): string
+    {
+        return Str::limit($this->content, 15, '...');
     }
 }

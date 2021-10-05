@@ -12,6 +12,7 @@ use App\Services\Favorite\FavoriteService;
 use Exception;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
+use Illuminate\Http\Response;
 
 class FavoriteController extends ApiController
 {
@@ -40,10 +41,10 @@ class FavoriteController extends ApiController
     /**
      * Store a newly created resource in storage.
      *
-     * @param \Illuminate\Http\Request $request
-     * @return \Illuminate\Http\Response
+     * @param FavoriteRequest $request
+     * @return JsonResponse
      */
-    public function store(FavoriteRequest $request)
+    public function store(FavoriteRequest $request): JsonResponse
     {
         $this->service->add($request->validated());
         return $this->success(__('messages.success'));

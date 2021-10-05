@@ -76,26 +76,11 @@ class Category extends Model
 
     public function scopeParents($q)
     {
-        return $q->where('parent_id', '=', null);
+        return $q->whereNull('parent_id');
     }
 
     public function scopeActive($q)
     {
         return $q->where('active', '=', true);
-    }
-
-    public function findDescendants(Category $category){
-        $this->descendants[] = $category->id;
-
-        if($category->hasChildren()){
-            foreach($category->children as $child){
-                $this->findDescendants($child);
-            }
-        }
-    }
-
-    public function getDescendants(Category $category){
-        $this->findDescendants($category);
-        return $this->descendants;
     }
 }

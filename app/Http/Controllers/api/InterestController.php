@@ -17,7 +17,7 @@ class InterestController extends ApiController
      */
     public function index(Request $request): JsonResponse
     {
-        $orderBy = $request->orderby ?? "name->".$request->getDeviceLang();
+        $orderBy = $request->orderby ?? "name->$request->getDeviceLang()";
         $sort = $request->sort ?? "ASC";
         $Customer = Interest::query()->orderBy($orderBy, $sort)->get()->all();
         return $this->success(__('pages.success'), InterestResource::collection($Customer));
