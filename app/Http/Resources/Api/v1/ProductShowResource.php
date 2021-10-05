@@ -6,7 +6,6 @@ use App\Models\Product;
 use App\Models\ProductAttributeValue;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
-use Illuminate\Support\Facades\Auth;
 
 class ProductShowResource extends JsonResource
 {

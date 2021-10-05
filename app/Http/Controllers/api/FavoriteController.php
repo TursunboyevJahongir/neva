@@ -8,7 +8,10 @@ use App\Http\Resources\Api\PaginationResourceCollection;
 use App\Http\Resources\Api\v1\FavoriteResource;
 use App\Models\Favorite;
 use App\Services\Favorite\FavoriteService;
+use Exception;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
+use Illuminate\Http\Response;
 
 class FavoriteController extends ApiController
 {
@@ -18,35 +21,33 @@ class FavoriteController extends ApiController
     {
         $this->service = $service;
     }
+
     /**
      * Display a listing of the resource.
      *
-     * @return \Illuminate\Http\Response
+     * @param Request $request
+     * @return JsonResponse
+     * @throws Exception
      */
-    public
-    function index(Request $request)
+    public function index(Request $request): JsonResponse
     {
         $size = $request->per_page ?? 10;
-        $orderBy = $request->orderby ?? "created_at";
-        $sort = $request->sort ?? "DESC";
-        $favorites = $this->service->all($orderBy, $sort, $size);
-        //dd($favorites);
-        return $this->success(__('messages.success'), new PaginationResourceCollection($favorites, FavoriteResource::class));
+        $favorites = $this->service->all($size);
+        return $this->success(__('messages.success'), new PaginationResourceCollection($favorites, ProductResource::class));
     }
 
 
     /**
      * Store a newly created resource in storage.
      *
-     * @param  \Illuminate\Http\Request $request
-     * @return \Illuminate\Http\Response
+     * @param FavoriteRequest $request
+     * @return JsonResponse
      */
-    public function store(FavoriteRequest $request)
+    public function store(FavoriteRequest $request): JsonResponse
     {
         $this->service->add($request->validated());
         return $this->success(__('messages.success'));
     }
-
 
 
 }

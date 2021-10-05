@@ -12,7 +12,9 @@ use App\Http\Controllers\api\{AuthController,
     NewsController,
     OrderController,
     ProductController,
-    UserController};
+    SearchController,
+    UserController
+};
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -27,7 +29,6 @@ use Illuminate\Support\Facades\Route;
 */
 
 Route::middleware('verify.device_headers')->prefix('v1')->group(static function () {
-
     /**
      * Login / Register
      */
@@ -60,6 +61,9 @@ Route::middleware('verify.device_headers')->prefix('v1')->group(static function 
         Route::get('/favorite', [FavoriteController::class, 'index']);
         Route::post('/favorite', [FavoriteController::class, 'store']);
 
+        Route::get('user/search', [SearchController::class, 'userSearch']);
+        Route::delete('user/search/{string}', [SearchController::class, 'userSearchDelete']);
+
         Route::get('/order', [OrderController::class, 'index']);
         Route::get('/order/{id}', [OrderController::class, 'show']);
         Route::post('/order', [OrderController::class, 'store']);
@@ -78,8 +82,10 @@ Route::middleware('verify.device_headers')->prefix('v1')->group(static function 
 
     Route::get('category', [CategoryController::class, 'parents']);
     Route::get('category/{id}/product', [CategoryController::class, 'show']);
-    Route::get('search/{string}', [ProductController::class, 'search']);
+    Route::get('product/{id}', [ProductController::class, 'show']);
+    Route::get('product/{id}/similar', [ProductController::class, 'similar']);
 
-    Route::get('/product/{id}', [ProductController::class, 'show']);
-
+    Route::get('popular/search', [SearchController::class, 'popular']);
+    Route::get('search/{string}', [SearchController::class, 'search']);
+    Route::get('search/like/{string}', [SearchController::class, 'like']);
 });

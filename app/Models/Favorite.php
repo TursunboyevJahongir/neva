@@ -4,7 +4,6 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Support\Facades\Auth;
 
 class Favorite extends Model
 {
@@ -19,5 +18,4 @@ class Favorite extends Model
     {
         return $this->hasOne(Product::class, 'id', 'product_id');
     }
-
 }

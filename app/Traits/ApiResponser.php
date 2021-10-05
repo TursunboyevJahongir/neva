@@ -52,7 +52,7 @@ trait ApiResponser
      * @param int $code
      * @return JsonResponse
      */
-    protected function error(mixed $errors = null, string $message = '', int $code = 404): JsonResponse
+    protected function error(string $message = '', mixed $errors = null, int $code = 404): JsonResponse
     {
         return response()->json([
             'status' => false,

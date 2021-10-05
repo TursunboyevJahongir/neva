@@ -76,7 +76,7 @@ class Category extends Model
 
     public function scopeParents($q)
     {
-        return $q->where('parent_id', '=', null);
+        return $q->whereNull('parent_id');
     }
 
     public function scopeActive($q)

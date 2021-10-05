@@ -45,11 +45,6 @@ class Kids extends Model
         return $this->birthday ? date_diff($this->birthday, Carbon::now())->y : null;
     }
 
-    public function avatar(): \Illuminate\Database\Eloquent\Relations\MorphOne
-    {
-        return $this->morphOne(Image::class, 'imageable');
-    }
-
     public function parent(): BelongsTo
     {
         return $this->belongsTo(User::class);

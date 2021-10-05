@@ -20,6 +20,7 @@ class CreateHistorySearchesTable extends Migration
                 ->nullable();
             $table->bigInteger('count')->default(0);
             $table->timestamps();
+            $table->softDeletes();
         });
     }
 
