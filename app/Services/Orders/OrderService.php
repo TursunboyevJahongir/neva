@@ -2,67 +2,66 @@
 
 namespace App\Services\Orders;
 
+use App\Models\Basket;
 use App\Models\Setting;
 use App\Models\Order;
 use App\Models\OrderItem;
 use App\Models\ProductVariation;
+use App\Models\Shop;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Arr;
 
 class OrderService
 {
-    public function all($shop_id = false)
+    public function all($user_id = false)
     {
         return Order::query()
             ->latest('id')
-            ->shopOwner($shop_id)
+            ->where('user_id',$user_id)
             ->paginate(config('app.per_page'));
     }
 
-    public function getOrder()
+    public function calcDelivery($items)
     {
+        foreach ($items as $item)
+            $suppiler[] = $item['shop'];
 
-        return session()->get('order');
+        $suppiler = array_unique($suppiler);
+        return Shop::query()->find($suppiler)->sum('delivery_price');
     }
 
-    public function setOrderCart()
+    public function setOrderBasket()
     {
-        $order = session()->get('order');
-        $order['user_id'] = auth()->user()->id;
-        $cart = session()->get('cart');
-        $order['shop_id'] = ProductVariation::find(array_key_first($cart['products']))->product->shop_id;
+        $order = [];
+        $order['user_id'] = Auth::id();
         $order['quantity'] = 0;
-        $order['sum'] = 0;
-        foreach ($cart['products'] as $key => $value) {
-            $product = ProductVariation::find($key);
-            if (empty($product)) return false;
-            if ($product->product->shop_id != $order['shop_id']) return false;
-
-            $name = $product->product->name;
+        $order['total_price'] = 0;
+        $basket = Basket::query()
+            ->where('user_id', Auth::id())->get()->load('product');
+        foreach ($basket as  $item) {
+            $productVariation = $item->product;
+            $product = $productVariation->product;
+            $name = $productVariation->name;
             if ($product->product_attribute_value_ids) {
                 $name .= ' (' . $product->full_name . ')';
             }
 
-            $order['items'][$key] = [
+            $order['items'][$item->id] = [
                 'name' => $name,
-                'quantity' => $value['qty'],
-                'price' => $value['price'],
-                'sum' => $value['price'] * $value['qty']
+                'sku' => $product->sku,
+                'quantity' => $item['quantity'],
+                'price' => $productVariation->price,
+                'sum' => $productVariation->price * $item['quantity'],
+                'shop' => $product->shop_id
             ];
-            $order['quantity'] += $order['items'][$key]['quantity'];
-            $order['sum'] += $order['items'][$key]['sum'];
-            if (!empty($product->product->delivery_price))
-                $order['tax'] = $product->product->delivery_price;
+            $order['quantity'] += $order['items'][$item->id]['quantity'];
+            $order['total_price'] += $order['items'][$item->id]['sum'];
         }
-        if (isset($order['tax']))
-            $order['sum'] += $order['tax'];
-        else
-            $order['tax']=0;
-        session()->put('order', $order);
-        session()->save();
-        session()->forget('cart');
-        return true;
+        $order['price_delivery'] = $this->calcDelivery($order['items']);
+        $order['total_price'] += $order['price_delivery'];
+
+        return $order;
     }
 
     public function setOrderProduct(ProductVariation $productVariation, $qty = 1)
@@ -72,95 +71,44 @@ class OrderService
             $name .= ' (' . $productVariation->full_name . ')';
         }
         $order = [];
-        $order['shop_id'] = $productVariation->product->shop_id;
-        if (!auth()->guest()) {
-            $order['user_id'] = auth()->user()->id;
-        }
+        $order['user_id'] = Auth::id();
         $order['quantity'] = $qty;
-        $order['tax'] = 0;
-        $order['sum'] = $qty * $productVariation->price;
+        $order['price_delivery'] = 0;
+        $order['total_price'] = $qty * $productVariation->price;
         $order['items'][$productVariation->id] = [
+            'name' => $name,
+            'sku' => $productVariation->product->sku,
+            'shop' => $productVariation->product->shop_id,
             'quantity' => $qty,
             'price' => $productVariation->price,
             'sum' => $order['sum'],
-            'name' => $name,
         ];
-        if (!empty($productVariation->product->delivery_price)) {
-            $order['tax'] = $productVariation->product->delivery_price;
-            $order['sum'] += $order['tax'];
-        }
-        session()->put('order', $order);
-        session()->save();
-        return true;
+        $order['price_delivery'] = $this->calcDelivery($order['items']);
+        $order['total_price'] += $order['price_delivery'];
+        return $order;
     }
 
-    public function save(array $attributes, $now = true)
+    public function save(array $attributes, $order_items)
     {
         $order = Order::create($attributes);
-        if (!$now) {
-            $order->address =
-                $attributes['city'] . ' ' .
-                $attributes['region'] . ' ' .
-                $attributes['street'];
-            $order->save();
-        }
-        $order_items = $this->getOrder();
-        foreach ($order_items['items'] as $key => $value) {
+        $order->address =
+            $attributes['city'] . ' ' .
+            $attributes['region'] . ' ' .
+            $attributes['street'];
+        $order->save();
+        foreach ($order_items as $key => $value) {
             OrderItem::create([
+                'sku' =>$value['sku'],
                 'sum' => $value['sum'],
                 'quantity' => $value['quantity'],
                 'price' => $value['price'],
                 'order_id' => $order->id,
                 'product_variation_id' => $key,
+                'shop_id' => $value['shop'],
             ]);
         }
-        return $order;
-    }
-
-    public function installment(array $attributes)
-    {
-        $order = $this->save($attributes, false);
-        $order->forceFill(Arr::only($attributes, [
-            'installment_card_number',
-            'installment_card_date',
-            'installment_firstname',
-            'installment_middlename',
-            'installment_lastname',
-            'installment_gender',
-            'installment_inn',
-            'installment_sn',
-            'installment_birthdate',
-            'installment_address',
-            'installment_issuedby',
-            'installment_issueddate'
-        ]));
-        $order->name = $attributes['installment_firstname'] . ' ' .
-            $attributes['installment_middlename'] . ' ' . $attributes['installment_lastname'];
-
-        $settings = Setting::all()->pluck('value', 'key')->toArray();
-        $condition = $attributes['installment_condition'];
-        if ($attributes['installment_card']) {
-            $months = explode(',', $settings['installment_months']);
-            $advances = explode(',', $settings['installment_card_advances']);
-            $markups = explode(',', $settings['installment_card_markups']);
-        } else {
-            $months = explode(',', $settings['installment_months']);
-            $advances = explode(',', $settings['installment_nocard_advances']);
-            $markups = explode(',', $settings['installment_nocard_markups']);
-        }
-        $order->forceFill([
-            'installment_month' => $months[$condition],
-            'installment_advance' => $advances[$condition],
-            'installment_markup' => $markups[$condition]
-        ]);
-
-        $order->installment_passport = Storage::putFile("uploads/installment",
-            $attributes['installment_passport']);
-        $order->installment_passport_face = Storage::putFile("uploads/installment",
-            $attributes['installment_passport_face']);
-        $order->installment_passport_address = Storage::putFile("uploads/installment",
-            $attributes['installment_passport_address']);
-        $order->save();
+        Basket::query()
+            ->where('user_id', Auth::id())->delete();
         return $order;
     }
 }

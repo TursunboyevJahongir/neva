@@ -22,7 +22,11 @@ class Order extends Model
         'name',
         'phone',
         'address',
-        'comment'
+        'comment',
+        'total_price',
+        'price_delivery',
+        'delivery',
+
     ];
 
     public function shop()
@@ -40,10 +44,6 @@ class Order extends Model
         return $this->hasMany(OrderItem::class, 'order_id', 'id');
     }
 
-    public function invoices()
-    {
-        return $this->hasMany(Invoice::class, 'order_id', 'id');
-    }
 
     public function scopeShopOwner($query, $shop_id)
     {

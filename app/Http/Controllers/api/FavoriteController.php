@@ -6,7 +6,6 @@ use App\Http\Controllers\ApiController;
 use App\Http\Requests\api\FavoriteRequest;
 use App\Http\Resources\Api\PaginationResourceCollection;
 use App\Http\Resources\Api\v1\FavoriteResource;
-use App\Http\Resources\Api\v1\ProductResource;
 use App\Models\Favorite;
 use App\Services\Favorite\FavoriteService;
 use Exception;

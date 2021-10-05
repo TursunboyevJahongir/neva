@@ -68,4 +68,31 @@ class SendService
         ]);
         return $res;
     }
+
+    public function sendFirebase($fcm_token,$message)
+    {
+        $this->client = new Client([
+            'base_uri' => 'https://fcm.googleapis.com/fcm/send'
+        ]);
+        $this->token=null;
+        $key = 'AAAAsmxfoE8:APA91bHgIlZCyLnq0aj2wBN5x-zWBnY-ddZ1no_VsIiZ0TlO2Xd5qpwEfw1vyc_eiqvRp1dDyvmd2gBmVTRVwlxJ108qPSgxEFzGS6O5oC2j-r2bL2-p-gTMA9ko5aoXYVgUt6XW0P9Q';
+        $res = $this->sendRequest('POST', '/http2sms', [
+            "to" => $fcm_token,
+            "notification" => [
+                "body" => $message,
+                "title" => "Neva",
+                "icon" => "ic_launcher"
+            ],
+            "data" => [
+                "body" => $message,
+                "title" => "Neva",
+                "icon" => "ic_launcher"
+            ],
+            'headers'=>[
+                'Content-Type'=>'application/json',
+                'Authorization'=>'key='.$key
+            ]
+        ]);
+        return $res;
+    }
 }

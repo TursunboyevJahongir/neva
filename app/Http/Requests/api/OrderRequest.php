@@ -21,8 +21,8 @@ class OrderRequest extends FormRequest
     public function rules()
     {
         return [
-            'phone' => ['required', 'string', new UzbekPhone],
-            'name' => 'required|string',
+            'phone' => ['nullable','string', new UzbekPhone],
+            'name' => 'nullable|string',
             'city' => 'nullable|string',
             'region' => 'nullable|string',
             'street' => 'nullable|string',

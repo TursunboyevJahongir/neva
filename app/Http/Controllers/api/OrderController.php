@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\api;
 
 use App\Http\Controllers\ApiController;
+use App\Http\Requests\api\OrderRequest;
 use App\Models\Category;
 use App\Models\Order;
 use App\Models\ProductVariation;
@@ -10,23 +11,19 @@ use App\Services\Orders\OrderService;
 use App\Services\Page\PageService;
 use App\Services\Payments\InvoiceService;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class OrderController extends ApiController
 {
-    private $orders;
-    private $invoice;
 
     /**
      * OrderController constructor.
-     * @param OrderService $orderService
-     * @param InvoiceService $invoiceService
-     * @param PageService $pageService
+     * @param OrderService $orders
      */
-    public function __construct(OrderService $orderService, InvoiceService $invoiceService, PageService $pageService)
+    public function __construct(private OrderService $orders)
     {
-        $this->invoice = $invoiceService;
-        $this->orders = $orderService;
     }
+
     /**
      * Display a listing of the resource.
      *
@@ -35,40 +32,49 @@ class OrderController extends ApiController
     public function index()
     {
         abort_if(!auth()->check(), 403);
-        $orderList = $this->orders->getOrder();
-        $shop = Shop::find($orderList['shop_id']);
-        return view('front.order', compact('orderList', 'shop'));
+        $orderList = $this->orders->all();
     }
 
+    public function saveData($request)
+    {
+        return [
+            'name' => $request['name'] ?? Auth::user()->full_name,
+            'phone' => $request['phone']?? Auth::user()->phone,
+            'location' => $request['location'],
+            'city' => $request['city']?? Auth::user()->full_name,
+            'region' => $request['region'],
+            'address' => $request['street']?? Auth::user()->address,
+            'street' => $request['street']?? Auth::user()->full_name,
+            'comment' => $request['comment'],
+            'delivery' => 'idcourier',
+        ];
+    }
 
     /**
      * Store a newly created resource in storage.
      *
-     * @param  \Illuminate\Http\Request $request
+     * @param \Illuminate\Http\Request $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store(OrderRequest $request)
     {
         abort_if(!auth()->check(), 403);
+        $orders = $this->orders->setOrderBasket();
+        $this->orders->save($this->saveData($request)+$orders, $orders['items']);
+        return $this->success(__('messages.success'));
+    }
 
-        if (request()->has('cart')) {
-            $order = $this->orders->setOrderCart();
-
-        }
-        if (request()->has('product')) {
-            $this->orders->setOrderProduct(
-                ProductVariation::find(request()->input('product')),
-                request()->input('qty')
-            );
-
-        }
-        return [];
+    public function orderProduct(Request $request,ProductVariation $id)
+    {
+        $orders = $this->orders->setOrderProduct($id,$request->qty ?? 1);
+        $this->orders->save($this->saveData($request)+$orders, $orders['items']);
+        return $this->success(__('messages.success'));
     }
 
     /**
      * Display the specified resource.
      *
-     * @param  \App\Models\Order $order
+     * @param \App\Models\Order $order
      * @return \Illuminate\Http\Response
      */
     public function show(Order $order)
@@ -78,21 +84,9 @@ class OrderController extends ApiController
 
 
     /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request $request
-     * @param  \App\Models\Order $order
-     * @return \Illuminate\Http\Response
-     */
-    public function update(Request $request, Order $order)
-    {
-        //
-    }
-
-    /**
      * Remove the specified resource from storage.
      *
-     * @param  \App\Models\Order $order
+     * @param \App\Models\Order $order
      * @return \Illuminate\Http\Response
      */
     public function destroy(Order $order)

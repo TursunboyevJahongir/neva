@@ -10,6 +10,7 @@ use App\Http\Controllers\api\{AuthController,
     InterestController,
     KidController,
     NewsController,
+    OrderController,
     ProductController,
     SearchController,
     UserController
@@ -62,6 +63,14 @@ Route::middleware('verify.device_headers')->prefix('v1')->group(static function 
 
         Route::get('user/search', [SearchController::class, 'userSearch']);
         Route::delete('user/search/{string}', [SearchController::class, 'userSearchDelete']);
+
+        Route::get('/order', [OrderController::class, 'index']);
+        Route::get('/order/{id}', [OrderController::class, 'show']);
+        Route::post('/order', [OrderController::class, 'store']);
+        Route::put('/order/product/{id}', [OrderController::class, 'order']);
+
+
+        Route::post('/logout', [AuthController::class, 'logout']);
     });
 
     Route::get('banners', [BannerController::class, 'index']);

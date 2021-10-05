@@ -20,7 +20,7 @@ class LoginRequest extends FormRequest
                 'required',
                 new PhoneRule()
             ],
-//            'firebase' => 'required|string'
+            'firebase' => 'required|string'
         ];
     }
 }

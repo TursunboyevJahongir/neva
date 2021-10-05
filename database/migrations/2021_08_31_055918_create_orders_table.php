@@ -16,7 +16,6 @@ class CreateOrdersTable extends Migration
     {
         Schema::create('orders', function (Blueprint $table) {
             $table->id();
-            $table->unsignedBigInteger('shop_id')->nullable();
             $table->foreignId('user_id')
                 ->nullable()
                 ->constrained()
@@ -35,11 +34,6 @@ class CreateOrdersTable extends Migration
             $table->string('city')->nullable();
             $table->string('street')->nullable();
             $table->text('note')->nullable();
-
-            $table->foreign('shop_id')
-                ->references('id')
-                ->on('shops')
-                ->cascadeOnDelete();
             $table->text('comment')->nullable();
             $table->timestamps();
         });

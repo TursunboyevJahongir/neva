@@ -5,16 +5,11 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class OrderItem extends Model
+class Firebase extends Model
 {
     use HasFactory;
     protected $fillable = [
-        'shop_id',
-        'order_id',
-        'product_variation_id',
-        'sku',
-        'quantity',
-        'price',
-        'sum'
+        'user_id',
+        'fcm_token',
     ];
 }
