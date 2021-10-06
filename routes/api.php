@@ -72,8 +72,8 @@ Route::middleware('verify.device_headers')->prefix('v1')->group(static function 
         Route::get('/card', [CardController::class, 'index']);
         Route::post('/card', [CardController::class, 'store']);
         Route::post('/card-confirm', [CardController::class, 'confirm']);
-        Route::put('/card', [CardController::class, 'update']);
-        Route::delete('/card', [CardController::class, 'destroy']);
+        Route::put('/card/{id}', [CardController::class, 'update']);
+        Route::delete('/card/{id}', [CardController::class, 'destroy']);
 
         Route::post('/logout', [AuthController::class, 'logout']);
     });

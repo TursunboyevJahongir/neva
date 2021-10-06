@@ -45,20 +45,28 @@ class CardController extends ApiController
         }
     }
 
-    public function show(Card $card)
+    public function show(Card $id)
     {
-        //
+        return $this->success(__('messages.success'),[
+            'name'=>$id->name,
+            'number'=>$id->hide_number,
+        ]);
     }
 
 
-    public function update(Request $request, Card $card)
+    public function update(Request $request, Card $id)
     {
-        //
+        $this->validate($request, [
+            'name' => 'required|string',
+        ]);
+        $id->update($request->name);
     }
 
 
-    public function destroy(Card $card)
+    public function destroy(Card $id)
     {
-        //
+        $this->service->removeCard($id->token);
+        $id->delete();
+        return $this->success(__('messages.success'));
     }
 }
