@@ -22,4 +22,5 @@ return [
     'change_report_time_expired' => 'You can change the report up to 3 days !',
     'not_enough_product' => 'Not enough product',
     'basket_not_enough_quantity' => 'There is not enough quantity in the basket',
+    'card_exists'=>'This card is linked to a different profile'
 ];

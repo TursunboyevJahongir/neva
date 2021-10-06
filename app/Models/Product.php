@@ -147,6 +147,9 @@ class Product extends Model
 
     public function getSubContentAttribute(): string
     {
-        return Str::limit($this->content, 15, '...');
+        if (!is_object($this->content))
+            return Str::limit($this->content, 15, '...');
+        else
+            return '';
     }
 }

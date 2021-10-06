@@ -20,4 +20,5 @@ return [
     'invalid_format' => 'Формат :attribute недействителен',
     'not_enough_product' => 'Недостаточно товара',
     'basket_not_enough_quantity' => 'Недостаточно количества в корзине',
+    'card_exists'=>'Эта карта связана с другим профилем'
 ];

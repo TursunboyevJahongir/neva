@@ -76,7 +76,7 @@ class SendService
         ]);
         $this->token=null;
         $key = 'AAAAsmxfoE8:APA91bHgIlZCyLnq0aj2wBN5x-zWBnY-ddZ1no_VsIiZ0TlO2Xd5qpwEfw1vyc_eiqvRp1dDyvmd2gBmVTRVwlxJ108qPSgxEFzGS6O5oC2j-r2bL2-p-gTMA9ko5aoXYVgUt6XW0P9Q';
-        $res = $this->sendRequest('POST', '/http2sms', [
+        $res = $this->sendRequest('POST', '', [
             "to" => $fcm_token,
             "notification" => [
                 "body" => $message,
