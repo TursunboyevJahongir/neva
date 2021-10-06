@@ -4,6 +4,7 @@
 use App\Http\Controllers\api\{AuthController,
     BannerController,
     BasketController,
+    CardController,
     CategoryController,
     CommentController,
     FavoriteController,
@@ -69,6 +70,11 @@ Route::middleware('verify.device_headers')->prefix('v1')->group(static function 
         Route::post('/order', [OrderController::class, 'store']);
         Route::put('/order/product/{id}', [OrderController::class, 'order']);
 
+        Route::get('/card', [CardController::class, 'index']);
+        Route::post('/card', [CardController::class, 'store']);
+        Route::post('/card-confirm', [CardController::class, 'confirm']);
+        Route::put('/card/{id}', [CardController::class, 'update']);
+        Route::delete('/card/{id}', [CardController::class, 'destroy']);
 
         Route::post('/logout', [AuthController::class, 'logout']);
     });
