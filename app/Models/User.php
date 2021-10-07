@@ -61,6 +61,7 @@ class User extends Authenticatable
         'status',
         'password',
         'interests',
+        'main_card',
     ];
 
     /**
