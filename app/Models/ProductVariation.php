@@ -6,13 +6,14 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\MorphOne;
+use Illuminate\Database\Eloquent\SoftDeletes;
 
 class ProductVariation extends Model
 {
-    use HasFactory;
+    use HasFactory,SoftDeletes;
     protected $fillable = [
         'product_id',
-        'product_attribute_value_ids',
+        'product_attributes',
         'quantity',
         'old_price',
         'price',
@@ -20,7 +21,7 @@ class ProductVariation extends Model
     ];
 
     protected $casts = [
-        'product_attribute_value_ids' => 'array'
+        'product_attributes' => 'array'
     ];
 
     public function product(): BelongsTo
@@ -28,10 +29,10 @@ class ProductVariation extends Model
         return $this->belongsTo(Product::class, 'product_id', 'id');
     }
 
-    public function productAttributeValues()
-    {
-        return ProductAttributeValue::whereIn('id', $this->product_attribute_value_ids)->get();
-    }
+//    public function productAttributeValues()
+//    {
+//        return ProductAttributeValue::whereIn('id', $this->product_attribute_value_ids)->get();
+//    }
 
     public function image(): MorphOne
     {

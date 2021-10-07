@@ -30,8 +30,8 @@ class UserResource extends JsonResource
             "avatar" => $this->avatar->image_url ?? null,
             "status" => $this->status ?? null,
             "email" => $this->email ?? null,
-            "address" => $this->address ?? null,
-            'district' => $this->district_id ? new DistrictParentResource($this->district) : null,
+            "address" => $this->main_address_id ? new AddressResource($this->main_address) : null,
+//            'district' => $this->district_id ? new DistrictParentResource($this->district) : null,
             'interests' => $this->interests ? InterestResource::collection(Interest::query()->whereIn('id', $this->interests)->get()) : null,
         ];
     }

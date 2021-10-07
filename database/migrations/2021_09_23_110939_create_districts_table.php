@@ -23,9 +23,9 @@ class CreateDistrictsTable extends Migration
             $table->foreign('parent_id')->references('id')->on('districts');
         });
 
-        Schema::table('users', function (Blueprint $table) {
-            $table->foreign('district_id')->references('id')->on('districts');
-        });
+//        Schema::table('users', function (Blueprint $table) {
+//            $table->foreign('district_id')->references('id')->on('districts');
+//        });
     }
 
     /**

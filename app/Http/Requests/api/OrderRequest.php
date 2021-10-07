@@ -23,11 +23,10 @@ class OrderRequest extends FormRequest
         return [
             'phone' => ['nullable','string', new UzbekPhone],
             'name' => 'nullable|string',
-            'city' => 'nullable|string',
-            'region' => 'nullable|string',
+//            'city' => 'nullable|string',
+//            'region' => 'nullable|string',
             'street' => 'nullable|string',
-            'shop_id' => 'nullable|integer',
-            'user_id' => 'nullable|integer',
+//            'shop_id' => 'nullable|integer',
             'quantity' => 'nullable|integer',
             'sum' => 'nullable|integer',
             'method' => 'nullable'

@@ -343,7 +343,7 @@ class SearchService
             ->get();
     }
 
-    public function LikeText($query): Collection|array
+    public function suggestText($query): Collection|array
     {
         return HistorySearch::withTrashed()
             ->selectRaw('sum(count) as count,query')

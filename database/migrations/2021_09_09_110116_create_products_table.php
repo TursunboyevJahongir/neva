@@ -16,13 +16,13 @@ class CreateProductsTable extends Migration
         Schema::create('products', function (Blueprint $table) {
             $table->id();
             $table->jsonb('name');
-            $table->jsonb('content')->nullable(); // translatable
-            $table->string('sku')->unique()->nullable();
+            $table->jsonb('description')->nullable(); // translatable
+            $table->string('sku')->unique();
             $table->string('slug')->unique();
-            $table->foreignId('shop_id')->nullable()->constrained();
+            $table->foreignId('shop_id')->nullable()->constrained()->cascadeOnDelete();
             $table->foreignId('category_id')->nullable()->constrained();
             $table->jsonb('collection_ids')->nullable();
-            $table->jsonb('product_attribute_ids')->nullable();
+            $table->jsonb('product_attributes')->nullable();
             $table->double('rating')->default(0)->comment("ratings tablitsadan avg olinib yozib qo'yiladi");
             $table->unsignedBigInteger('quantity')->default(0);
             $table->unsignedDouble('min_old_price')->nullable()->comment('voretionlar ichidagi eng arzon tovarning old price');
@@ -32,7 +32,7 @@ class CreateProductsTable extends Migration
             $table->bigInteger('position')->nullable();
             $table->string('tag')->nullable();
             $table->boolean('active')->default(true);
-
+            $table->softDeletes();
             $table->timestamps();
         });
     }

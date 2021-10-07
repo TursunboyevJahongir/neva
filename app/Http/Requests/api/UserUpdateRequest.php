@@ -43,9 +43,15 @@ class UserUpdateRequest extends FormRequest
             'avatar' => 'nullable|image|max:1000',
             'email' => 'nullable|email',
             'gender' => ['nullable', new GenderRule()],
-            'address' => 'nullable|string',
-            'district_id' => 'nullable|exists:districts,id',
+//            'district_id' => 'nullable|exists:districts,id',
             'interests.*' => 'nullable|exists:interests,id',
+            'address' => 'nullable|string',
+            'lat' => ['required_with:long', 'nullable',
+//                'regex:/^[-]?(([0-8]?[0-9])\.(\d+))|(90(\.0+)?)$/'
+            ],
+            'long' => ['required_with:lat', 'nullable',
+//                'regex:/^[-]?((((1[0-7][0-9])|([0-9]?[0-9]))\.(\d+))|180(\.0+)?)$/'
+            ]
         ];
     }
 }

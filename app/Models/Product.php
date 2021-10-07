@@ -6,6 +6,7 @@ use App\Casts\TranslatableJson;
 use App\Traits\HasTranslatableJson;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Support\Str;
 
 /**
@@ -17,7 +18,7 @@ use Illuminate\Support\Str;
  * @property int position
  * @property array product_attribute_ids
  * @property TranslatableJson name
- * @property TranslatableJson content
+ * @property TranslatableJson description
  * @property string sku
  * @property string slug
  * @property int rating
@@ -36,7 +37,7 @@ use Illuminate\Support\Str;
 class Product extends Model
 {
     use HasFactory,
-        HasTranslatableJson;
+        HasTranslatableJson, SoftDeletes;
 
     protected $fillable = [
         'name',
@@ -44,8 +45,8 @@ class Product extends Model
         'category_id',
         'sku',
         'slug',
-        'product_attribute_ids',
-        'content',
+        'product_attributes',
+        'description',
         'rating',
         'min_old_price',
         'min_price',
@@ -60,18 +61,18 @@ class Product extends Model
     protected $casts = [
         'active' => 'boolean',
         'name' => TranslatableJson::class,
-        'content' => TranslatableJson::class,
-        'product_attribute_ids' => 'array',
+        'description' => TranslatableJson::class,
+        'product_attributes' => 'array',
     ];
 
     protected $with = [
         'variations'
     ];
 
-    public function productAttributes()
-    {
-        return ProductAttribute::whereIn('id', $this->product_attribute_ids)->get();
-    }
+//    public function productAttributes()
+//    {
+//        return ProductAttribute::whereIn('id', $this->product_attribute_ids)->get();
+//    }
 
     public function single()
     {
@@ -145,8 +146,8 @@ class Product extends Model
         return $this->favorite()->where('user_id', auth('sanctum')->id())->exists();
     }
 
-    public function getSubContentAttribute(): string
+    public function getSubDescriptionAttribute(): string
     {
-        return Str::limit($this->content, 15, '...');
+        return !is_object($this->description) ? Str::limit($this->description, 15, '...') : "";
     }
 }

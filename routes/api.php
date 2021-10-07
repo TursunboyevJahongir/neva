@@ -6,6 +6,7 @@ use App\Http\Controllers\api\{AuthController,
     BasketController,
     CategoryController,
     CommentController,
+    DistrictController,
     FavoriteController,
     InterestController,
     KidController,
@@ -13,8 +14,7 @@ use App\Http\Controllers\api\{AuthController,
     OrderController,
     ProductController,
     SearchController,
-    UserController
-};
+    UserController};
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -64,14 +64,15 @@ Route::middleware('verify.device_headers')->prefix('v1')->group(static function 
         Route::get('user/search', [SearchController::class, 'userSearch']);
         Route::delete('user/search/{string}', [SearchController::class, 'userSearchDelete']);
 
-        Route::get('/order', [OrderController::class, 'index']);
-        Route::get('/order/{id}', [OrderController::class, 'show']);
-        Route::post('/order', [OrderController::class, 'store']);
-        Route::put('/order/product/{id}', [OrderController::class, 'order']);
+        Route::get('order', [OrderController::class, 'index']);
+        Route::get('order/{id}', [OrderController::class, 'show']);
+        Route::post('order', [OrderController::class, 'store']);
+        Route::post('order/product/{id}', [OrderController::class, 'orderProduct']);
 
 
         Route::post('/logout', [AuthController::class, 'logout']);
     });
+//    Route::get('region/{id?}', [DistrictController::class, 'index']);
 
     Route::get('banners', [BannerController::class, 'index']);
     Route::get('banners/{object}/{id?}', [BannerController::class, 'show'])->where(['id' => '[0-9]+', 'object' => '[a-z]+']);
@@ -87,5 +88,5 @@ Route::middleware('verify.device_headers')->prefix('v1')->group(static function 
 
     Route::get('popular/search', [SearchController::class, 'popular']);
     Route::get('search/{string}', [SearchController::class, 'search']);
-    Route::get('search/like/{string}', [SearchController::class, 'like']);
+    Route::get('search/suggest/{string}', [SearchController::class, 'suggest']);
 });

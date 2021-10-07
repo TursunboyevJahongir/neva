@@ -21,9 +21,9 @@ class DistrictParentResource extends JsonResource
          */
         return [
             'id' => $this->id,
-            'name' => $this->name[$request->getDeviceLang()] ?? $this->name[config('app.locale')],
+            'name' => $this->name,
             'code' => $this->code,
-            'parent' => new DistrictParentResource($this->parent),
+            'parent' => new RegionResource($this->parent),
         ];
     }
 }

@@ -61,10 +61,10 @@ class SearchController extends ApiController
     /**
      * @throws Exception
      */
-    public function like(string $search): JsonResponse
+    public function suggest(string $search): JsonResponse
     {
         $search = rtrim($search, " \t.");
-        $search = $this->service->LikeText($search);
+        $search = $this->service->suggestText($search);
         return $this->success(__('messages.success'), SearchLikeTestResource::collection($search));
     }
 

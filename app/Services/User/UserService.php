@@ -10,6 +10,7 @@ namespace App\Services\User;
 
 
 use App\Enums\UserStatusEnum;
+use App\Models\Address;
 use App\Models\Image;
 use App\Models\User;
 
@@ -51,6 +52,11 @@ class UserService
 
     public function update(array $attributes, User $user)
     {
+        if (isset($attributes['address'])) {//todo agarm ko'p  address tanlanadigan bo'lsa
+            $address = Address::query()
+                ->create(['user_id' => $user->id, 'address' => $attributes['address'], 'lat' => $attributes['lat'] ?? null, 'long' => $attributes['long'] ?? null]);
+            $user->update(['main_address_id' => $address->id]);
+        }
         $user->update($attributes);
         if (array_key_exists('avatar', $attributes)) {
             if ($user->avatar()->exists()) {

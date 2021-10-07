@@ -2,6 +2,8 @@
 
 namespace App\Models;
 
+use App\Casts\TranslatableJson;
+use App\Traits\HasTranslatableJson;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
@@ -9,7 +11,7 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class District extends Model
 {
-    use HasFactory;
+    use HasFactory, HasTranslatableJson;
 
     /**
      * The attributes that are mass assignable.
@@ -28,7 +30,7 @@ class District extends Model
      * @var array
      */
     protected $casts = [
-        'name'=>'array'
+        'name'=>TranslatableJson::class
     ];
 
     /**
