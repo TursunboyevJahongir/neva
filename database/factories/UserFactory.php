@@ -4,6 +4,7 @@ namespace Database\Factories;
 
 use App\Models\Team;
 use App\Models\User;
+use Exception;
 use Illuminate\Database\Eloquent\Factories\Factory;
 use Illuminate\Support\Str;
 use Laravel\Jetstream\Features;
@@ -16,6 +17,23 @@ class UserFactory extends Factory
      * @var string
      */
     protected $model = User::class;
+
+    /**
+     * @throws Exception
+     */
+    public function configure()
+    {
+        $faker = $this->faker;
+        return $this->afterCreating(static function (User $User) use ($faker) {
+            @mkdir(public_path('/uploads/avatar/'), 0777, true);
+            $time = time() . random_int(1000, 60000);
+            copy($faker->imageUrl(), public_path('/uploads/avatar/') . $time . '.jpg');
+            $path = '/uploads/avatar/' . $time . '.jpg';
+            $User->avatar()->create([
+                'url' => $path,
+            ]);
+        });
+    }
 
     /**
      * Define the model's default state.
@@ -54,14 +72,14 @@ class UserFactory extends Factory
      */
     public function withPersonalTeam()
     {
-        if (! Features::hasTeamFeatures()) {
+        if (!Features::hasTeamFeatures()) {
             return $this->state([]);
         }
 
         return $this->has(
             Team::factory()
                 ->state(function (array $attributes, User $user) {
-                    return ['name' => $user->name.'\'s Team', 'user_id' => $user->id, 'personal_team' => true];
+                    return ['name' => $user->name . '\'s Team', 'user_id' => $user->id, 'personal_team' => true];
                 }),
             'ownedTeams'
         );

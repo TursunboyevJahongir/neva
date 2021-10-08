@@ -8,6 +8,7 @@ use App\Models\ProductAttribute;
 use App\Models\ProductAttributeValue;
 use App\Models\ProductVariation;
 use App\Models\Shop;
+use Exception;
 use Illuminate\Database\Eloquent\Factories\Factory;
 use Faker\Generator as Generator;
 
@@ -19,6 +20,38 @@ class ProductFactory extends Factory
      * @var string
      */
     protected $model = Product::class;
+
+
+    /**
+     * @throws Exception
+     */
+    public function configure()
+    {
+        $faker = $this->faker;
+        return $this->afterCreating(static function (Product $product) use ($faker) {
+
+//            $name = $fake->image(public_path('uploads/'),640,480, null, false);
+//            $path = '/uploads/'.$name;
+            @mkdir(public_path('/uploads/product/'), 0777, true);
+            $size = random_int(3, 7);
+            for ($i = 0; $i <= $size; $i++) {
+                $time = time() . random_int(1000, 60000);
+                copy($faker->imageUrl(), public_path('/uploads/product/') . $time . '.jpg');
+                $path = '/uploads/product/' . $time . '.jpg';
+                $product->images()->create([
+                    'url' => $path,
+                ]);
+            }
+
+            $time = time() . random_int(1000, 60000);
+            copy($faker->imageUrl(), public_path('/uploads/product/') . $time . '.jpg');
+            $path = '/uploads/product/' . $time . '.jpg';
+            $product->image()->create([
+                'url' => $path,
+                'cover_image' => 1,
+            ]);
+        });
+    }
 
     /**
      * Define the model's default state.

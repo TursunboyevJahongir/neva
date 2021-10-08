@@ -6,6 +6,7 @@ use App\Http\Controllers\api\{AuthController,
     BasketController,
     CategoryController,
     CommentController,
+    DataController,
     DistrictController,
     FavoriteController,
     InterestController,
@@ -69,10 +70,11 @@ Route::middleware('verify.device_headers')->prefix('v1')->group(static function 
         Route::post('order', [OrderController::class, 'store']);
         Route::post('order/product/{id}', [OrderController::class, 'orderProduct']);
 
-
         Route::post('/logout', [AuthController::class, 'logout']);
     });
 //    Route::get('region/{id?}', [DistrictController::class, 'index']);
+
+    Route::get('intro', [DataController::class, 'intro']);
 
     Route::get('banners', [BannerController::class, 'index']);
     Route::get('banners/{object}/{id?}', [BannerController::class, 'show'])->where(['id' => '[0-9]+', 'object' => '[a-z]+']);

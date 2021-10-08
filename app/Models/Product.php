@@ -6,6 +6,8 @@ use App\Casts\TranslatableJson;
 use App\Traits\HasTranslatableJson;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Support\Str;
 
@@ -79,18 +81,17 @@ class Product extends Model
         return $this->hasOne(ProductVariation::class, 'product_id', 'id');
     }
 
-    public function variations()
+    public function variations(): HasMany
     {
         return $this->hasMany(ProductVariation::class, 'product_id', 'id');
     }
 
-    public function comments()
+    public function comments(): HasMany
     {
         return $this->hasMany(Comment::class, 'product_id', 'id');
     }
 
-
-    public function shop()
+    public function shop(): BelongsTo
     {
         return $this->belongsTo(Shop::class, 'shop_id', 'id');
     }

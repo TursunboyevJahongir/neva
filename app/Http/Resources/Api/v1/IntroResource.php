@@ -2,11 +2,11 @@
 
 namespace App\Http\Resources\Api\v1;
 
-use App\Models\Category;
+use App\Models\Intro;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
 
-class CategoryResource extends JsonResource
+class IntroResource extends JsonResource
 {
     /**
      * Transform the resource into an array.
@@ -17,12 +17,12 @@ class CategoryResource extends JsonResource
     public function toArray($request)
     {
         /**
-         * @var Category $this
+         * @var Intro $this
          */
         return [
-            "id" => $this->id,
-            "name" => $this->name,
-            "ico" => $this->ico->image_url,
+            "title" => $this->title,
+            "description" => $this->description,
+            "images" => ImageResource::collection($this->images),
         ];
     }
 }
