@@ -7,6 +7,7 @@ use App\Http\Controllers\api\{AuthController,
     CardController,
     CategoryController,
     CommentController,
+    DataController,
     DistrictController,
     FavoriteController,
     InterestController,
@@ -78,6 +79,9 @@ Route::middleware('verify.device_headers')->prefix('v1')->group(static function 
 
         Route::post('/logout', [AuthController::class, 'logout']);
     });
+//    Route::get('region/{id?}', [DistrictController::class, 'index']);
+
+    Route::get('intro', [DataController::class, 'intro']);
 
     Route::get('banners', [BannerController::class, 'index']);
     //Route::get('banners/{id}', [BannerController::class, 'show'])->where(['id' => '[0-9]+']);
