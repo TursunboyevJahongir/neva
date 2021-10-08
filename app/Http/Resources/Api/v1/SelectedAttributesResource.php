@@ -18,6 +18,7 @@ class SelectedAttributesResource extends JsonResource
     public function toArray($request)
     {
         return [
+            'id' => $this['attribute'],
             "name" => ProductAttribute::query()->find($this['attribute'])->name,
             "values" => SelectedAttributeValueResource::collection(ProductAttributeValue::query()->whereIn('id', $this['values'])->get()),
         ];

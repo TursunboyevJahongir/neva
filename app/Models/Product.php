@@ -45,7 +45,7 @@ class Product extends Model
         'category_id',
         'sku',
         'slug',
-        'product_attributes',
+//        'product_attributes',
         'description',
         'rating',
         'min_old_price',
@@ -62,7 +62,7 @@ class Product extends Model
         'active' => 'boolean',
         'name' => TranslatableJson::class,
         'description' => TranslatableJson::class,
-        'product_attributes' => 'array',
+//        'product_attributes' => 'array',
     ];
 
     protected $with = [
