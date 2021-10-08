@@ -8,7 +8,7 @@ use App\Models\ProductVariation;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
 
-class ProductVariationResource extends JsonResource
+class SelectedAttributeValueResource extends JsonResource
 {
     /**
      * Transform the resource into an array.
@@ -19,16 +19,11 @@ class ProductVariationResource extends JsonResource
     public function toArray($request)
     {
         /**
-         * @var ProductVariation $this
+         * @var ProductAttributeValue $this
          */
         return [
             "id" => $this->id,
-            "quantity" => $this->quantity,
-            "old_price" => $this->old_price,
-            "price" => $this->price,
-            "image" => $this->image->image_url,
-            "percent" => $this->percent ?? null,
-            "product_attribute" => SelectedAttributesResource::collection($this->product_attributes) ?? null,
+            "attribute" =>$this->name,
         ];
     }
 }

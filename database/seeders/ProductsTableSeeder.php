@@ -38,7 +38,7 @@ class ProductsTableSeeder extends Seeder
         ]);
          ProductVariation::create([
              'product_id'=>1,
-             'product_attribute_value_ids'=>[1,2],
+//             'product_attribute_value_ids'=>[1,2],
              'quantity'=>14,
              'price'=>15000,
              'old_price'=>15000

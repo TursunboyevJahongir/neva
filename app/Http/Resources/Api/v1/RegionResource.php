@@ -6,7 +6,7 @@ use App\Models\District;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
 
-class DistrictChildrenResource extends JsonResource
+class RegionResource extends JsonResource
 {
     /**
      * Transform the resource into an array.
@@ -23,7 +23,7 @@ class DistrictChildrenResource extends JsonResource
             'id' => $this->id,
             'name' => $this->name,
             'code' => $this->code,
-            'children' => DistrictChildrenResource::collection($this->children),
+//            'children' => DistrictChildrenResource::collection($this->children),
         ];
     }
 }

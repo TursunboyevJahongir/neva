@@ -28,7 +28,34 @@ class ProductVariationFactory extends Factory
     {
         return [
             'product_id' => Product::all()->random()->id,
-            'product_attribute_value_ids' => $this->faker->boolean ? [ProductAttributeValue::all()->random()->id] : [ProductAttributeValue::all()->random()->id, ProductAttributeValue::all()->random()->id],
+//            'product_attribute_value_ids' => $this->faker->boolean ? [ProductAttributeValue::all()->random()->id] : [ProductAttributeValue::all()->random()->id, ProductAttributeValue::all()->random()->id],
+            'product_attributes' => $this->faker->boolean ?
+                [[
+                    'attribute' => ProductAttribute::all()->random()->id,
+                    "values" =>
+                        [
+                            ProductAttributeValue::all()->random()->id,
+                            ProductAttributeValue::all()->random()->id,
+                        ]
+                ]] :
+                [
+                    [
+                        'attribute' => ProductAttribute::all()->random()->id,
+                        "values" =>
+                            [
+                                ProductAttributeValue::all()->random()->id,
+                                ProductAttributeValue::all()->random()->id,
+                            ],
+                    ],
+                    [
+                        'attribute' => ProductAttribute::all()->random()->id,
+                        "values" =>
+                            [
+                                ProductAttributeValue::all()->random()->id,
+                                ProductAttributeValue::all()->random()->id,
+                            ]
+                    ]
+                ],
             'quantity' => $this->faker->numberBetween(100, 150),
             'old_price' => $this->faker->numberBetween(10000, 500000),
             'price' => $this->faker->numberBetween(400000, 10000000),

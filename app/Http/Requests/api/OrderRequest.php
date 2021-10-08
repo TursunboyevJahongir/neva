@@ -30,6 +30,7 @@ class OrderRequest extends FormRequest
             'user_id' => 'nullable|integer',
             'quantity' => 'nullable|integer',
             'sum' => 'nullable|integer',
+            'method' => 'nullable'
         ];
     }
 }

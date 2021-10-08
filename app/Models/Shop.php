@@ -7,11 +7,11 @@ use App\Traits\HasTranslatableJson;
 use Illuminate\Database\Eloquent\Casts\AsCollection;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Shop extends Model
 {
-    use HasFactory,
-        HasTranslatableJson;
+    use HasFactory, HasTranslatableJson, SoftDeletes;
 
     protected $fillable = [
         'user_id',
@@ -30,8 +30,8 @@ class Shop extends Model
 
     protected $casts = [
         'active' => 'boolean',
-        'work_day'=>'array',
+        'work_day' => 'array',
         'description' => TranslatableJson::class
     ];
-    
+
 }

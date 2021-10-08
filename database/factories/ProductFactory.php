@@ -35,14 +35,14 @@ class ProductFactory extends Factory
                 'ru' => $this->faker->word,
                 'en' => $this->faker->word
             ],
-            'content' => [
+            'description' => [
                 'uz' => $this->faker->text(200),
                 'ru' => $this->faker->text(200),
                 'en' => $this->faker->text(200),
             ],
             'sku' => $this->faker->slug(),
             'slug' => $this->faker->slug(),
-            'product_attribute_ids' => $this->faker->boolean ? [ProductAttributeValue::all()->random()->id] : [ProductAttributeValue::all()->random()->id, ProductAttributeValue::all()->random()->id],
+         //   'product_attribute_ids' => $this->faker->boolean ? [ProductAttributeValue::all()->random()->id] : [ProductAttributeValue::all()->random()->id, ProductAttributeValue::all()->random()->id],
             'quantity' => $this->faker->numberBetween(100, 150),
             'min_old_price' => $this->faker->boolean ? $this->faker->numberBetween(1000, 10000) : null,
             'min_price' => $this->faker->numberBetween(10000, 500000),

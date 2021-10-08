@@ -1,5 +1,6 @@
 <?php
 
+use App\Enums\BannerEnum;
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
@@ -15,11 +16,13 @@ class CreateBannersTable extends Migration
     {
         Schema::create('banners', function (Blueprint $table) {
             $table->id();
-            $table->json('name');
-            $table->json('description');
-            $table->string('link');
-            $table->string('entity_id');
-            $table->string('entity');
+            $table->string('name');
+            $table->boolean('active')->default(true);
+           // $table->json('description');
+            $table->string('link')->nullable();
+            $table->enum('object',BannerEnum::toArray());
+            $table->unsignedBigInteger('object_id');
+            $table->unsignedBigInteger('position')->default(0);
             $table->timestamps();
         });
     }

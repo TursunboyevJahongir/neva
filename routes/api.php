@@ -7,6 +7,7 @@ use App\Http\Controllers\api\{AuthController,
     CardController,
     CategoryController,
     CommentController,
+    DistrictController,
     FavoriteController,
     InterestController,
     KidController,
@@ -64,10 +65,10 @@ Route::middleware('verify.device_headers')->prefix('v1')->group(static function 
         Route::get('user/search', [SearchController::class, 'userSearch']);
         Route::delete('user/search/{string}', [SearchController::class, 'userSearchDelete']);
 
-        Route::get('/order', [OrderController::class, 'index']);
-        Route::get('/order/{id}', [OrderController::class, 'show']);
-        Route::post('/order', [OrderController::class, 'store']);
-        Route::put('/order/product/{id}', [OrderController::class, 'order']);
+        Route::get('order', [OrderController::class, 'index']);
+        Route::get('order/{id}', [OrderController::class, 'show']);
+        Route::post('order', [OrderController::class, 'store']);
+        Route::post('order/product/{id}', [OrderController::class, 'orderProduct']);
 
         Route::get('/card', [CardController::class, 'index']);
         Route::post('/card', [CardController::class, 'store']);
@@ -79,7 +80,7 @@ Route::middleware('verify.device_headers')->prefix('v1')->group(static function 
     });
 
     Route::get('banners', [BannerController::class, 'index']);
-    Route::get('banners/{object}/{id?}', [BannerController::class, 'show'])->where(['id' => '[0-9]+', 'object' => '[a-z]+']);
+    //Route::get('banners/{id}', [BannerController::class, 'show'])->where(['id' => '[0-9]+']);
     Route::get('comments', [CommentController::class, 'index']);
     Route::get('comments/{id?}', [CommentController::class, 'show'])->where(['id' => '[0-9]+']);
     Route::get('news', [NewsController::class, 'index']);
@@ -92,5 +93,5 @@ Route::middleware('verify.device_headers')->prefix('v1')->group(static function 
 
     Route::get('popular/search', [SearchController::class, 'popular']);
     Route::get('search/{string}', [SearchController::class, 'search']);
-    Route::get('search/like/{string}', [SearchController::class, 'like']);
+    Route::get('search/suggest/{string}', [SearchController::class, 'suggest']);
 });

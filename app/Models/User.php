@@ -21,18 +21,19 @@ use Spatie\Permission\Traits\HasRoles;
 /**
  * Class Client
  * @package App\Models
- * @property int $id
- * @property string $full_name
- * @property string $phone
- * @property string $email
- * @property GenderEnum $gender
+ * @property int id
+ * @property int main_address_id
+ * @property string full_name
+ * @property string phone
+ * @property string email
+ * @property GenderEnum gender
  * @property array interests
- * @property UserStatusEnum $status
- * @property Carbon $birthday
- * @property int $district_id
- * @property string $address
- * @property District $district
- * @property Image $avatar
+ * @property UserStatusEnum status
+ * @property Carbon birthday
+ * @property int district_id
+ * @property string address
+ * @property District district
+ * @property Image avatar
  *  * @OA\Schema(
  *     title="User model",
  *     description="User model",
@@ -55,8 +56,8 @@ class User extends Authenticatable
         'login',
         'email',
         'phone',
-        'district_id',
-        'address',
+//        'district_id',
+        'main_address_id',
         'gender',
         'status',
         'password',
@@ -106,5 +107,13 @@ class User extends Authenticatable
     public function kids(): HasMany
     {
         return $this->hasMany(Kids::class, 'parent_id');
+    }
+
+    /**
+     * @return BelongsTo
+     */
+    public function main_address(): BelongsTo
+    {
+        return $this->belongsTo(Address::class, 'main_address_id');
     }
 }

@@ -2,6 +2,9 @@
 
 namespace App\Services\Banner;
 
+use App\Http\Resources\Api\PaginationResourceCollection;
+use App\Http\Resources\Api\v1\ProductResource;
+use App\Http\Resources\Api\v1\ProductShowResource;
 use App\Models\Banner;
 use App\Models\Category;
 use App\Models\Image;
@@ -14,28 +17,28 @@ class BannerService
 {
     public function all()
     {
-        return Banner::with('image')
-            ->latest('id')
-            ->paginate(config('app.per_page'));
+        return Banner::active()->get();
     }
 
-    public function object($model, $id)
+    public function object($model, $id,&$data,$request)
     {
         $object =null;
 
         switch ($model) {
-            case 'news':
-                $object = News::findOrFail($id)->with('image')
-                    ->paginate();
+            case 'shop':
+
+               // $object = new PaginationResourceCollection(,
+             //       ProductResource::class);
                 break;
             case 'product':
-                $object = Product::findOrFail($id)->with('image')
-                    ->paginate();
+                $object = new ProductShowResource(Product::query()->findOrFail($id));
+                (new ProductService)->historyView($id);
                 break;
             case 'category':
                 $category=Category::findOrFail($id);
-                $object=new ProductService();
-                $object=$object->render($category);
+                $data = (new ProductService)->categoryProducts($category, $request);
+                $object= new PaginationResourceCollection($data['products'],
+                    ProductResource::class);
                 break;
         }
         return $object;
