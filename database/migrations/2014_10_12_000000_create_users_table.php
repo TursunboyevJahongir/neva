@@ -15,7 +15,8 @@ class CreateUsersTable extends Migration
     {
         Schema::create('users', function (Blueprint $table) {
             $table->id();
-            $table->string('full_name')->nullable();
+            $table->string('first_name');
+            $table->string('last_name');
             $table->string('phone')->unique();
             $table->enum('gender', \App\Enums\GenderEnum::toArray())->nullable();
             $table->date('birthday')->nullable();
@@ -25,6 +26,7 @@ class CreateUsersTable extends Migration
             $table->string('password')->nullable();
 //            $table->unsignedBigInteger('district_id')->nullable();
             $table->json('interests')->nullable();
+            $table->unsignedBigInteger('main_card')->nullable();
             $table->enum('status', \App\Enums\UserStatusEnum::toArray());
             $table->string('firebase')->nullable()->comment('firebase push token');
             $table->unsignedBigInteger('main_address_id')->nullable();

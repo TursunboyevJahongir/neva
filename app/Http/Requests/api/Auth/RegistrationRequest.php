@@ -6,7 +6,7 @@ use App\Rules\PhoneRule;
 use App\Rules\UzbekPhone;
 use Illuminate\Foundation\Http\FormRequest;
 
-class LoginRequest extends FormRequest
+class RegistrationRequest extends FormRequest
 {
     /**
      * Get the validation rules that apply to the request.
@@ -18,9 +18,11 @@ class LoginRequest extends FormRequest
         return [
             'phone' => [
                 'required',
-                'exists:users,phone',
+                'unique:users,phone',
                 new PhoneRule()
             ],
+            'first_name'=>'required|string',
+            'last_name'=>'required|string'
         ];
     }
 }

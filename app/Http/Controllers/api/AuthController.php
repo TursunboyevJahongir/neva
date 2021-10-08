@@ -5,6 +5,7 @@ namespace App\Http\Controllers\api;
 use App\Enums\UserStatusEnum;
 use App\Http\Controllers\ApiController;
 use App\Http\Requests\api\Auth\LoginRequest;
+use App\Http\Requests\api\Auth\RegistrationRequest;
 use App\Http\Requests\api\Auth\ResendSmsConfirmRequest;
 use App\Http\Requests\api\Auth\SmsConfirmRequest;
 use App\Http\Requests\api\VerifyRequest;
@@ -69,21 +70,25 @@ class AuthController extends ApiController
      */
     public function authenticate(LoginRequest $request, SmsService $smsService): JsonResponse
     {
-
-        $user = User::query()->firstOrCreate(
-            ['phone' => $request->validated()['phone']],
-            ['status' => UserStatusEnum::PENDING,
-//                'firebase' => $request->validated()['firebase']
-            ]
-        );
         try {
             $smsService->sendConfirm($request->validated()['phone']);
-            Firebase::query()->firstOrCreate(
-                [
-                    'user_id' => $user->id,
-                    'fcm_token' => $request->validated()['firebase']
-                ],
-            );
+//            Firebase::query()->firstOrCreate(
+//                [
+//                    'user_id' => $user->id,
+//                    'fcm_token' => $request->validated()['firebase']
+//                ],
+//            );
+            return $this->success(__('sms.confirmation_sent', ['attribute' => $request->validated()['phone']]));
+        } catch (\Throwable $e) {
+            return $this->error($e->getMessage());
+        }
+    }
+
+    public function Registration(RegistrationRequest $request, SmsService $smsService): JsonResponse
+    {
+        User::query()->create($request->validated());
+        try {
+            $smsService->sendConfirm($request->validated()['phone']);
             return $this->success(__('sms.confirmation_sent', ['attribute' => $request->validated()['phone']]));
         } catch (\Throwable $e) {
             return $this->error($e->getMessage());
@@ -94,6 +99,7 @@ class AuthController extends ApiController
     /**
      * @param SmsConfirmRequest $request
      * @param SmsService $smsService
+     * @param UserService $userService
      * @return JsonResponse
      */
     public function authConfirm(SmsConfirmRequest $request, SmsService $smsService, UserService $userService): JsonResponse
@@ -101,6 +107,12 @@ class AuthController extends ApiController
         try {
             if ($smsService->confirm($request->json('phone'), $request->json('code'))) {
                 $userWithToken = $userService->generateToken($request->json('phone'));
+                Firebase::query()->firstOrCreate(
+                    [
+                        'user_id' => $userWithToken->id,
+                        'fcm_token' => $request->validated()['firebase']
+                    ],
+                );
                 return $this->success('', $userWithToken);
             }
             return $this->error(__('sms.invalid_code'));
