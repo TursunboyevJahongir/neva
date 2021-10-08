@@ -25,8 +25,8 @@ class BannersTableSeeder extends Seeder
                 'uz' => ''
             ],
             'link' => 'test',
-            'entity_id'=>1,
-            'entity'=>'category'
+            'object_id'=>1,
+            'object'=>'category'
         ])->image()->create([
             'url' => '/images/bg-01.jpg'
         ]);
@@ -41,8 +41,8 @@ class BannersTableSeeder extends Seeder
                 'uz' => ''
             ],
             'link' => 'test',
-            'entity_id'=>1,
-            'entity'=>'shop'
+            'object_id'=>1,
+            'object'=>'shop'
         ])->image()->create([
             'url' => '/images/bg-01.jpg'
         ]);
@@ -57,8 +57,8 @@ class BannersTableSeeder extends Seeder
                 'uz' => ''
             ],
             'link' => 'test',
-            'entity_id'=>2,
-            'entity'=>'category'
+            'object_id'=>2,
+            'object'=>'category'
         ])->image()->create([
             'url' => '/images/bg-01.jpg'
         ]);

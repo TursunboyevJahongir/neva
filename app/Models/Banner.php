@@ -13,14 +13,21 @@ class Banner extends Model
 
     protected $fillable = [
         'name',
-        'description',
-        'link'
+    //    'description',
+        'link',
+        'object',
+        'object_id',
+        'active',
+        'position',
     ];
 
     protected $casts = [
-        'name' => TranslatableJson::class,
-        'description' => TranslatableJson::class
+       // 'description' => TranslatableJson::class
     ];
+    public function scopeActive($q)
+    {
+        return $q->where('active', '=', true)->orderBy('position','DESC');
+    }
 
     public function image()
     {

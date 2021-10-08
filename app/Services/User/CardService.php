@@ -37,8 +37,35 @@ class CardService
         $this->password = config('payme.password');
     }
 
+    public function all()
+    {
+        $this->front = false;
+        $cards = Card::query()->where('user_id', Auth::id())
+            ->where('verify', true)->get();
+        $cards_list = [];
+        foreach ($cards as $card) {
+            $check = $this->checkCard($card->token);
+            if (isset($check->result) && $check->result->card->verify)
+                $cards_list[] = [
+                    'id' => $card->id,
+                    'name' => $card->name,
+                    'number' => $card->hide_number,
+                    'expire' => $card->expire,
+                    'main' => Auth::user()->main_card === $card->id,
+                ];
+            else
+                $card->update(['verify' => false]);
+
+        }
+usort($cards_list, function ($item1, $item2) {
+        return $item1['main'] <=> $item2['main'];
+    });
+        return  $cards_list;
+    }
+
     public function add(array $attributes)
     {
+        $this->front = true;
         $result = $this->addCard($attributes['number'], $attributes['expire']);
         if (isset($result->result)) {
             $card = $result->result->card;
@@ -57,22 +84,28 @@ class CardService
         if (isset($result->error)) {
             throw new \Exception($result->error->message);
         }
+        $result->result->name=$attributes['name'];
+        $result->result->number=$card->number;
+        $result->result->expire=$card->expire;
         return $result->result;
     }
+
     public function confirm(array $attributes)
     {
-        $token=Card::query()->where('user_id',Auth::id())
-            ->where('verify',false)
-            ->where('hide_number',$attributes['hide_number'])
-            ->select('token')
+        $this->front = true;
+        $token = Card::query()->where('user_id', Auth::id())
+            ->where('verify', false)
+            ->where('hide_number', $attributes['number'])
             ->first();
-        $result = $this->verifyCard($token, $attributes['code']);
+        $token->update(['verify' => true]);
+        $result = $this->verifyCard($token->token, $attributes['code']);
         if (isset($result->result)) {
-           $token->update(['verify'=>true]);
+            $token->update(['verify' => true]);
         }
         if (isset($result->error)) {
             throw new \Exception($result->error->message);
         }
+
         return true;
     }
 
@@ -87,7 +120,6 @@ class CardService
             'method' => $method_api,
             'params' => $params,
         ];
-
         if (in_array($method, ['GET', 'POST', 'PATCH', 'DELETE', 'PUT'])) {
             $res = $this->client->request($method, '', $options);
             if ($res->getStatusCode() === 200) {
@@ -101,7 +133,6 @@ class CardService
 
     public function addCard(string $number, string $expire)
     {
-        $this->front = true;
         $result = $this->sendRequest('POST',
             'cards.create', [
                 'card' => [
@@ -130,9 +161,9 @@ class CardService
             [
                 'token' => $token,
                 'code' => $code
-
             ],
         );
+
         return $result;
     }
 
@@ -149,6 +180,7 @@ class CardService
 
     public function removeCard(string $token)
     {
+        $this->front = false;
         $result = $this->sendRequest('POST',
             'cards.remove',
             [
@@ -160,6 +192,7 @@ class CardService
 
     public function receiptsCreate($order_id, $amount)
     {
+        $this->front = false;
         $result = $this->sendRequest('POST',
             'receipts.create',
             [
@@ -174,6 +207,7 @@ class CardService
 
     public function receiptsPay($_id, $token)
     {
+        $this->front = false;
         $result = $this->sendRequest('POST',
             'receipts.pay',
             [
@@ -186,6 +220,7 @@ class CardService
 
     public function receiptsCancel($_id)
     {
+        $this->front = false;
         $result = $this->sendRequest('POST',
             'receipts.cancel',
             [
@@ -197,6 +232,7 @@ class CardService
 
     public function receiptsCheck($_id)
     {
+        $this->front = false;
         $result = $this->sendRequest('POST',
             'receipts.check',
             [

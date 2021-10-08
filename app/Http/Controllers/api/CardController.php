@@ -21,16 +21,18 @@ class CardController extends ApiController
 
     public function index()
     {
-        
+        return $this->success(__('messages.success'),$this->service->all() );
     }
 
 
     public function store(CardRequest $request)
     {
         try {
+            $result=$this->service->add($request->validated());
+
             return $this->success(__('payme.confirmation_sent', [
-                'attribute' => $this->service->add($request->validated())->phone
-            ]));
+                'attribute' => $result->phone
+            ]),$result);
         } catch (\Throwable $e) {
             return $this->error($e->getMessage());
         }
@@ -39,6 +41,7 @@ class CardController extends ApiController
     public function confirm(CardConfirmRequest $request)
     {
         try {
+            $this->service->confirm($request->validated());
             return $this->success(__('payme.verify'));
         } catch (\Throwable $e) {
             return $this->error($e->getMessage());
@@ -56,10 +59,12 @@ class CardController extends ApiController
 
     public function update(Request $request, Card $id)
     {
-        $this->validate($request, [
+        $request->validate([
             'name' => 'required|string',
         ]);
-        $id->update($request->name);
+
+        $id->update(['name' => $request->name]);
+        return $this->success(__('messages.success'));
     }
 
 

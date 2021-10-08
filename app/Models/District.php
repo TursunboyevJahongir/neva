@@ -30,7 +30,7 @@ class District extends Model
      * @var array
      */
     protected $casts = [
-        'name'=>TranslatableJson::class
+        'name'=>'array'
     ];
 
     /**

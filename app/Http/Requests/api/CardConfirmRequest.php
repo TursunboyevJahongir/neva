@@ -25,7 +25,7 @@ class CardConfirmRequest extends FormRequest
     public function rules()
     {
         return [
-            'hide_number' => ['required|max:16|min:16'],
+            'number' => 'required|max:16|min:16|exists:cards,hide_number',
             'code' => ['required', 'numeric']
         ];
     }
