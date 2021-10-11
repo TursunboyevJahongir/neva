@@ -16,6 +16,12 @@ class CreateAddressTable extends Migration
         Schema::create('addresses', function (Blueprint $table) {
             $table->id();
             $table->foreignId('user_id')->constrained()->cascadeOnDelete();
+            $table->string('apartment')->nullable()->comment('квартира');
+            $table->string('storey')->nullable()->comment('этаж');
+            $table->string('intercom')->nullable()->comment('домофон');
+            $table->string('entrance')->nullable()->comment('подъезд');
+            $table->text('landmark')->nullable()->comment('ориентир');
+
             $table->text('address');
             $table->string('lat')->nullable();
             $table->string('long')->nullable();

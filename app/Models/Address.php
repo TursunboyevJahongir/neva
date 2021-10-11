@@ -12,15 +12,19 @@ use Illuminate\Database\Eloquent\SoftDeletes;
  * @package App\Models
  * @property int id
  * @property int user_id
+ * @property int $apartment квартира
+ * @property int $storey этаж
+ * @property int $intercom домофон
+ * @property int $entrance подъезд
+ * @property string $landmark ориентир
  * @property string address
  * @property string lat
  * @property string long
+ *
  */
 class Address extends Model
 {
     use HasFactory;
-
-    public $timestamps = false;
     /**
      * The attributes that are mass assignable.
      *
@@ -28,11 +32,16 @@ class Address extends Model
      */
     protected $fillable = [
         'user_id',
+        'apartment',
+        'storey',
+        'intercom',
+        'entrance',
+        'landmark',
+
         'address',
         'lat',
         'long',
     ];
-
     /**
      * @return BelongsTo
      */
