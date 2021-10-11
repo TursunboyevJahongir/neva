@@ -45,6 +45,7 @@ Route::middleware('verify.device_headers')->prefix('v1')->group(static function 
         Route::post('/logout', [AuthController::class, 'logout']);
         Route::get('/me', [UserController::class, 'me']);
         Route::post('/me', [UserController::class, 'update']);
+        Route::post('/me/address', [UserController::class, 'address']);
 
         Route::get('/interests', [InterestController::class, 'index']);
 

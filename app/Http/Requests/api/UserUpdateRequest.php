@@ -38,20 +38,14 @@ class UserUpdateRequest extends FormRequest
     public function rules()
     {
         return [
-            'full_name' => 'nullable|string',
+            'first_name' => 'nullable|string',
+            'last_name' => 'nullable|string',
             'birthday' => 'nullable|date',
             'avatar' => 'nullable|image|max:1000',
             'email' => 'nullable|email',
             'gender' => ['nullable', new GenderRule()],
 //            'district_id' => 'nullable|exists:districts,id',
             'interests.*' => 'nullable|exists:interests,id',
-            'address' => 'nullable|string',
-            'lat' => ['required_with:long', 'nullable',
-//                'regex:/^[-]?(([0-8]?[0-9])\.(\d+))|(90(\.0+)?)$/'
-            ],
-            'long' => ['required_with:lat', 'nullable',
-//                'regex:/^[-]?((((1[0-7][0-9])|([0-9]?[0-9]))\.(\d+))|180(\.0+)?)$/'
-            ]
         ];
     }
 }

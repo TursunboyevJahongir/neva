@@ -22,7 +22,8 @@ class UserResource extends JsonResource
          */
         return [
             "id" => $this->id,
-            "full_name" => $this->full_name ?? null,
+            "first_name" => $this->first_name,
+            "last_name" => $this->last_name ,
             "phone" => $this->phone,
             "birthday" => $this->birthday ? $this->birthday->format('d.m.Y') : null,
             "age" => $this->age ?? null,

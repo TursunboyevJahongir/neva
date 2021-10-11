@@ -13,29 +13,29 @@ use Illuminate\Database\Eloquent\Factories\Factory;
 
 class ProductVariationFactory extends Factory
 {
-    /**
-     * The name of the factory's corresponding model.
-     *
-     * @var string
-     */
-    protected $model = ProductVariation::class;
-
-    /**
-     * @throws Exception
-     */
-    public function configure()
-    {
-        $faker = $this->faker;
-        return $this->afterCreating(static function (ProductVariation $product) use ($faker) {
-            @mkdir(public_path('/uploads/product/'), 0777, true);
-            $time = time() . random_int(1000, 60000);
-            copy($faker->imageUrl(), public_path('/uploads/product/') . $time . '.jpg');
-            $path = '/uploads/product/' . $time . '.jpg';
-            $product->image()->create([
-                'url' => $path,
-            ]);
-        });
-    }
+//    /**//todo Pictures
+//     * The name of the factory's corresponding model.
+//     *
+//     * @var string
+//     */
+//    protected $model = ProductVariation::class;
+//
+//    /**
+//     * @throws Exception
+//     */
+//    public function configure()
+//    {
+//        $faker = $this->faker;
+//        return $this->afterCreating(static function (ProductVariation $product) use ($faker) {
+//            @mkdir(public_path('/uploads/product/'), 0777, true);
+//            $time = time() . random_int(1000, 60000);
+//            copy($faker->imageUrl(), public_path('/uploads/product/') . $time . '.jpg');
+//            $path = '/uploads/product/' . $time . '.jpg';
+//            $product->image()->create([
+//                'url' => $path,
+//            ]);
+//        });
+//    }
 
     /**
      * Define the model's default state.
