@@ -17,6 +17,8 @@ class CreateNewsTable extends Migration
             $table->id();
             $table->json('name');
             $table->json('description');
+            $table->boolean('active')->default(false);
+            $table->unsignedBigInteger('position')->default(0);
             $table->timestamps();
         });
     }

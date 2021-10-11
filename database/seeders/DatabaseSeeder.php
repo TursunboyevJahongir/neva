@@ -29,9 +29,9 @@ class DatabaseSeeder extends Seeder
         \App\Models\Category::factory(10)->create();
         \App\Models\Category::factory(10)->create();
         $this->call(ProductAttributesTableSeeder::class);
-        \App\Models\Interest::factory(30)->create();
-        \App\Models\Product::factory(50)->create();
-        \App\Models\ProductVariation::factory(150)->create();
+        \App\Models\Interest::factory(10)->create();
+        \App\Models\Product::factory(10)->create();
+        \App\Models\ProductVariation::factory(10)->create();
 
     }
 }

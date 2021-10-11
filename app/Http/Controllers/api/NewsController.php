@@ -3,11 +3,10 @@
 namespace App\Http\Controllers\api;
 
 use App\Http\Controllers\ApiController;
-use App\Http\Controllers\Controller;
+use App\Http\Resources\Api\v1\NewsResource;
+use App\Http\Resources\Api\v1\NewsShowResource;
 use App\Models\News;
-
-use App\Services\Comment\CommentService;
-use App\Traits\ApiResponser;
+use App\Services\News\NewsService;
 use Illuminate\Http\Request;
 
 class NewsController extends ApiController
@@ -20,7 +19,7 @@ class NewsController extends ApiController
     private $service;
 
 
-    public function __construct(CommentService $service)
+    public function __construct(NewsService $service)
     {
         $this->service = $service;
     }
@@ -28,16 +27,16 @@ class NewsController extends ApiController
     /**
      * Display a listing of the resource.
      *
-     * @return \Illuminate\Http\Response
+     * @return \Illuminate\Http\JsonResponse
      */
-    public function index(Request $request)
+    public function index()
     {
         $news = $this->service->all();
-        return $this->success($news);
+        return $this->success(__('messages.success'), NewsResource::collection($news));
     }
 
-    public function show(News $news)
+    public function show(News $id)
     {
-        $this->success($news);
+       return $this->success(__('messages.success'), new NewsShowResource($id));
     }
 }

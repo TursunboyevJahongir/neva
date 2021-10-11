@@ -11,14 +11,11 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Shop extends Model
 {
-    use HasFactory, HasTranslatableJson, SoftDeletes;
-
     protected $fillable = [
         'user_id',
         'name',
         'description',
         'slug',
-        'active',
         'delivery_price',
         'delivery_time',
         'work_day',
@@ -26,12 +23,24 @@ class Shop extends Model
         'close',
         'pickup',
         'refund',
+        'is_brand',
+        'position',
+        'active',
     ];
+
+    use HasFactory, HasTranslatableJson, SoftDeletes;
 
     protected $casts = [
         'active' => 'boolean',
         'work_day' => 'array',
         'description' => TranslatableJson::class
     ];
-
+    public function scopeActive($q)
+    {
+        return $q->where('active', '=', true)->orderBy('position','DESC');
+    }
+    public function image()
+    {
+        return $this->morphOne(Image::class, 'imageable')->withDefault(['url' => '/img/no-icon.png']);
+    }
 }

@@ -4,6 +4,7 @@
 use App\Http\Controllers\api\{AuthController,
     BannerController,
     BasketController,
+    BrandController,
     CardController,
     CategoryController,
     CommentController,
@@ -84,7 +85,7 @@ Route::middleware('verify.device_headers')->prefix('v1')->group(static function 
     Route::get('intro', [DataController::class, 'intro']);
 
     Route::get('banners', [BannerController::class, 'index']);
-    //Route::get('banners/{id}', [BannerController::class, 'show'])->where(['id' => '[0-9]+']);
+    Route::get('brands', [BrandController::class, 'index']);
     Route::get('comments', [CommentController::class, 'index']);
     Route::get('comments/{id?}', [CommentController::class, 'show'])->where(['id' => '[0-9]+']);
     Route::get('news', [NewsController::class, 'index']);
