@@ -29,7 +29,6 @@ class ProductResource extends JsonResource
             "old_price" => $this->min_old_price,
             "percent" => $this->max_percent,
             "preview" => $this->image->image_url,
-
         ];
     }
 }

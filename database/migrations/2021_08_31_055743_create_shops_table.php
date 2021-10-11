@@ -32,6 +32,8 @@ class CreateShopsTable extends Migration
             $table->unsignedInteger('refund')->default(0); // days, 0 is unavailable
             $table->string('merchant_id')->nullable();
             $table->boolean('active')->default(false);
+            $table->boolean('is_brand')->default(false);
+            $table->unsignedBigInteger('position')->default(0);
             $table->softDeletes();
             $table->timestamps();
         });

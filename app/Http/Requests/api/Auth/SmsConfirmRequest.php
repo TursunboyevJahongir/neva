@@ -26,7 +26,8 @@ class SmsConfirmRequest extends FormRequest
     {
         return [
             'phone' => ['required', new PhoneRule()],
-            'code' => ['required', 'numeric']
+            'code' => ['required', 'numeric'],
+            'firebase' => 'required|string'
         ];
     }
 }

@@ -18,7 +18,6 @@ class Shop extends Model
         'name',
         'description',
         'slug',
-        'active',
         'delivery_price',
         'delivery_time',
         'work_day',
@@ -26,6 +25,9 @@ class Shop extends Model
         'close',
         'pickup',
         'refund',
+        'is_brand',
+        'position',
+        'active',
     ];
 
     protected $casts = [
@@ -33,5 +35,12 @@ class Shop extends Model
         'work_day' => 'array',
         'description' => TranslatableJson::class
     ];
-
+    public function scopeActive($q)
+    {
+        return $q->where('active', '=', true)->orderBy('position','DESC');
+    }
+    public function image()
+    {
+        return $this->morphOne(Image::class, 'imageable')->withDefault(['url' => '/img/no-icon.png']);
+    }
 }

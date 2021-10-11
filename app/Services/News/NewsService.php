@@ -19,8 +19,7 @@ class NewsService
 
     public function all()
     {
-        return News::with('image')
-            ->latest('id')
+        return News::active()
             ->get();
     }
 
