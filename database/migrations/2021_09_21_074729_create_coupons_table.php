@@ -15,14 +15,22 @@ class CreateCouponsTable extends Migration
     {
         Schema::create('coupons', function (Blueprint $table) {
             $table->id();
-            $table->boolean('active')->default(true);
+            $table->unsignedBigInteger('creator_id');
+            $table->BigInteger('object_id')->nullable();
+            $table->enum('coupon_type',\App\Enums\CouponTypeEnum::toArray())->nullable();
             $table->string('code');
-            $table->foreignId('user_id')->nullable();
+            $table->text('description')->nullable();
             $table->timestamp('start_at')->nullable();
             $table->timestamp('end_at')->nullable();
-            $table->json('type')->nullable();
-            $table->unsignedBigInteger('count')->nullable();
+            $table->enum('sale_type',\App\Enums\SaleTypeEnum::toArray())->comment('price,percent');
+            $table->unsignedBigInteger('value');
+            $table->unsignedBigInteger('count')->nullable()->comment('ishlash soni');
+            $table->unsignedBigInteger('price')->nullable()->comment('minimum summa');
+            $table->boolean('active')->default(true);
+            $table->softDeletes();
             $table->timestamps();
+
+            $table->foreign('creator_id')->references('id')->on('user_id');
         });
     }
 
