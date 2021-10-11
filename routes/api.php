@@ -36,6 +36,7 @@ Route::middleware('verify.device_headers')->prefix('v1')->group(static function 
      * Login / Register
      */
     Route::prefix('auth')->group(static function () {
+        Route::post('/register', [AuthController::class, 'Registration']);
         Route::post('/', [AuthController::class, 'authenticate']);
         Route::post('confirm', [AuthController::class, 'authConfirm']);
         Route::post('resend-sms', [AuthController::class, 'resendSms']);
