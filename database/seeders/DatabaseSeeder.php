@@ -22,6 +22,7 @@ class DatabaseSeeder extends Seeder
 
 
         $this->call(ShopsTableSeeder::class);
+        $this->call(CouponSeeder::class);
         $this->call(DistrictSeeder::class);
         $this->call(Categories::class);
         $this->call(BannersTableSeeder::class);

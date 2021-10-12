@@ -19,7 +19,7 @@ class CreateCouponsTable extends Migration
             $table->BigInteger('object_id')->nullable();
             $table->enum('coupon_type',\App\Enums\CouponTypeEnum::toArray())->nullable();
             $table->string('code');
-            $table->text('description')->nullable();
+            $table->json('description')->nullable();
             $table->timestamp('start_at')->nullable();
             $table->timestamp('end_at')->nullable();
             $table->enum('sale_type',\App\Enums\SaleTypeEnum::toArray())->comment('price,percent');
@@ -30,7 +30,7 @@ class CreateCouponsTable extends Migration
             $table->softDeletes();
             $table->timestamps();
 
-            $table->foreign('creator_id')->references('id')->on('user_id');
+            $table->foreign('creator_id')->references('id')->on('users');
         });
     }
 
