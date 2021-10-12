@@ -14,6 +14,7 @@ class AddressResource extends JsonResource
      * @var bool
      */
     public bool $preserveKeys = true;
+
     /**
      * Transform the resource into an array.
      *
@@ -28,8 +29,14 @@ class AddressResource extends JsonResource
         return [
 //            'id' => $this->id,
             'address' => $this->address,
-            'lat' => $this->lat,
-            'long' => $this->long,
+            'lat' => $this->lat ?? null,
+            'long' => $this->long ?? null,
+
+            'apartment' => $this->apartment,
+            'storey' => $this->storey,
+            'intercom' => $this->intercom,
+            'entrance' => $this->entrance,
+            'landmark' => $this->landmark
         ];
     }
 }

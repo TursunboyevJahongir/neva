@@ -52,11 +52,6 @@ class UserService
 
     public function update(array $attributes, User $user)
     {
-        if (isset($attributes['address'])) {//todo agarm ko'p  address tanlanadigan bo'lsa
-            $address = Address::query()
-                ->create(['user_id' => $user->id, 'address' => $attributes['address'], 'lat' => $attributes['lat'] ?? null, 'long' => $attributes['long'] ?? null]);
-            $user->update(['main_address_id' => $address->id]);
-        }
         $user->update($attributes);
         if (array_key_exists('avatar', $attributes)) {
             if ($user->avatar()->exists()) {
@@ -72,6 +67,18 @@ class UserService
             $user->load('avatar');
         }
         return $user;
+    }
+
+    public function address(array $attributes, User $user)
+    {
+        $attributes['user_id'] = $user->id;
+        if (isset($attributes['address'])) {//todo agarm ko'p  address tanlanadigan bo'lsa
+            $address = Address::query()->create($attributes);
+            $user->update(['main_address_id' => $address->id]);
+        } else {
+            $address = Address::query()->findOrFail($user->main_address_id);
+            $address->update($attributes);
+        }
     }
 
     /**
@@ -103,10 +110,10 @@ class UserService
      */
     private function confirmUser(User $user): void
     {
+        $user->phone_verified_at = now();
         if (!in_array($user->status, [UserStatusEnum::ACTIVE, UserStatusEnum::BLOCKED], true)) {
             //todo bu yerda birinchi registratsiyadagi cupon beriladi
             $user->status = UserStatusEnum::ACTIVE;
-            $user->phone_verified_at = now();
             $user->update();
         }
     }

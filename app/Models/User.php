@@ -23,7 +23,8 @@ use Spatie\Permission\Traits\HasRoles;
  * @package App\Models
  * @property int id
  * @property int main_address_id
- * @property string full_name
+ * @property string first_name
+ * @property string last_name
  * @property string phone
  * @property string email
  * @property GenderEnum gender
@@ -78,12 +79,18 @@ class User extends Authenticatable
 
     protected $casts = [
         'birthday' => 'datetime:Y-m-d',
+        'phone_verified_at' => 'datetime:Y-m-d H:i',
         'interests' => 'array',
     ];
 
     public function getAgeAttribute(): ?int
     {
         return $this->birthday ? date_diff($this->birthday, Carbon::now())->y : null;
+    }
+
+    public function getFullNameAttribute(): string
+    {
+        return $this->first_name . " " . $this->last_name;
     }
 
     public function setPasswordAttribute($value)
