@@ -93,7 +93,7 @@ return [
     |
     */
 
-    'fallback_locale' => 'ru',
+    'fallback_locale' => 'en',
 
     /*
     |--------------------------------------------------------------------------
@@ -178,6 +178,7 @@ return [
         App\Providers\TelescopeServiceProvider::class,
 
         Spatie\Permission\PermissionServiceProvider::class,
+        SocialiteProviders\Manager\ServiceProvider::class,
     ],
 
     /*

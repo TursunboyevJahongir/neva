@@ -30,4 +30,23 @@ return [
         'region' => env('AWS_DEFAULT_REGION', 'us-east-1'),
     ],
 
+    'facebook' => [
+        'client_id' => env('FACEBOOK_CLIENT_ID'),
+        'client_secret' => env('FACEBOOK_CLIENT_SECRET'),
+        'redirect' => env('FACEBOOK_CLIENT_REDIRECT')
+    ],
+
+    'google' => [
+        'client_id' => env('GOOGLE_CLIENT_ID'),
+        'client_secret' => env('GOOGLE_CLIENT_SECRET'),
+//        'redirect' => env('GOOGLE_CLIENT_REDIRECT')
+    ],
+
+    'telegram' => [
+    'bot' => env('TELEGRAM_BOT_NAME'),  // The bot's username
+    'client_id' => null,
+    'client_secret' => env('TELEGRAM_TOKEN'),
+    'redirect' => env('TELEGRAM_REDIRECT_URI'),
+],
+
 ];

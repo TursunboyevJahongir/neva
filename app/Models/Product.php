@@ -137,6 +137,13 @@ class Product extends Model
         return "$this->min_price - $this->max_price";
     }
 
+    public function moneyFormatter($number)
+    {
+        $locale = localeconv();
+        $text = money_format('%i', $number);
+        $text = str_replace($locale['mon_thousands_sep'], ' ', $text);;
+    }
+
     public function favorite()
     {
         return $this->hasMany(Favorite::class);
@@ -151,4 +158,6 @@ class Product extends Model
     {
         return !is_object($this->description) ? Str::limit($this->description, 15, '...') : "";
     }
+
+
 }

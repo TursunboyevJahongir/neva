@@ -27,7 +27,7 @@ class ProductShowResource extends JsonResource
             "content" => $this->description ?? null,
             "rating" => $this->rating,
             "in_favorite" => $this->in_favorite,
-            "min_price" => $this->min_price,
+            "min_price" => number_format(100000000.25, 2, ',', ' '),
             "max_price" => $this->max_price,
             "percent" => $this->max_percent,
             "image" => $this->image->image_url,

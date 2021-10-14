@@ -58,6 +58,8 @@ class User extends Authenticatable
         'login',
         'email',
         'phone',
+        'phone_verified_at',
+        'email_verified_at',
 //        'district_id',
         'main_address_id',
         'gender',
@@ -80,6 +82,7 @@ class User extends Authenticatable
     protected $casts = [
         'birthday' => 'datetime:Y-m-d',
         'phone_verified_at' => 'datetime:Y-m-d H:i',
+        'email_verified_at' => 'datetime:Y-m-d H:i',
         'interests' => 'array',
     ];
 
@@ -124,5 +127,10 @@ class User extends Authenticatable
     public function main_address(): BelongsTo
     {
         return $this->belongsTo(Address::class, 'main_address_id');
+    }
+
+    public function social_accounts(): HasMany
+    {
+        return $this->hasMany(SocialAccount::class)->with('social_accounts');
     }
 }
