@@ -139,7 +139,9 @@ class Product extends Model
 
     public function moneyFormatter($number): string
     {
-        return number_format($number, 0, ',', ' ');
+        list($whole, $decimal) = sscanf($number, '%d.%d');
+        $money = number_format($number, 0, ',', ' ');
+        return $decimal ? $money . ",$decimal" : $money;
     }
 
     public function favorite()
