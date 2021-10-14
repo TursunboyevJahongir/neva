@@ -137,11 +137,9 @@ class Product extends Model
         return "$this->min_price - $this->max_price";
     }
 
-    public function moneyFormatter($number)
+    public function moneyFormatter($number): string
     {
-        $locale = localeconv();
-        $text = money_format('%i', $number);
-        $text = str_replace($locale['mon_thousands_sep'], ' ', $text);;
+        return number_format($number, 0, ',', ' ');
     }
 
     public function favorite()
