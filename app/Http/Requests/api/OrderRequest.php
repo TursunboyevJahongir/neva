@@ -2,6 +2,7 @@
 
 namespace App\Http\Requests\api;
 
+use App\Rules\PhoneRule;
 use App\Rules\UzbekPhone;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Support\Facades\Auth;
@@ -21,14 +22,14 @@ class OrderRequest extends FormRequest
     public function rules()
     {
         return [
-            'phone' => ['nullable','string', new UzbekPhone],
+            'phone' => ['nullable', new PhoneRule()],
             'name' => 'nullable|string',
 //            'city' => 'nullable|string',
 //            'region' => 'nullable|string',
             'street' => 'nullable|string',
 //            'shop_id' => 'nullable|integer',
             'quantity' => 'nullable|integer',
-            'sum' => 'nullable|integer',
+//            'sum' => 'nullable|integer',
             'method' => 'nullable'
         ];
     }

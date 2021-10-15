@@ -27,6 +27,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
  * @property int count
  * @property int $price to min price
  * @property boolean active
+ * @property User creator
  */
 class Coupon extends Model
 {
