@@ -137,6 +137,13 @@ class Product extends Model
         return "$this->min_price - $this->max_price";
     }
 
+    public function moneyFormatter($number): string
+    {
+        list($whole, $decimal) = sscanf($number, '%d.%d');
+        $money = number_format($number, 0, ',', ' ');
+        return $decimal ? $money . ",$decimal" : $money;
+    }
+
     public function favorite()
     {
         return $this->hasMany(Favorite::class);

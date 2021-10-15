@@ -2,6 +2,8 @@
 
 namespace App\Models;
 
+use App\Casts\TranslatableJson;
+use App\Traits\HasTranslatableJson;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Str;
@@ -16,7 +18,7 @@ use Illuminate\Support\Str;
  */
 class Interest extends Model
 {
-    use HasFactory;
+    use HasFactory,HasTranslatableJson;
 
     protected $fillable = [
         'name',
@@ -25,38 +27,8 @@ class Interest extends Model
     ];
 
     protected $casts = [
-        'name' => 'array',
-        'description' => 'array',
+        'name' => TranslatableJson::class,
+        'description' => TranslatableJson::class,
         'categories' => 'array',
     ];
-
-    public function getNameUzAttribute()
-    {
-        return $this->exists ? $this->name['uz'] : '';
-    }
-
-    public function getNameRuAttribute()
-    {
-        return $this->exists ? $this->name['ru'] : '';
-    }
-
-    public function getNameEnAttribute()
-    {
-        return $this->exists ? $this->name['en'] : '';
-    }
-
-    public function getDescriptionUzAttribute(): string
-    {
-        return Str::limit($this->description['uz'], 10, '...');
-    }
-
-    public function getDescriptionRuAttribute(): string
-    {
-        return Str::limit($this->description['ru'], 10, '...');
-    }
-
-    public function getDescriptionEnAttribute(): string
-    {
-        return Str::limit($this->description['en'], 10, '...');
-    }
 }

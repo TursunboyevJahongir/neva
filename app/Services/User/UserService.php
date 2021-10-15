@@ -99,7 +99,7 @@ class UserService
 //        if ($token !== null) {
 //            $token->delete();
 //        }
-        $this->confirmUser($user);
+        $this->confirmPhoneUser($user);
         $token = $user->createToken($phone);
         $user->auth_token = $token->plainTextToken;
         return $user;
@@ -108,9 +108,22 @@ class UserService
     /**
      * @param User $user
      */
-    private function confirmUser(User $user): void
+    private function confirmPhoneUser(User $user): void
     {
         $user->phone_verified_at = now();
+        if (!in_array($user->status, [UserStatusEnum::ACTIVE, UserStatusEnum::BLOCKED], true)) {
+            //todo bu yerda birinchi registratsiyadagi cupon beriladi
+            $user->status = UserStatusEnum::ACTIVE;
+            $user->update();
+        }
+    }
+
+    /**
+     * @param User $user
+     */
+    public function verifyEmailUser(User $user): void
+    {
+        $user->email_verified_at = now();
         if (!in_array($user->status, [UserStatusEnum::ACTIVE, UserStatusEnum::BLOCKED], true)) {
             //todo bu yerda birinchi registratsiyadagi cupon beriladi
             $user->status = UserStatusEnum::ACTIVE;

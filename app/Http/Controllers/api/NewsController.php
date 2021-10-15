@@ -7,6 +7,7 @@ use App\Http\Resources\Api\v1\NewsResource;
 use App\Http\Resources\Api\v1\NewsShowResource;
 use App\Models\News;
 use App\Services\News\NewsService;
+use Illuminate\Http\Request;
 
 class NewsController extends ApiController
 {

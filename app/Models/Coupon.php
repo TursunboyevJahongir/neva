@@ -2,8 +2,10 @@
 
 namespace App\Models;
 
+use App\Casts\TranslatableJson;
 use App\Enums\CouponTypeEnum;
 use App\Enums\SaleTypeEnum;
+use App\Traits\HasTranslatableJson;
 use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
@@ -28,7 +30,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
  */
 class Coupon extends Model
 {
-    use HasFactory;
+    use HasFactory, HasTranslatableJson;
 
     /**
      * The attributes that are mass assignable.
@@ -48,6 +50,12 @@ class Coupon extends Model
         'count',
         'price',
         'active',
+    ];
+
+    protected $casts = [
+        'start_at' => 'datetime:Y-m-d H:i:s',
+        'end_at' => 'datetime:Y-m-d H:i:s',
+        'description' => TranslatableJson::class
     ];
 
     /**

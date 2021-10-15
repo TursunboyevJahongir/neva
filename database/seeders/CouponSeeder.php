@@ -25,7 +25,12 @@ class CouponSeeder extends Seeder
             'code' => "first_coupon",
             'start_at' => null,
             'end_at' => null,
-            'description' => "First Coupon",
+            'description' =>
+                [
+                    'ru' => 'Купон на первую регистрацию',
+                    'en' => "First registration coupon",
+                    'uz' => "Birinchi ro'yxatdan o'tish kuponi"
+                ],
             'sale_type' => SaleTypeEnum::PERCENT,
             'value' => 5,
             'count' => null,
