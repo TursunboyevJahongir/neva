@@ -15,6 +15,8 @@ class DatabaseSeeder extends Seeder
      */
     public function run()
     {
+        \App\Models\Intro::factory(1)->create();
+
         $this->call(AdminSeeder::class);
         $this->call(PermissionsSeeder::class);
 
@@ -27,13 +29,9 @@ class DatabaseSeeder extends Seeder
         \App\Models\Category::factory(10)->create();
         \App\Models\Category::factory(10)->create();
         $this->call(ProductAttributesTableSeeder::class);
-//        $this->call(ProductsTableSeeder::class);
-        \App\Models\Interest::factory(30)->create();
-//        \App\Models\Product::factory(15)->create()->each(function ($currency) {
-//            $currency->variations()->save(\App\Models\ProductVariation::factory(2)->make());
-//        });
-        \App\Models\Product::factory(50)->create();
-        \App\Models\ProductVariation::factory(150)->create();
+        \App\Models\Interest::factory(10)->create();
+        \App\Models\Product::factory(10)->create();
+        \App\Models\ProductVariation::factory(10)->create();
 
     }
 }

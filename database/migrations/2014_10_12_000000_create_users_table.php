@@ -1,5 +1,6 @@
 <?php
 
+use App\Enums\UserStatusEnum;
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
@@ -27,7 +28,7 @@ class CreateUsersTable extends Migration
 //            $table->unsignedBigInteger('district_id')->nullable();
             $table->json('interests')->nullable();
             $table->unsignedBigInteger('main_card')->nullable();
-            $table->enum('status', \App\Enums\UserStatusEnum::toArray());
+            $table->enum('status', UserStatusEnum::toArray())->default(UserStatusEnum::PENDING);
             $table->string('firebase')->nullable()->comment('firebase push token');
             $table->unsignedBigInteger('main_address_id')->nullable();
             $table->timestamps();
