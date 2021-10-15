@@ -17,6 +17,8 @@ class CreateUserCouponsTable extends Migration
             $table->id();
             $table->foreignId('user_id')->constrained();
             $table->foreignId('coupon_id')->constrained();
+            $table->timestamp('end_at')->nullable();
+            $table->boolean('used')->default(false);
             $table->timestamps();
         });
     }
