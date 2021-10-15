@@ -32,7 +32,7 @@ class ProductShowResource extends JsonResource
             "percent" => $this->max_percent,
             "image" => $this->image->image_url,
             "images" => ImageResource::collection($this->images),
-//            "product_attribute" => SelectedAttributesResource::collection($this->product_attributes) ?? null,
+            "product_attribute" => $this->product_attr ?? null,
             "variations" => ProductVariationResource::collection($this->variations),
         ];
     }

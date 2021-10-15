@@ -22,7 +22,8 @@ class CreateProductsTable extends Migration
             $table->foreignId('shop_id')->nullable()->constrained()->cascadeOnDelete();
             $table->foreignId('category_id')->nullable()->constrained();
             $table->jsonb('collection_ids')->nullable();
-//            $table->jsonb('product_attributes')->nullable();
+            $table->jsonb('product_attr')->nullable();
+            $table->jsonb('product_attr_ids')->nullable();
             $table->double('rating')->default(0)->comment("ratings tablitsadan avg olinib yozib qo'yiladi");
             $table->unsignedBigInteger('quantity')->default(0);
             $table->unsignedDouble('min_old_price')->nullable()->comment('voretionlar ichidagi eng arzon tovarning old price');

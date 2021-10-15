@@ -23,9 +23,9 @@ class CreateCouponsTable extends Migration
             $table->timestamp('start_at')->nullable();
             $table->timestamp('end_at')->nullable();
             $table->enum('sale_type',\App\Enums\SaleTypeEnum::toArray())->comment('price,percent');
-            $table->unsignedBigInteger('value');
+            $table->unsignedDouble('value');
             $table->unsignedBigInteger('count')->nullable()->comment('ishlash soni');
-            $table->unsignedBigInteger('price')->nullable()->comment('minimum summa');
+            $table->unsignedDouble('price')->nullable()->comment('minimum summa');
             $table->boolean('active')->default(true);
             $table->softDeletes();
             $table->timestamps();

@@ -20,13 +20,12 @@ class CreateDiscountsTable extends Migration
                 ->cascadeOnDelete();
             $table->boolean('active')->default(true);
             $table->string('name', 100);
-            $table->string('coupon');
+            $table->jsonb('product_ids');
             $table->date('expire_date');
             $table->text('description')->nullable();
-            $table->json('discount_type')->nullable();
+            $table->enum('discount_type',\App\Enums\SaleTypeEnum::toArray())->nullable();
             $table->decimal('discount_amount', 22, 4)->default(0);
-            $table->unsignedDouble('discount_price')->nullable();
-            $table->unsignedBigInteger('discount_percent')->nullable();
+            $table->unsignedDouble('value')->nullable();
             $table->softDeletes();
             $table->timestamps();
         });

@@ -47,7 +47,8 @@ class Product extends Model
         'category_id',
         'sku',
         'slug',
-//        'product_attributes',
+        'product_attr',
+        'product_attr_ids',
         'description',
         'rating',
         'min_old_price',
@@ -64,17 +65,15 @@ class Product extends Model
         'active' => 'boolean',
         'name' => TranslatableJson::class,
         'description' => TranslatableJson::class,
-//        'product_attributes' => 'array',
+        'product_attr' => 'array',
+        'product_attr_ids' => 'array',
     ];
 
     protected $with = [
         'variations'
     ];
 
-//    public function productAttributes()
-//    {
-//        return ProductAttribute::whereIn('id', $this->product_attribute_ids)->get();
-//    }
+
 
     public function single()
     {
