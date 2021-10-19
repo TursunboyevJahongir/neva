@@ -25,8 +25,17 @@ class UserCoupons extends Model
     protected $fillable = [
         'user_id',
         'coupon_id',
+        'used',
         'end_at',
     ];
+    protected $casts = [
+        'used' => 'boolean',
+    ];
+
+    public function scopeUsed($q)
+    {
+        return $q->where('used', '=', false);
+    }
 
     /**
      * @return BelongsTo

@@ -2,32 +2,42 @@
 
 namespace App\Services\Coupon;
 
+use App\Enums\CouponTypeEnum;
 use App\Models\Coupon;
+use App\Models\Product;
+use Illuminate\Support\Facades\Auth;
 
 class CouponService
 {
     public function all()
     {
-        return Coupon::latest('id')
-            ->get();
+
+        return Auth::user()->user_coupons()->get();
     }
 
-    public function create(array $attributes)
+    public function calcBasket($coupon)
     {
 
-        $discount = Coupon::create($attributes);
-
-        return $discount;
     }
 
-    public function update(array $attributes, Coupon $discount)
+    public function logicCoupon( $products,Coupon $coupon)
     {
-        $discount = Coupon::update($attributes);
-        return $discount;
-    }
+switch ($coupon->coupon_type){
+    case CouponTypeEnum::PRODUCT:
+        
+        break;
+    case CouponTypeEnum::USER:
 
-    public function delete(Coupon $discount)
-    {
-        return $discount->delete();
+        break;
+    case CouponTypeEnum::CATEGORY:
+
+        break;
+    case CouponTypeEnum::SHOP:
+
+        break;
+    case CouponTypeEnum::DELIVERY:
+
+        break;
+}
     }
 }

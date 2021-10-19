@@ -19,6 +19,7 @@ class CreateCouponsTable extends Migration
             $table->BigInteger('object_id')->nullable();
             $table->enum('coupon_type',\App\Enums\CouponTypeEnum::toArray())->nullable();
             $table->string('code');
+            $table->json('name')->nullable();
             $table->json('description')->nullable();
             $table->timestamp('start_at')->nullable();
             $table->timestamp('end_at')->nullable();

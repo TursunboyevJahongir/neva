@@ -132,4 +132,9 @@ class User extends Authenticatable
     {
         return $this->hasMany(SocialAccount::class)->with('social_accounts');
     }
+
+    public function user_coupons()
+    {
+        return $this->hasMany(UserCoupons::class, 'user_id');
+    }
 }

@@ -2,6 +2,7 @@
 
 namespace Database\Seeders;
 
+use App\Models\Coupon;
 use App\Models\Shop;
 use Illuminate\Database\Seeder;
 use Faker\Generator as Faker;
@@ -25,13 +26,14 @@ class DatabaseSeeder extends Seeder
         $this->call(DistrictSeeder::class);
         $this->call(Categories::class);
         $this->call(BannersTableSeeder::class);
+        $this->call(CouponSeeder::class);
         \App\Models\Category::factory(10)->create();
         \App\Models\Category::factory(10)->create();
         \App\Models\Category::factory(10)->create();
         $this->call(ProductAttributesTableSeeder::class);
         \App\Models\Interest::factory(10)->create();
-        \App\Models\Product::factory(10)->create();
-        \App\Models\ProductVariation::factory(10)->create();
+      //  \App\Models\Product::factory(10)->create();
+    //    \App\Models\ProductVariation::factory(10)->create();
 
     }
 }
