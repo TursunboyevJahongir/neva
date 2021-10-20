@@ -11,8 +11,6 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Shop extends Model
 {
-    use HasFactory, HasTranslatableJson, SoftDeletes;
-
     protected $fillable = [
         'user_id',
         'name',
@@ -29,6 +27,8 @@ class Shop extends Model
         'position',
         'active',
     ];
+
+    use HasFactory, HasTranslatableJson, SoftDeletes;
 
     protected $casts = [
         'active' => 'boolean',

@@ -47,8 +47,7 @@ class Product extends Model
         'category_id',
         'sku',
         'slug',
-        'product_attr',
-        'product_attr_ids',
+//        'product_attributes',
         'description',
         'rating',
         'min_old_price',
@@ -65,15 +64,17 @@ class Product extends Model
         'active' => 'boolean',
         'name' => TranslatableJson::class,
         'description' => TranslatableJson::class,
-        'product_attr' => 'array',
-        'product_attr_ids' => 'array',
+//        'product_attributes' => 'array',
     ];
 
     protected $with = [
         'variations'
     ];
 
-
+//    public function productAttributes()
+//    {
+//        return ProductAttribute::whereIn('id', $this->product_attribute_ids)->get();
+//    }
 
     public function single()
     {
@@ -138,9 +139,14 @@ class Product extends Model
 
     public function moneyFormatter($number): string
     {
-        list($whole, $decimal) = sscanf($number, '%d.%d');
-        $money = number_format($number, 0, ',', ' ');
-        return $decimal ? $money . ",$decimal" : $money;
+        /**
+         * qoldiq bilan chiqarish uchun ishlatildi
+         * list($whole, $decimal) = sscanf($number, '%d.%d');
+         * $money = number_format($number, 0, ',', ' ');
+         * return $decimal ? $money . ",$decimal" : $money;
+         */
+        return number_format(ceil($number), 0, ',', ' ');
+
     }
 
     public function favorite()
@@ -157,4 +163,6 @@ class Product extends Model
     {
         return !is_object($this->description) ? Str::limit($this->description, 15, '...') : "";
     }
+
+
 }

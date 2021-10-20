@@ -22,36 +22,36 @@ class ProductFactory extends Factory
     protected $model = Product::class;
 
 
-    /**
-     * @throws Exception
-     */
-    public function configure()
-    {
-        $faker = $this->faker;
-        return $this->afterCreating(static function (Product $product) use ($faker) {
-
-//            $name = $fake->image(public_path('uploads/'),640,480, null, false);
-//            $path = '/uploads/'.$name;
-            @mkdir(public_path('/uploads/product/'), 0777, true);
-            $size = random_int(3, 7);
-            for ($i = 0; $i <= $size; $i++) {
-                $time = time() . random_int(1000, 60000);
-                copy($faker->imageUrl(), public_path('/uploads/product/') . $time . '.jpg');
-                $path = '/uploads/product/' . $time . '.jpg';
-                $product->images()->create([
-                    'url' => $path,
-                ]);
-            }
-
-            $time = time() . random_int(1000, 60000);
-            copy($faker->imageUrl(), public_path('/uploads/product/') . $time . '.jpg');
-            $path = '/uploads/product/' . $time . '.jpg';
-            $product->image()->create([
-                'url' => $path,
-                'cover_image' => 1,
-            ]);
-        });
-    }
+//    /**//todo Pictures
+//     * @throws Exception
+//     */
+//    public function configure()
+//    {
+//        $faker = $this->faker;
+//        return $this->afterCreating(static function (Product $product) use ($faker) {
+//
+////            $name = $fake->image(public_path('uploads/'),640,480, null, false);
+////            $path = '/uploads/'.$name;
+//            @mkdir(public_path('/uploads/product/'), 0777, true);
+//            $size = random_int(3, 7);
+//            for ($i = 0; $i <= $size; $i++) {
+//                $time = time() . random_int(1000, 60000);
+//                copy($faker->imageUrl(), public_path('/uploads/product/') . $time . '.jpg');
+//                $path = '/uploads/product/' . $time . '.jpg';
+//                $product->images()->create([
+//                    'url' => $path,
+//                ]);
+//            }
+//
+//            $time = time() . random_int(1000, 60000);
+//            copy($faker->imageUrl(), public_path('/uploads/product/') . $time . '.jpg');
+//            $path = '/uploads/product/' . $time . '.jpg';
+//            $product->image()->create([
+//                'url' => $path,
+//                'cover_image' => 1,
+//            ]);
+//        });
+//    }
 
     /**
      * Define the model's default state.
@@ -75,7 +75,33 @@ class ProductFactory extends Factory
             ],
             'sku' => $this->faker->slug(),
             'slug' => $this->faker->slug(),
-         //   'product_attribute_ids' => $this->faker->boolean ? [ProductAttributeValue::all()->random()->id] : [ProductAttributeValue::all()->random()->id, ProductAttributeValue::all()->random()->id],
+//            'product_attributes' => $this->faker->boolean ?
+//                [[
+//                    'attribute' => ProductAttribute::all()->random()->id,
+//                    "values" =>
+//                        [
+//                            ProductAttributeValue::all()->random()->id,
+//                            ProductAttributeValue::all()->random()->id,
+//                        ]
+//                ]] :
+//                [
+//                    [
+//                        'attribute' => ProductAttribute::all()->random()->id,
+//                        "values" =>
+//                            [
+//                                ProductAttributeValue::all()->random()->id,
+//                                ProductAttributeValue::all()->random()->id,
+//                            ],
+//                    ],
+//                    [
+//                        'attribute' => ProductAttribute::all()->random()->id,
+//                        "values" =>
+//                            [
+//                                ProductAttributeValue::all()->random()->id,
+//                                ProductAttributeValue::all()->random()->id,
+//                            ]
+//                    ]
+//                ],
             'quantity' => $this->faker->numberBetween(100, 150),
             'min_old_price' => $this->faker->boolean ? $this->faker->numberBetween(1000, 10000) : null,
             'min_price' => $this->faker->numberBetween(10000, 500000),

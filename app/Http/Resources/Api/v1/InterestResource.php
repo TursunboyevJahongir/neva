@@ -23,9 +23,10 @@ class InterestResource extends JsonResource
          */
         return [
             "id" => $this->id,
-            "name" => $this->name[$request->getDeviceLang()] ?? $this->name[config('app.locale')],
-            "description" => $this->description[$request->getDeviceLang()] ?? null,
-            "categories" => $this->categories ?? null,
+//            "name" => $this->name[$request->getDeviceLang()] ?? $this->name[config('app.locale')],
+            "name" => $this->name,
+//            "description" => $this->description[$request->getDeviceLang()] ?? null,
+            "description" => $this->description ?? null
         ];
     }
 }

@@ -19,8 +19,7 @@ class NewsService
 
     public function all()
     {
-        return News::active()
-            ->get();
+        return News::active()->get();
     }
 
     public function create(array $attributes)

@@ -13,10 +13,9 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
  * @property int id
  * @property int user_id
  * @property int coupon_id
- * @property Carbon start_at
  * @property Carbon end_at
+ * @property boolean used
  * @property User user
- * @property Coupon coupon
  */
 class UserCoupons extends Model
 {
@@ -24,18 +23,16 @@ class UserCoupons extends Model
 
     protected $fillable = [
         'user_id',
-        'coupon_id',
-        'used',
+        'coupon',
         'end_at',
-    ];
-    protected $casts = [
-        'used' => 'boolean',
+        'used',
+        'coupon_info',
     ];
 
-    public function scopeUsed($q)
-    {
-        return $q->where('used', '=', false);
-    }
+    protected $casts = [
+        'used' => 'boolean',
+        'coupon_info' => 'array',
+    ];
 
     /**
      * @return BelongsTo
@@ -43,13 +40,5 @@ class UserCoupons extends Model
     public function user(): BelongsTo
     {
         return $this->belongsTo(User::class);
-    }
-
-    /**
-     * @return BelongsTo
-     */
-    public function coupon(): BelongsTo
-    {
-        return $this->belongsTo(Coupon::class);
     }
 }

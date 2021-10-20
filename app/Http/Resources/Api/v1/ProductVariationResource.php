@@ -23,12 +23,9 @@ class ProductVariationResource extends JsonResource
          */
         return [
             "id" => $this->id,
-            "quantity" => $this->quantity,
-            "old_price" => $this->product->moneyFormatter($this->old_price),
-            "price" => $this->product->moneyFormatter($this->price),
-            "image" => $this->image->image_url,
-            "percent" => $this->percent ?? null,
-            "product_attribute" => SelectedAttributesResource::collection($this->product_attributes) ?? null,
+            "name" => $this->name,
+            "image" => $this->image_url,
+            "properties" => VariationPropertyResource::collection($this->properties) ?? null,
         ];
     }
 }

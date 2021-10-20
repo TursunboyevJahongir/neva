@@ -25,7 +25,6 @@ class BasketService
         $basket = $basket->paginate($size);
 
         return ['basket' => $basket, 'append' => ['sum' => $sum]];
-
     }
 
     //Cart

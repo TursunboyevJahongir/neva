@@ -19,14 +19,13 @@ class CreateCouponsTable extends Migration
             $table->BigInteger('object_id')->nullable();
             $table->enum('coupon_type',\App\Enums\CouponTypeEnum::toArray())->nullable();
             $table->string('code');
-            $table->json('name')->nullable();
             $table->json('description')->nullable();
             $table->timestamp('start_at')->nullable();
             $table->timestamp('end_at')->nullable();
             $table->enum('sale_type',\App\Enums\SaleTypeEnum::toArray())->comment('price,percent');
-            $table->unsignedDouble('value');
+            $table->unsignedBigInteger('value');
             $table->unsignedBigInteger('count')->nullable()->comment('ishlash soni');
-            $table->unsignedDouble('price')->nullable()->comment('minimum summa');
+            $table->unsignedBigInteger('price')->nullable()->comment('minimum summa');
             $table->boolean('active')->default(true);
             $table->softDeletes();
             $table->timestamps();

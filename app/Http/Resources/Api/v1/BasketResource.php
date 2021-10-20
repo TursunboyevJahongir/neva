@@ -4,6 +4,7 @@ namespace App\Http\Resources\Api\v1;
 
 use App\Models\Basket;
 use App\Models\ProductAttributeValue;
+use App\Models\ProductVariation;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
 
@@ -22,13 +23,14 @@ class BasketResource extends JsonResource
          */
         return [
             "id" => $this->id,
-            "product" => [
-                "id" => $this->product->product->id,
-                'name' => $this->product->product->name,
-                'price' => $this->product->price,
-                'image' => $this->product->image->image_url,
-                'attributes' => ProductAttributesResource::collection(ProductAttributeValue::whereIn('id', $this->product->product_attribute_value_ids)->get()),
-            ],
+//            "product" => [
+//                "id" => $this->product->product->id,
+//                'name' => $this->product->product->name,
+//                'price' => $this->product->price,
+//                'image' => $this->product->image->image_url,
+//                'attributes' => ProductAttributesResource::collection(ProductAttributeValue::whereIn('id', $this->product->product_attribute_value_ids)->get()),
+//            ],
+            'product' => new ProductVariationResource($this->product),
             "quantity" => $this->quantity,
         ];
     }

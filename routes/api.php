@@ -8,7 +8,6 @@ use App\Http\Controllers\api\{AuthController,
     CardController,
     CategoryController,
     CommentController,
-    CouponController,
     DataController,
     DistrictController,
     FavoriteController,
@@ -48,7 +47,6 @@ Route::middleware('verify.device_headers')->prefix('v1')->group(static function 
         Route::get('/me', [UserController::class, 'me']);
         Route::post('/me', [UserController::class, 'update']);
         Route::post('/me/address', [UserController::class, 'address']);
-        Route::post('/me/coupons', [CouponController::class, 'index']);
 
         Route::get('/interests', [InterestController::class, 'index']);
 

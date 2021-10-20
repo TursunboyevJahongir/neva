@@ -7,6 +7,7 @@
 
     "require": {
         "php": "^7.3|^8.0",
+        "ext-json": "*",
         "aspera/xlsx-reader": "^0.9.0",
         "darkaonline/l5-swagger": "^8.0",
         "fideloper/proxy": "^4.4",
@@ -19,10 +20,10 @@
         "laravel/tinker": "^2.5",
         "livewire/livewire": "^2.5",
         "ph7jack/wireui": "^0.11.0",
-        "zircote/swagger-php": "^3.2",
+        "socialiteproviders/telegram": "^4.1",
         "spatie/enum": "^3.9",
         "spatie/laravel-permission": "^5.1",
-        "ext-json": "*"
+        "zircote/swagger-php": "^3.2"
     },
     "require-dev": {
         "facade/ignition": "^2.5",

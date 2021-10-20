@@ -100,6 +100,7 @@ class User extends Authenticatable
     {
         return $this->attributes['password'] = bcrypt($value);
     }
+
     public function avatar(): MorphOne
     {
         return $this->morphOne(Image::class, 'imageable');
@@ -131,10 +132,5 @@ class User extends Authenticatable
     public function social_accounts(): HasMany
     {
         return $this->hasMany(SocialAccount::class)->with('social_accounts');
-    }
-
-    public function user_coupons()
-    {
-        return $this->hasMany(UserCoupons::class, 'user_id');
     }
 }

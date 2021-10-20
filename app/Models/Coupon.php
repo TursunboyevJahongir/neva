@@ -10,7 +10,6 @@ use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
-use Illuminate\Support\Facades\Auth;
 
 /**
  * Class Coupon
@@ -44,7 +43,6 @@ class Coupon extends Model
         'object_id',
         'coupon_type',
         'code',
-        'name',
         'description',
         'start_at',
         'end_at',
@@ -58,7 +56,6 @@ class Coupon extends Model
     protected $casts = [
         'start_at' => 'datetime:Y-m-d H:i:s',
         'end_at' => 'datetime:Y-m-d H:i:s',
-        'name' => TranslatableJson::class,
         'description' => TranslatableJson::class
     ];
 
@@ -69,18 +66,4 @@ class Coupon extends Model
     {
         return $this->belongsTo(User::class, 'creator_id');
     }
-    public function image()
-    {
-        return $this->morphOne(Image::class, 'imageable')->where('cover_image', false)->withDefault(['url' => '/img/no-icon.png']);
-    }
-    public function scopeActive($q)
-    {
-        return $q->whereNull('active');
-    }
-    public function scopeAuthUser($q)
-    {
-        return $q->where('coupon_type', '=', 'user')->where('object_id', '=', Auth::id());
-    }
-
-
 }

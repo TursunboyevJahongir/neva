@@ -2,13 +2,11 @@
 
 namespace App\Http\Controllers\api;
 
-use App\Enums\UserStatusEnum;
 use App\Http\Controllers\ApiController;
 use App\Http\Requests\api\Auth\LoginRequest;
 use App\Http\Requests\api\Auth\RegistrationRequest;
 use App\Http\Requests\api\Auth\ResendSmsConfirmRequest;
 use App\Http\Requests\api\Auth\SmsConfirmRequest;
-use App\Http\Requests\api\VerifyRequest;
 use App\Models\Firebase;
 use App\Models\User;
 use App\Services\Sms\SmsService;
@@ -205,26 +203,6 @@ class AuthController extends ApiController
             return $this->error($e->getMessage());
         }
     }
-
-    public function verify(VerifyRequest $request)
-    {
-        $user = User::query()
-            ->firstWhere('phone', $request->phone);
-
-        if ($user && $user->verifyCode($request->verify_code)) {
-            $token = $user->createToken(time())->plainTextToken;
-            $user->active = true;
-            return response()->json([
-                'status' => true,
-                'token' => $token
-            ]);
-        }
-        return response()->json([
-            'status' => false,
-            'message' => 'Неправильный код'
-        ], 401);
-    }
-
 
     public function logout(Request $request): JsonResponse
     {
