@@ -6,6 +6,7 @@ use App\Enums\CouponTypeEnum;
 use App\Models\Coupon;
 use App\Models\Product;
 use Illuminate\Support\Facades\Auth;
+use phpDocumentor\Reflection\Types\Collection;
 
 class CouponService
 {
@@ -20,11 +21,11 @@ class CouponService
 
     }
 
-    public function logicCoupon( $products,Coupon $coupon)
+    public function logicCoupon(Collection $products,Coupon $coupon)
     {
 switch ($coupon->coupon_type){
     case CouponTypeEnum::PRODUCT:
-        
+
         break;
     case CouponTypeEnum::USER:
 
