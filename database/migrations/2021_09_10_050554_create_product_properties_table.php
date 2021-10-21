@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateVariationPropertiesTable extends Migration
+class CreateProductPropertiesTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,7 +13,7 @@ class CreateVariationPropertiesTable extends Migration
      */
     public function up()
     {
-        Schema::create('variation_properties', function (Blueprint $table) {
+        Schema::create('product_properties', function (Blueprint $table) {
             $table->id();
             $table->foreignId('product_id')->constrained()->cascadeOnDelete();
             $table->string('image')->nullable();
@@ -31,6 +31,6 @@ class CreateVariationPropertiesTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('variation_properties');
+        Schema::dropIfExists('product_properties');
     }
 }

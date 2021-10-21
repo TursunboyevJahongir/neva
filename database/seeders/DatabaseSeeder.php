@@ -31,8 +31,8 @@ class DatabaseSeeder extends Seeder
         $this->call(ProductAttributesTableSeeder::class);
         \App\Models\Interest::factory(10)->create();
         \App\Models\Product::factory(10)->create();
-        \App\Models\ProductVariation::factory(30)->create();
-        \App\Models\VariationProperty::factory(50)->create();
+        \App\Models\ProductProperty::factory(30)->create();
+       \App\Models\ProductVariation::factory(30)->create();
 
     }
 }

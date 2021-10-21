@@ -29,9 +29,4 @@ class ProductVariation extends Model
     {
         return $this->belongsTo(Product::class, 'product_id', 'id');
     }
-
-    public function variation(): BelongsTo
-    {
-        return $this->belongsTo(VariationProperty::class, 'product_id', 'id');
-    }
 }

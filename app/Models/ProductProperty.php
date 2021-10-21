@@ -8,12 +8,13 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\Relations\MorphOne;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Support\Facades\URL;
 
 
 /**
- * Class VariationProperty
+ * Class ProductProperty
  * @package App\Models
  * @property int id
  * @property int product_id
@@ -24,7 +25,7 @@ use Illuminate\Support\Facades\URL;
  *     title="Product model",
  * )
  */
-class VariationProperty extends Model
+class ProductProperty extends Model
 {
     use HasFactory, SoftDeletes, HasTranslatableJson;
 
@@ -43,11 +44,14 @@ class VariationProperty extends Model
         return $this->belongsTo(Product::class, 'product_id', 'id');
     }
 
-    public function properties(): HasMany
+    public function variations(): HasMany
     {
-        return $this->hasMany(VariationProperty::class, 'property_id', 'id');
+        return $this->hasMany(ProductVariation::class, 'property_id', 'id');
     }
-
+    public function image(): MorphOne
+    {
+        return $this->morphOne(Image::class, 'imageable')->withDefault(['url'=>'/img/no-icon.png']);
+    }
     public function getImageUrlAttribute(): ?string
     {
         return $this->image ? URL::to($this->image) : null;
