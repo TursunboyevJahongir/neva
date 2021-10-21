@@ -4,7 +4,6 @@ namespace Database\Seeders;
 
 use App\Models\Shop;
 use Illuminate\Database\Seeder;
-use Faker\Generator as Faker;
 
 class DatabaseSeeder extends Seeder
 {

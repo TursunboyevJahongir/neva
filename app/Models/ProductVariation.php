@@ -2,40 +2,27 @@
 
 namespace App\Models;
 
-use App\Casts\TranslatableJson;
-use App\Traits\HasTranslatableJson;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
-use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\Relations\MorphOne;
 use Illuminate\Database\Eloquent\SoftDeletes;
-use Illuminate\Support\Facades\URL;
 
-
-/**
- * Class Product
- * @package App\Models
- * @property int id
- * @property int product_id
- * @property TranslatableJson name
- * @property string image
- * @property string image_url
- *  * @OA\Schema(
- *     title="Product model",
- * )
- */
 class ProductVariation extends Model
 {
-    use HasFactory, SoftDeletes, HasTranslatableJson;
-
+    use HasFactory,SoftDeletes;
     protected $fillable = [
         'product_id',
-        'image',
-        'name',
+        'property_id',
+        'combs_attributes',
+        'quantity',
+        'old_price',
+        'price',
+        'percent',
     ];
 
     protected $casts = [
-        'name' => TranslatableJson::class
+        'combs_attributes' => 'array'
     ];
 
     public function product(): BelongsTo
@@ -43,35 +30,8 @@ class ProductVariation extends Model
         return $this->belongsTo(Product::class, 'product_id', 'id');
     }
 
-    public function properties(): HasMany
+    public function variation(): BelongsTo
     {
-        return $this->hasMany(VariationProperty::class, 'variation_id', 'id');
-    }
-
-    public function getImageUrlAttribute(): ?string
-    {
-        return $this->image ? URL::to($this->image) : null;
-    }
-
-    public function getFullNameAttribute()
-    {
-        $res = null;
-        $global_values = ProductAttributeValue::all(); // optimize maybe
-        if (count($this->product_attribute_value_ids) > 0) {
-            $res = '';
-            $vals = array_values($this->product_attribute_value_ids);
-            $last = end($vals);
-            foreach ($this->product_attribute_value_ids as $variation_value_id) {
-                foreach ($global_values as $v) {
-                    if ($v->id == $variation_value_id) {
-                        $res .= $v->name;
-                    }
-                }
-                if ($last != $variation_value_id) {
-                    $res .= ', ';
-                }
-            }
-        }
-        return $res;
+        return $this->belongsTo(VariationProperty::class, 'product_id', 'id');
     }
 }

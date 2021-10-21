@@ -49,6 +49,7 @@ class SmsService
             'resend_count' => $smsConfirm->resend_count + 1,
             'phone' => $phone,
             'expired_at' => Carbon::now()->addSeconds(SmsConfirm::SMS_EXPIRY_SECONDS)
+
         ]);
         if (empty($smsConfirm->id)) {
             $smsConfirm->save();

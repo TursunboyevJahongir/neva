@@ -2,11 +2,6 @@
 
 namespace App\Models;
 
-use App\Casts\TranslatableJson;
-use App\Enums\CouponTypeEnum;
-use App\Enums\SaleTypeEnum;
-use App\Traits\HasTranslatableJson;
-use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
@@ -65,5 +60,9 @@ class Coupon extends Model
     public function creator(): BelongsTo
     {
         return $this->belongsTo(User::class, 'creator_id');
+    }
+    public function scopeActive($q)
+    {
+        return $q->where('active', '=', true)->where('start_at', '<=', now())->where('end_at', '>=', now());
     }
 }

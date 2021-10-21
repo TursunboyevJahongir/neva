@@ -8,19 +8,22 @@ use Illuminate\Database\Eloquent\Model;
 
 class Discount extends Model
 {
-    use HasFactory;
     protected $fillable = [
+        'active',
         'name',
-        'product_id',
-        'discount_price',
-        'discount_percent',
-        'start_at',
-        'end_at',
+        'name',
+        'description',
+        'product_ids',
+        'discount_type',
+        'discount_amount',
+        'value',
+        'expire_date',
 
     ];
+    use HasFactory;
     protected $casts = [
         'name' => TranslatableJson::class,
+        'expire_date'=>'date'
     ];
-    protected $dates = ['starts_at', 'ends_at'];
 
 }

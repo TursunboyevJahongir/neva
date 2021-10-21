@@ -3,11 +3,19 @@
 namespace App\Http\Controllers\api;
 
 use App\Http\Controllers\ApiController;
+use App\Http\Resources\Api\v1\CouponResource;
 use App\Models\Coupon;
+use App\Services\Coupon\CouponService;
 use Illuminate\Http\Request;
 
 class CouponController extends ApiController
 {
+    private $service;
+
+    public function __construct(CouponService $service)
+    {
+        $this->service = $service;
+    }
     /**
      * Display a listing of the resource.
      *
@@ -15,29 +23,10 @@ class CouponController extends ApiController
      */
     public function index()
     {
-        //
+        $coupons=$this->service->all();
+        return $this->success(__('messages.success'), CouponResource::collection($coupons));
     }
 
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function create()
-    {
-        //
-    }
-
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
-     */
-    public function store(Request $request)
-    {
-        //
-    }
 
     /**
      * Display the specified resource.
@@ -50,37 +39,5 @@ class CouponController extends ApiController
         //
     }
 
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  \App\Models\Coupon  $coupon
-     * @return \Illuminate\Http\Response
-     */
-    public function edit(Coupon $coupon)
-    {
-        //
-    }
 
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Models\Coupon  $coupon
-     * @return \Illuminate\Http\Response
-     */
-    public function update(Request $request, Coupon $coupon)
-    {
-        //
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  \App\Models\Coupon  $coupon
-     * @return \Illuminate\Http\Response
-     */
-    public function destroy(Coupon $coupon)
-    {
-        //
-    }
 }
