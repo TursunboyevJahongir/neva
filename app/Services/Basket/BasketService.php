@@ -19,9 +19,15 @@ class BasketService
 //                return $query->where('message', 'ilike', "%$search%");
 //            })
             ->orderBy($orderBy, $sort);
-        if (!empty(request('coupon')))
-            $basket = (new CouponService())->logicCoupon(ProductVariation::query()->find([1,2,3]), Coupon::query()->active()->where('code', '=', request('coupon'))->first());
+
+        if (!empty(request('coupon')) &&
+            $coupon=Coupon::query()->active()->where('code', '=', request('coupon'))->first())
+            $products = (new CouponService())->logicCoupon(
+                ProductVariation::query()->find($basket->pluck('product_variation_id')->toArray())
+                ,$coupon);
+
         foreach ($basket->get()as $item) {
+            $products
             $sum += $item->product->price * $item->quantity;
         }
 
