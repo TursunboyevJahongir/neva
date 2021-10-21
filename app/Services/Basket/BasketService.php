@@ -3,7 +3,9 @@
 namespace App\Services\Basket;
 
 use App\Models\Basket;
-use Illuminate\Http\Request;
+use App\Models\Coupon;
+use App\Models\ProductVariation;
+use App\Services\Coupon\CouponService;
 use Illuminate\Support\Facades\Auth;
 
 class BasketService
@@ -17,8 +19,9 @@ class BasketService
 //                return $query->where('message', 'ilike', "%$search%");
 //            })
             ->orderBy($orderBy, $sort);
-
-        foreach ($basket->get() as $item) {
+        if (!empty(request('coupon')))
+            $basket = (new CouponService())->logicCoupon(ProductVariation::query()->find([1,2,3]), Coupon::query()->active()->where('code', '=', request('coupon'))->first());
+        foreach ($basket->get()as $item) {
             $sum += $item->product->price * $item->quantity;
         }
 
@@ -53,7 +56,6 @@ class BasketService
         unset($cart['products'][$id]);
         session()->put('cart', $cart);
     }
-
 
 
 }

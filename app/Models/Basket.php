@@ -17,4 +17,5 @@ class Basket extends Model
     {
         return $this->hasOne(ProductVariation::class, 'id', 'product_variation_id');
     }
+
 }
