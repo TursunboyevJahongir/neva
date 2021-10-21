@@ -16,8 +16,14 @@ class CreateProductVariationsTable extends Migration
         Schema::create('product_variations', function (Blueprint $table) {
             $table->id();
             $table->foreignId('product_id')->constrained()->cascadeOnDelete();
-            $table->string('image')->nullable();
-            $table->json('name')->nullable();
+            $table->unsignedBigInteger('property_id');
+            $table->foreign('property_id')->references('id')->on('variation_properties');
+
+            $table->jsonb('combs_attributes')->nullable()->comment('комбинация атрибутов');
+            $table->unsignedInteger('quantity');
+            $table->unsignedDouble('old_price')->nullable();
+            $table->unsignedDouble('percent')->nullable();
+            $table->unsignedDouble('price');
             $table->timestamps();
             $table->softDeletes();
         });

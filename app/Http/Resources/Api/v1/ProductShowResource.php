@@ -4,6 +4,7 @@ namespace App\Http\Resources\Api\v1;
 
 use App\Models\Product;
 use App\Models\ProductAttributeValue;
+use App\Models\VariationProperty;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
 
@@ -33,7 +34,7 @@ class ProductShowResource extends JsonResource
             "image" => $this->image->image_url,
             "images" => ImageResource::collection($this->images),
 //            "product_attribute" => SelectedAttributesResource::collection($this->product_attributes) ?? null,
-            "variations" => ProductVariationResource::collection($this->variations),
+            "properties" => VariationPropertyResource::collection($this->variations),
         ];
     }
 }

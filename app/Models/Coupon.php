@@ -66,4 +66,8 @@ class Coupon extends Model
     {
         return $this->belongsTo(User::class, 'creator_id');
     }
+    public function scopeActive($q)
+    {
+        return $q->where('active', '=', true)->where('start_at', '<=', now())->where('end_at', '>=', now());
+    }
 }
