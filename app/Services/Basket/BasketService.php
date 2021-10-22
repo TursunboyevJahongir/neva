@@ -26,13 +26,14 @@ class BasketService
              (new CouponService())->logicCoupon($basket
                 ,$coupon);
 
+        }else
+            $basket=$basket->get();
+
+        foreach ($basket as $item) {
+            $total += $item->sum;
         }
 
-        foreach ($basket->get()as $item) {
-            $total += $item->product->price * $item->quantity;
-        }
-
-        $basket = $basket->paginate($size);
+        //$basket = $basket->paginate($size);
 
         return ['basket' => $basket, 'append' => ['total' => $total]];
     }

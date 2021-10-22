@@ -38,7 +38,8 @@ class BasketController extends ApiController
         $orderBy = $request->orderby ?? "created_at";
         $sort = $request->sort ?? "DESC";
         $baskets = $this->service->all($orderBy, $sort, $size);
-        return $this->success(__('messages.success'), new PaginationResourceCollection($baskets['basket'], BasketResource::class), $baskets['append']);
+       // return $this->success(__('messages.success'), new PaginationResourceCollection($baskets['basket'], BasketResource::class), $baskets['append']);
+        return $this->success(__('messages.success'),  BasketResource::collection($baskets['basket']), $baskets['append']);
     }
 
 

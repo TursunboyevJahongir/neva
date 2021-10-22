@@ -63,11 +63,12 @@ class CouponService
                 break;
 
         }
-
-        foreach ($basket->get() as $item) {
+        $basket=$basket->get();
+        foreach ($basket as $item) {
             $product = $item->product;
             if (in_array($product->id, $ids) && empty($product->old_price) && ($coupon->value > 0) &&
                 empty($product->percent) && (empty($item->limit_product) || $coupon->limit_product >= $item->quantity)) {
+
                 if ($this->saleType($coupon->sale_type)) {
                     $item->sum = $item->sum * (1 - $coupon->value / 100);
                 } else {
@@ -82,7 +83,6 @@ class CouponService
                 if (!empty($coupon->limit_product))
                     $coupon->limit_product -= $item->quantity;
             }
-
         }
 
     }
