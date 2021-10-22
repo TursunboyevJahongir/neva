@@ -4,10 +4,19 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
-
+/**
+ * Class Basket
+ * @package App\Models
+ * @property int user_id
+ * @property int product_variation_id
+ * @property int quantity
+ * @property float sum
+ */
 class Basket extends Model
 {
     use HasFactory;
+
+
     protected $fillable = [
         'user_id',
         'product_variation_id',

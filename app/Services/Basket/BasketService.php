@@ -10,6 +10,12 @@ use Illuminate\Support\Facades\Auth;
 
 class BasketService
 {
+    /**
+     * @param string $orderBy
+     * @param string $sort
+     * @param int $size
+     * @return array
+     */
     public function all($orderBy = 'created_at', $sort = 'DESC', $size = 10)
     {
         $total = 0;
@@ -39,6 +45,11 @@ class BasketService
     }
 
     //Cart
+
+    /**
+     * @param array $attributes
+     * @return int
+     */
     public function cart(array $attributes)
     {
         $product_id = $attributes['product_id'];
