@@ -13,9 +13,21 @@ class Basket extends Model
         'product_variation_id',
         'quantity'
     ];
+    protected $appends = [
+        'sum',
+    ];
     public function product()
     {
         return $this->hasOne(ProductVariation::class, 'id', 'product_variation_id');
+    }
+
+    public function getSumAttribute()
+    {
+        return $this->product->price*$this->quantity;
+    }
+    public function setSumAttribute($value)
+    {
+        $this->sum = $value;
     }
 
 }

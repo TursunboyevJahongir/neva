@@ -12,7 +12,7 @@ class BasketService
 {
     public function all($orderBy = 'created_at', $sort = 'DESC', $size = 10)
     {
-        $sum = 0;
+        $total = 0;
         $basket = Basket::query()
             ->where('user_id', Auth::id())
 //            ->when($search, function ($query, $search) {
@@ -21,19 +21,20 @@ class BasketService
             ->orderBy($orderBy, $sort);
 
         if (!empty(request('coupon')) &&
-            $coupon=Coupon::query()->active()->where('code', '=', request('coupon'))->first())
-            $products = (new CouponService())->logicCoupon(
-                ProductVariation::query()->find($basket->pluck('product_variation_id')->toArray())
+            $coupon=Coupon::query()->active()->where('code', '=', request('coupon'))->first()){
+           // $basket_products=ProductVariation::query()->find($basket->pluck('product_variation_id')->toArray());
+             (new CouponService())->logicCoupon($basket
                 ,$coupon);
 
+        }
+
         foreach ($basket->get()as $item) {
-            $products
-            $sum += $item->product->price * $item->quantity;
+            $total += $item->product->price * $item->quantity;
         }
 
         $basket = $basket->paginate($size);
 
-        return ['basket' => $basket, 'append' => ['sum' => $sum]];
+        return ['basket' => $basket, 'append' => ['total' => $total]];
     }
 
     //Cart

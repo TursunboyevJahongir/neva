@@ -32,6 +32,7 @@ class BasketResource extends JsonResource
 //            ],
             'product' => new ProductVariationResource($this->product),
             "quantity" => $this->quantity,
+            "sum" => $this->sum,
         ];
     }
 }
