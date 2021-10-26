@@ -7,6 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 /**
  * Class Basket
  * @package App\Models
+ * @property int id
  * @property int user_id
  * @property int product_variation_id
  * @property int quantity

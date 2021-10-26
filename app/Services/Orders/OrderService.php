@@ -8,6 +8,7 @@ use App\Models\Order;
 use App\Models\OrderItem;
 use App\Models\ProductVariation;
 use App\Models\Shop;
+use App\Services\Coupon\CouponService;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Arr;
@@ -18,7 +19,7 @@ class OrderService
     {
         return Order::query()
             ->latest('id')
-            ->where('user_id',$user_id)
+            ->where('user_id', $user_id)
             ->paginate(config('app.per_page'));
     }
 
@@ -38,8 +39,38 @@ class OrderService
         $order['quantity'] = 0;
         $order['total_price'] = 0;
         $basket = Basket::query()
-            ->where('user_id', Auth::id())->get()->load('product');
-        foreach ($basket as  $item) {
+            ->where('user_id', Auth::id());
+
+        $this->calc($basket, $order);
+        $order['price_delivery'] = $this->calcDelivery($order['items']);
+        $order['total_price'] += $order['price_delivery'];
+
+        return $order;
+    }
+
+    public function setOrderProduct(ProductVariation $productVariation, $qty = 1)
+    {
+        $order = [];
+        $order['user_id'] = Auth::id();
+        $order['quantity'] = $qty;
+        $order['price_delivery'] = 0;
+        $basket = new Basket();
+        $basket->user_id = $order['user_id'];
+        $basket->product_variation_id = $productVariation->id;
+        $basket->quantity = $qty;
+$basket->save();
+        $this->calc(Basket::query()->where('id','=',$basket->id), $order);
+        $basket->delete();
+        $order['price_delivery'] = $this->calcDelivery($order['items']);
+        $order['total_price'] += $order['price_delivery'];
+        return $order;
+    }
+
+    public function calc($basket, &$order)
+    {
+        (new CouponService())->logicCoupon($basket);
+
+        foreach ($basket as $item) {
             $productVariation = $item->product;
             $product = $productVariation->product;
             $name = $productVariation->name;
@@ -58,34 +89,7 @@ class OrderService
             $order['quantity'] += $order['items'][$item->id]['quantity'];
             $order['total_price'] += $order['items'][$item->id]['sum'];
         }
-        $order['price_delivery'] = $this->calcDelivery($order['items']);
-        $order['total_price'] += $order['price_delivery'];
 
-        return $order;
-    }
-
-    public function setOrderProduct(ProductVariation $productVariation, $qty = 1)
-    {
-        $name = $productVariation->product->name;
-        if ($productVariation->product_attribute_value_ids) {
-            $name .= ' (' . $productVariation->full_name . ')';
-        }
-        $order = [];
-        $order['user_id'] = Auth::id();
-        $order['quantity'] = $qty;
-        $order['price_delivery'] = 0;
-        $order['total_price'] = $qty * $productVariation->price;
-        $order['items'][$productVariation->id] = [
-            'name' => $name,
-            'sku' => $productVariation->product->sku,
-            'shop' => $productVariation->product->shop_id,
-            'quantity' => $qty,
-            'price' => $productVariation->price,
-            'sum' => $order['sum'],
-        ];
-        $order['price_delivery'] = $this->calcDelivery($order['items']);
-        $order['total_price'] += $order['price_delivery'];
-        return $order;
     }
 
     public function save(array $attributes, $order_items)
@@ -98,7 +102,7 @@ class OrderService
         $order->save();
         foreach ($order_items as $key => $value) {
             OrderItem::create([
-                'sku' =>$value['sku'],
+                'sku' => $value['sku'],
                 'sum' => $value['sum'],
                 'quantity' => $value['quantity'],
                 'price' => $value['price'],

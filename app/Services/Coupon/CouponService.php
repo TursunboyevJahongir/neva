@@ -7,6 +7,7 @@ use App\Enums\SaleTypeEnum;
 use App\Models\Coupon;
 use App\Models\Product;
 use App\Models\Shop;
+use App\Models\UserCoupons;
 use Illuminate\Support\Facades\Auth;
 use phpDocumentor\Reflection\Types\Collection;
 
@@ -35,55 +36,61 @@ class CouponService
     }
 
 
-    public function logicCoupon(&$basket, Coupon $coupon)
+    public function logicCoupon(&$basket)
     {
-        $ids = [];
-        switch ($coupon->coupon_type) {
-            case CouponTypeEnum::PRODUCT:
-                $ids[] = $coupon->object_id;
-                break;
-            case CouponTypeEnum::USER:
-                if (Auth::id() === $coupon->object_id)
+        if (!empty(request('coupon')) &&
+            !empty($coupon = Coupon::query()->active()->where('code', '=', request('coupon'))->first()) &&
+            UserCoupons::query()->active()->where('user_id', '=', Auth::id())->first()
+        ) {
+            $ids = [];
+            switch ($coupon->coupon_type) {
+                case CouponTypeEnum::PRODUCT:
+                    $ids[] = $coupon->object_id;
+                    break;
+                case CouponTypeEnum::USER:
+                    if (Auth::id() === $coupon->object_id)
+                        $ids = $basket->pluck('product_variation_id')->toArray();
+                    break;
+                case CouponTypeEnum::CATEGORY:
+                    foreach ($basket->get() as $item)
+                        if ($item->product->product->category_id === $coupon->object_id)
+                            $ids[] = $item->id;
+                    break;
+                case CouponTypeEnum::SHOP:
+                    foreach ($basket->get() as $item)
+                        if ($item->product->product->shop_id === $coupon->object_id)
+                            $ids[] = $item->id;
+                    break;
+                case CouponTypeEnum::DELIVERY:
+                    break;
+                default:
                     $ids = $basket->pluck('product_variation_id')->toArray();
-                break;
-            case CouponTypeEnum::CATEGORY:
-                foreach ($basket->get() as $item)
-                    if ($item->product->product->category_id === $coupon->object_id)
-                        $ids[] = $item->id;
-                break;
-            case CouponTypeEnum::SHOP:
-                foreach ($basket->get() as $item)
-                    if ($item->product->product->shop_id === $coupon->object_id)
-                        $ids[] = $item->id;
-                break;
-            case CouponTypeEnum::DELIVERY:
-                break;
-            default:
-                $ids = $basket->pluck('product_variation_id')->toArray();
-                break;
+                    break;
 
-        }
-        $basket=$basket->get();
-        foreach ($basket as $item) {
-            $product = $item->product;
-            if (in_array($product->id, $ids) && empty($product->old_price) && ($coupon->value > 0) &&
-                empty($product->percent) && (empty($item->limit_product) || $coupon->limit_product >= $item->quantity)) {
-
-                if ($this->saleType($coupon->sale_type)) {
-                    $item->sum = $item->sum * (1 - $coupon->value / 100);
-                } else {
-                    if (($coupon->value - $item->sum) > 0) {
-                        $coupon->value -= $item->sum;
-                        $item->sum = 0;
-                    } else {
-                        $item->sum -= $coupon->value;
-                        $coupon->value = 0;
-                    }
-                }
-                if (!empty($coupon->limit_product))
-                    $coupon->limit_product -= $item->quantity;
             }
-        }
+            $basket = $basket->get()->load('product');
+            foreach ($basket as $item) {
+                $product = $item->product;
+                if (in_array($product->id, $ids) && empty($product->old_price) && ($coupon->value > 0) &&
+                    empty($product->percent) && (empty($item->limit_product) || $coupon->limit_product >= $item->quantity)) {
+
+                    if ($this->saleType($coupon->sale_type)) {
+                        $item->sum = $item->sum * (1 - $coupon->value / 100);
+                    } else {
+                        if (($coupon->value - $item->sum) > 0) {
+                            $coupon->value -= $item->sum;
+                            $item->sum = 0;
+                        } else {
+                            $item->sum -= $coupon->value;
+                            $coupon->value = 0;
+                        }
+                    }
+                    if (!empty($coupon->limit_product))
+                        $coupon->limit_product -= $item->quantity;
+                }
+            }
+        } else
+            $basket = $basket->get()->load('product');
 
     }
 }

@@ -38,11 +38,19 @@ class BasketController extends ApiController
         $orderBy = $request->orderby ?? "created_at";
         $sort = $request->sort ?? "DESC";
         $baskets = $this->service->all($orderBy, $sort, $size);
-       // return $this->success(__('messages.success'), new PaginationResourceCollection($baskets['basket'], BasketResource::class), $baskets['append']);
-        return $this->success(__('messages.success'),  BasketResource::collection($baskets['basket']), $baskets['append']);
+        return $this->success(__('messages.success'), new PaginationResourceCollection($baskets['basket'], BasketResource::class), $baskets['append']);
     }
 
+    /**
+     * @param BasketProductDeleteRequest $ids
+     * @return JsonResponse
+     */
+    public function checked(BasketProductDeleteRequest $request): JsonResponse
+    {
+        $baskets = $this->service->selected($request->basket_id);
+        return $this->success(__('messages.success'),  BasketResource::collection($baskets['basket']), $baskets['append']);
 
+    }
     /**
      * Store a newly created resource in storage.
      *

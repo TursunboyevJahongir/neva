@@ -50,11 +50,10 @@ class OrderController extends ApiController
         ];
     }
 
+
     /**
-     * Store a newly created resource in storage.
-     *
-     * @param \Illuminate\Http\Request $request
-     * @return \Illuminate\Http\Response
+     * @param OrderRequest $request
+     * @return \Illuminate\Http\JsonResponse
      */
     public function store(OrderRequest $request)
     {
