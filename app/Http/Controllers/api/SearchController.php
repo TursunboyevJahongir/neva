@@ -59,7 +59,8 @@ class SearchController extends ApiController
     }
 
     /**
-     * @throws Exception
+     * @param string $search
+     * @return JsonResponse
      */
     public function suggest(string $search): JsonResponse
     {

@@ -7,4 +7,5 @@ return [
     'too_many_attempts' =>  'Too many attempts. Please use Resend SMS',
     'сode_expired' => 'Code expired.Please,use re-sending SMS',
     'minutes_diff' =>  ':minutes min :seconds sec',
+    'not_expired' => 'SMS message has already been sent to :phone, please wait.',
 ];

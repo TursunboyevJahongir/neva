@@ -42,7 +42,7 @@ class CategoryService
     {
         $category = Category::create($attributes);
         if (array_key_exists('image', $attributes)) {
-            $file = $this->image->uploadFile($attributes['image'], 'category');
+            $file = $this->image->uploadFile($attributes['image'], 'category',);
 
             $category->image()->create([
                 'url' => '/' . $file

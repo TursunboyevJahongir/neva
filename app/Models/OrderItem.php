@@ -11,17 +11,23 @@ class OrderItem extends Model
     use HasFactory;
 
     protected $fillable = [
-        'shop_id',
         'order_id',
-        'product_variation_id',
+        'shop_id',
+        'variation_property_id',
         'sku',
         'quantity',
+        'sum',
         'price',
-        'sum'
+        'percent',
     ];
 
     public function product(): BelongsTo
     {
-        return $this->belongsTo(ProductVariation::class, 'product_variation_id', 'id')->withTrashed();
+        return $this->belongsTo(VariationProperty::class, 'variation_property_id', 'id')->withTrashed();
+    }
+
+    public function shop(): BelongsTo
+    {
+        return $this->belongsTo(Shop::class, 'shop_id', 'id');
     }
 }

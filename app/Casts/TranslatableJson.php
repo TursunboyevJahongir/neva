@@ -5,10 +5,11 @@ namespace App\Casts;
 
 use App\Http\Request;
 use Illuminate\Contracts\Database\Eloquent\CastsAttributes;
+use Illuminate\Contracts\Database\Eloquent\SerializesCastableAttributes;
 use Illuminate\Database\Eloquent\Model;
 use stdClass;
 
-class TranslatableJson implements CastsAttributes
+class TranslatableJson implements CastsAttributes, SerializesCastableAttributes
 {
 
     /**
@@ -23,7 +24,7 @@ class TranslatableJson implements CastsAttributes
     public function get($model, $key, $value, $attributes): mixed
     {
         $arr = json_decode($value, true);
-        return $arr[app()->getLocale()] ?? $arr['ru'] ?? $arr['uz'] ?? new stdClass();
+        return $arr[app()->getLocale()] ?? $arr['ru'];
     }
 
     /**

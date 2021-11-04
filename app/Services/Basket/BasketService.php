@@ -13,9 +13,6 @@ class BasketService
         $sum = 0;
         $basket = Basket::query()
             ->where('user_id', Auth::id())
-//            ->when($search, function ($query, $search) {
-//                return $query->where('message', 'ilike', "%$search%");
-//            })
             ->orderBy($orderBy, $sort);
 
         foreach ($basket->get() as $item) {

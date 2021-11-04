@@ -43,7 +43,7 @@ class ProductController extends ApiController
     public function similar(Product $id, Request $request): JsonResponse
     {
         $size = $request->per_page ?? 10;
-        $lang = $request->getDeviceLang();;
+        $lang = $request->getDeviceLang();
         $data = $this->service->similar($id, $size, $lang);
         return $this->success(__('messages.success'), new PaginationResourceCollection($data, ProductResource::class));
     }

@@ -29,16 +29,16 @@ class KidController extends ApiController
         return $this->success(__('messages.success'), KidResource::collection(Auth::user()->kids));
     }
 
-//    /**
-//     * Display a listing of the resource.
-//     *
-//     * @param int $id
-//     * @return JsonResponse
-//     */
-//    public function show(int $id): JsonResponse
-//    {
-//        return $this->success(__('messages.success'), new KidResource($this->service->one($id)));
-//    }
+    /**
+     * Display a listing of the resource.
+     *
+     * @param int $id
+     * @return JsonResponse
+     */
+    public function show(int $id): JsonResponse
+    {
+        return $this->success(__('messages.success'), new KidResource($this->service->one($id)));
+    }
 
     /**
      * Display a listing of the resource.

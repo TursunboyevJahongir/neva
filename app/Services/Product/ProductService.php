@@ -73,70 +73,6 @@ class ProductService
 
         return $data;
     }
-
-    public function render(Category $category, $subcategory = 'all', $shop = 0, $sort = 'asc', $brand = 0, $minPrice = 0, $maxPrice = 0)
-    {
-        $data = [];
-        if ($shop) {
-            $query = $shop->products();
-            if ($subcategory != "all") {
-                $category = Category::find($subcategory);
-                $category_ids = $category->getDescendants($category);
-                $query->whereIn('category_id', $category_ids);
-            }
-            if ($brand != 0) {
-                $query->where('brand_id', $brand);
-            }
-            $minimal = $query->min('min_price');
-            $maximal = $query->max('max_price');
-
-            if ($minPrice && $maxPrice) {
-                $query->whereBetween('min_price', [$minPrice, $maxPrice]);
-            } else {
-                $minPrice = $minimal;
-                $maxPrice = $maximal;
-            }
-            $query->orderBy('min_price', $sort);
-
-            $categories = [];
-            /*$brands = Brand::join('products', 'brands.id', '=', 'products.brand_id')
-                ->where('products.shop_id', $shop->id)->distinct()->get('brands.*');*/
-        } else {
-
-            $category_ids = $category->getDescendants($category);
-            if ($subcategory != "all") {
-                $category = Category::find($subcategory);
-                $category_ids = $category->getDescendants($category);
-            }
-            $query = Product::whereIn('category_id', $category_ids);
-
-            if ($brand != 0) {
-                $query->where('brand_id', $brand);
-            }
-            $minimal = $query->min('min_price');
-            $maximal = $query->max('max_price');
-
-            if ($minPrice && $maxPrice) {
-                $query->whereBetween('min_price', [$minPrice, $maxPrice]);
-            } else {
-                $minPrice = $minimal;
-                $maxPrice = $maximal;
-            }
-            $query->orderBy('min_price', $sort);
-
-            /*$brands = Brand::join('products', 'brands.id', '=', 'products.brand_id')
-                ->whereIn('products.category_id', $category->getDescendants($category))
-                ->distinct()->get('brands.*');*/
-            $categories = $category->children;
-        }
-        $data['products'] = $query->paginate(10);
-        $data['appends']['categories'] = CategoryResource::collection($categories);
-        $data['appends']['minimal'] = $minimal;
-        $data['appends']['maximal'] = $maximal;
-
-        return $data;
-    }
-
     public function create(array $attributes)
     {
         $product = new Product([
@@ -266,40 +202,11 @@ class ProductService
         ]);
     }
 
-    public function getImages(Product $product)
-    {
-        $images = array();
-        foreach ($product->images as $image) {
-            array_push($images, array(
-                'file' => $image->url,
-                'size' => Storage::size($image->url)
-            ));
-        }
-        return $images;
-    }
-
     public function deleteImage(Product $product, string $fileUrl)
     {
         $image = $product->images()->where('url', $fileUrl)->firstOrFail();
         $image->removeFile();
         $image->delete();
-    }
-
-    public function calculateMinMaxPrice(Product $product)
-    {
-        $max = 0;
-        $min = 999999999;
-        foreach ($product->variations as $variation) {
-            if ($variation->price < $min) {
-                $min = $variation->price;
-            }
-            if ($variation->price > $max) {
-                $max = $variation->price;
-            }
-        }
-        $product->min_price = $min;
-        $product->max_price = $max;
-        return $product;
     }
 
     public function historyView($id)

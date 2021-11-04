@@ -26,7 +26,6 @@ class FavoriteService
     {
         $data['user_id'] = Auth::id();
         $model = Favorite::query()->where($data);
-//        dd($model->delete());
         $model->exists() ? $model->delete() : Favorite::create($data);
     }
 }

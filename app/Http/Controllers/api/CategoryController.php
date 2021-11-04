@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\api;
 
 use App\Http\Controllers\ApiController;
+use App\Http\Request;
 use App\Http\Resources\Api\PaginationResourceCollection;
 use App\Http\Resources\Api\v1\CategoryResource;
 use App\Http\Resources\Api\v1\ProductResource;
@@ -11,7 +12,6 @@ use App\Services\Category\CategoryService;
 use App\Services\Product\ProductService;
 use Exception;
 use Illuminate\Http\JsonResponse;
-use Illuminate\Http\Request;
 
 class CategoryController extends ApiController
 {
@@ -39,6 +39,10 @@ class CategoryController extends ApiController
     }
 
     /**
+     * @param Category $id
+     * @param ProductService $data
+     * @param Request $request
+     * @return JsonResponse
      * @throws Exception
      */
     public function show(Category $id, ProductService $data, Request $request): JsonResponse
