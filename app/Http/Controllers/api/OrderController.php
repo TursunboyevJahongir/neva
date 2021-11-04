@@ -40,21 +40,19 @@ class OrderController extends ApiController
         return [
             'name' => $request['name'] ?? Auth::user()->full_name,
             'phone' => $request['phone']?? Auth::user()->phone,
-            'location' => $request['location'],
-            'city' => $request['city']?? Auth::user()->full_name,
+            'location' => $request['location'] ?? Auth::user()->main_address->location,
+            'city' => $request['city'],
             'region' => $request['region'],
-            'address' => $request['street']?? Auth::user()->address,
+            'address' => $request['address']?? Auth::user()->main_address->address,
             'street' => $request['street']?? Auth::user()->full_name,
             'comment' => $request['comment'],
-            'delivery' => 'idcourier',
+            'delivery' => $request['delivery'],
         ];
     }
 
     /**
-     * Store a newly created resource in storage.
-     *
-     * @param \Illuminate\Http\Request $request
-     * @return \Illuminate\Http\Response
+     * @param OrderRequest $request
+     * @return \Illuminate\Http\JsonResponse
      */
     public function store(OrderRequest $request)
     {

@@ -3,8 +3,6 @@
 namespace App\Http\Resources\Api\v1;
 
 use App\Models\Product;
-use App\Models\ProductAttributeValue;
-use App\Models\VariationProperty;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
 

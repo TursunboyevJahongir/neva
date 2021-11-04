@@ -26,6 +26,7 @@ class CreateCouponsTable extends Migration
             $table->unsignedBigInteger('value');
             $table->unsignedBigInteger('count')->nullable()->comment('ishlash soni');
             $table->unsignedBigInteger('price')->nullable()->comment('minimum summa');
+            $table->unsignedBigInteger('limit_product')->nullable();
             $table->boolean('active')->default(true);
             $table->softDeletes();
             $table->timestamps();

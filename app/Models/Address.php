@@ -49,4 +49,8 @@ class Address extends Model
     {
         return $this->belongsTo(User::class, 'user_id');
     }
+    public function getLocationAttribute($value)
+    {
+        return $this->lat . ',' . $this->long;
+    }
 }

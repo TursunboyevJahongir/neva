@@ -23,6 +23,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
  * @property Carbon end_at
  * @property CouponTypeEnum coupon_type
  * @property SaleTypeEnum sale_type
+ * @property int limit_product
  * @property int value
  * @property int count
  * @property int $price to min price
@@ -47,6 +48,7 @@ class Coupon extends Model
         'start_at',
         'end_at',
         'sale_type',
+        'limit_product',
         'value',
         'count',
         'price',

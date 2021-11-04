@@ -3,31 +3,62 @@
 namespace App\Services\Basket;
 
 use App\Models\Basket;
-use Illuminate\Http\Request;
+use App\Models\Coupon;
+use App\Models\ProductVariation;
+use App\Models\UserCoupons;
+use App\Services\Coupon\CouponService;
+use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Support\Facades\Auth;
 
 class BasketService
 {
+    /**
+     * @param string $orderBy
+     * @param string $sort
+     * @param int $size
+     * @return array
+     */
     public function all($orderBy = 'created_at', $sort = 'DESC', $size = 10)
     {
-        $sum = 0;
+        $total = 0;
         $basket = Basket::query()
             ->where('user_id', Auth::id())
-//            ->when($search, function ($query, $search) {
-//                return $query->where('message', 'ilike', "%$search%");
-//            })
             ->orderBy($orderBy, $sort);
 
         foreach ($basket->get() as $item) {
-            $sum += $item->product->price * $item->quantity;
+            $total += $item->sum;
         }
 
         $basket = $basket->paginate($size);
+        return ['basket' => $basket, 'append' => ['total' => $total]];
+    }
 
-        return ['basket' => $basket, 'append' => ['sum' => $sum]];
+    /**
+     * @param $ids
+     * @return array
+     */
+    public function selected($ids): array
+    {
+        $total = 0;
+        $basket = Basket::query()
+            ->where('user_id', Auth::id())
+            ->whereIn('id', $ids);
+
+        (new CouponService())->logicCoupon($basket);
+
+        foreach ($basket as $item) {
+            $total += $item->sum;
+        }
+
+        return ['basket' => $basket, 'append' => ['total' => $total]];
     }
 
     //Cart
+
+    /**
+     * @param array $attributes
+     * @return int
+     */
     public function cart(array $attributes)
     {
         $product_id = $attributes['product_id'];
@@ -40,20 +71,6 @@ class BasketService
         return 1;
 
     }
-
-    public function reCalc($product)
-    {
-        $id = $product->id;
-        $cart = session()->get('cart');
-        if (!isset($cart['products'][$id])) return false;
-        $qtyMinus = $cart['products'][$id]['qty'];
-        $sumMinus = $cart['products'][$id]['qty'] * $cart['products'][$id]['price'];
-        $cart['qty'] -= $qtyMinus;
-        $cart['sum'] -= $sumMinus;
-        unset($cart['products'][$id]);
-        session()->put('cart', $cart);
-    }
-
 
 
 }

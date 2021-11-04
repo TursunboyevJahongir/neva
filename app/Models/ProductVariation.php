@@ -5,9 +5,20 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
-use Illuminate\Database\Eloquent\Relations\MorphOne;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
+/**
+ * Class ProductVariation
+ * @package App\Models
+ * @property int id
+ * @property int product_id
+ * @property int property_id
+ * @property array combs_attributes
+ * @property int quantity
+ * @property float old_price
+ * @property float price
+ * @property int percent
+ */
 class ProductVariation extends Model
 {
     use HasFactory,SoftDeletes;
@@ -30,8 +41,4 @@ class ProductVariation extends Model
         return $this->belongsTo(Product::class, 'product_id', 'id');
     }
 
-    public function variation(): BelongsTo
-    {
-        return $this->belongsTo(VariationProperty::class, 'product_id', 'id');
-    }
 }
