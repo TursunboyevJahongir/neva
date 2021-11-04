@@ -95,11 +95,6 @@ class OrderService
     public function save(array $attributes, $order_items)
     {
         $order = Order::create($attributes);
-        $order->address =
-            $attributes['city'] . ' ' .
-            $attributes['region'] . ' ' .
-            $attributes['street'];
-        $order->save();
         foreach ($order_items as $key => $value) {
             OrderItem::create([
                 'sku' => $value['sku'],
