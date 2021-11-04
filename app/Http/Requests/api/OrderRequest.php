@@ -2,8 +2,8 @@
 
 namespace App\Http\Requests\api;
 
+use App\Models\ProductProperty;
 use App\Rules\PhoneRule;
-use App\Rules\UzbekPhone;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Support\Facades\Auth;
 
@@ -22,6 +22,15 @@ class OrderRequest extends FormRequest
     public function rules()
     {
         return [
+            'product_id' => 'required,exists:variation_properties,id',
+            'quantity' => ['required', 'integer',
+                function ($attribute, $value, $fail) {
+                    $product = ProductProperty::query()->find($this->product_id);
+
+                    if ($product->quantity < $value) {
+                        $fail(__('messages.not_enough_product'));
+                    }
+                }],
             'phone' => ['nullable', new PhoneRule()],
             'name' => 'nullable|string',
 //            'city' => 'nullable|string',

@@ -4,22 +4,21 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class Order extends Model
 {
     use HasFactory;
-    const STATUS_NEW = 'new';
-    const STATUS_PENDING = 'pending';
-    const STATUS_SHIPPED = 'shipped';
-    const STATUS_CANCELLED = 'cancelled';
-    const STATUS_FINISHED = 'finished';
+
     protected $fillable = [
-        'shop_id',
         'user_id',
+        'user_coupon_id',
+        'address_id',
         'quantity',
         'sum',
         'status',
-        'name',
+        'full_name',
         'phone',
         'address',
         'comment',
@@ -29,27 +28,18 @@ class Order extends Model
 
     ];
 
-    public function shop()
-    {
-        return $this->belongsTo(Shop::class, 'shop_id', 'id');
-    }
-
-    public function user()
+    public function user(): BelongsTo
     {
         return $this->belongsTo(User::class, 'user_id', 'id');
     }
 
-    public function items()
+    public function items(): HasMany
     {
         return $this->hasMany(OrderItem::class, 'order_id', 'id');
     }
 
 
-    public function scopeShopOwner($query, $shop_id)
-    {
-        if ($shop_id)
-            return $query->where('shop_id', $shop_id);
-    }
+
 
     public function scopeFilterByDate($query, $date)
     {

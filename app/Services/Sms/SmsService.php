@@ -24,6 +24,7 @@ class SmsService
         if ($smsConfirm === null) {
             $smsConfirm = new SmsConfirm();
         }
+
         if ($smsConfirm->isBlockExpired()) {
             $smsConfirm->try_count = 0;
             $smsConfirm->resend_count = 0;
@@ -38,7 +39,11 @@ class SmsService
 
         if ($smsConfirm->isBlocked()) {
             $time = dataController::diffMinutesOnString($smsConfirm->unblocked_at, Carbon::now());
-            throw new PhoneBlockedException(__('sms.phone_blocked', ['time' => $time]));
+            throw new PhoneBlockedException(__('sms.phone_blocked', ['time' => $time]),401);
+        }
+
+        if ($smsConfirm->canNotResend()) {
+            throw new CodeNotExpired(__('sms.not_expired', ['phone' => $phone]),403);
         }
 
 //        $code = random_int(100000, 999999);
@@ -49,7 +54,6 @@ class SmsService
             'resend_count' => $smsConfirm->resend_count + 1,
             'phone' => $phone,
             'expired_at' => Carbon::now()->addSeconds(SmsConfirm::SMS_EXPIRY_SECONDS)
-
         ]);
         if (empty($smsConfirm->id)) {
             $smsConfirm->save();
@@ -81,11 +85,11 @@ class SmsService
         }
 
         if ($smsConfirm->isOutOfTries()) {
-            throw new TooManyAttemptsException(__('sms.too_many_attempts'));
+            throw new TooManyAttemptsException(__('sms.too_many_attempts'),401);
         }
 
         if ($smsConfirm->SmsExpirySeconds()) {
-            throw new CodeExpired(__('sms.сode_expired'));
+            throw new CodeExpired(__('sms.сode_expired'),401);
         }
 
         if ($smsConfirm->code === $code) {

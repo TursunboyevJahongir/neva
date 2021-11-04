@@ -9,8 +9,9 @@ use App\Models\Order;
 use App\Models\ProductVariation;
 use App\Services\Orders\OrderService;
 use App\Services\Page\PageService;
-use App\Services\Payments\InvoiceService;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
+use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Auth;
 
 class OrderController extends ApiController
@@ -51,10 +52,12 @@ class OrderController extends ApiController
     }
 
     /**
+     * Store a newly created resource in storage.
+     *
      * @param OrderRequest $request
-     * @return \Illuminate\Http\JsonResponse
+     * @return JsonResponse
      */
-    public function store(OrderRequest $request)
+    public function store(OrderRequest $request): JsonResponse
     {
         abort_if(!auth()->check(), 403);
         $orders = $this->orders->setOrderBasket();
@@ -73,7 +76,7 @@ class OrderController extends ApiController
      * Display the specified resource.
      *
      * @param \App\Models\Order $order
-     * @return \Illuminate\Http\Response
+     * @return Response
      */
     public function show(Order $order)
     {
@@ -85,7 +88,7 @@ class OrderController extends ApiController
      * Remove the specified resource from storage.
      *
      * @param \App\Models\Order $order
-     * @return \Illuminate\Http\Response
+     * @return Response
      */
     public function destroy(Order $order)
     {

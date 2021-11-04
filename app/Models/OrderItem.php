@@ -24,4 +24,8 @@ class OrderItem extends Model
     {
         return $this->belongsTo(ProductVariation::class, 'product_variation_id', 'id')->withTrashed();
     }
+    public function shop(): BelongsTo
+    {
+        return $this->belongsTo(Shop::class, 'shop_id', 'id');
+    }
 }

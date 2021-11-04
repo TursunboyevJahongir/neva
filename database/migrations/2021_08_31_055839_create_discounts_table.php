@@ -15,19 +15,20 @@ class CreateDiscountsTable extends Migration
     {
         Schema::create('discounts', function (Blueprint $table) {
             $table->id();
-            $table->unsignedBigInteger('creator_id');
+            $table->foreignId('user_id')
+                ->constrained()
+                ->cascadeOnDelete();
             $table->boolean('active')->default(true);
             $table->string('name', 100);
-            $table->jsonb('product_ids');
+            $table->string('coupon');
             $table->date('expire_date');
             $table->text('description')->nullable();
-            $table->enum('discount_type',\App\Enums\SaleTypeEnum::toArray())->nullable();
+            $table->json('discount_type')->nullable();
             $table->decimal('discount_amount', 22, 4)->default(0);
-            $table->unsignedDouble('value')->nullable();
+            $table->unsignedDouble('discount_price')->nullable();
+            $table->unsignedBigInteger('discount_percent')->nullable();
             $table->softDeletes();
             $table->timestamps();
-            $table->foreign('creator_id')->references('id')->on('users');
-
         });
     }
 

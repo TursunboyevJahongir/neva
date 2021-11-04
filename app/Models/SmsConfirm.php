@@ -2,7 +2,6 @@
 
 namespace App\Models;
 
-use App\Models\Traits\HasUuid4;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Carbon;
@@ -25,6 +24,7 @@ class SmsConfirm extends Model
     public const MAX_TRY_COUNT = 5;
     public const MAX_RESEND_COUNT = 3;
     public const SMS_EXPIRY_SECONDS = 120;
+    public const RESEND_AFTER_SECONDS = 60;
     public const BLOCKED_MINUTES = 15;
 
     protected $fillable = [
@@ -40,6 +40,11 @@ class SmsConfirm extends Model
         'expired_at' => 'datetime',
         'unblocked_at' => 'datetime',
     ];
+
+    public function canNotResend()
+    {
+        return $this->updated_at?->addSeconds(self::RESEND_AFTER_SECONDS)->greaterThan(Carbon::now());
+    }
 
 
     /**

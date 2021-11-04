@@ -25,5 +25,6 @@ class Discount extends Model
         'name' => TranslatableJson::class,
         'expire_date'=>'date'
     ];
+    protected $dates = ['starts_at', 'ends_at'];
 
 }

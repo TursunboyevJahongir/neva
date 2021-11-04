@@ -17,16 +17,12 @@ class CreateOrderItemsTable extends Migration
             $table->id();
 
             $table->foreignId('order_id')
-                ->constrained()
-                ->cascadeOnDelete();
+                ->constrained();
             $table->foreignId('shop_id')
-                ->constrained()
-                ->cascadeOnDelete();
+                ->constrained();
 
             $table->foreignId('product_variation_id')
-                ->nullable()
-                ->constrained()
-                ->nullOnDelete(); // order item
+                ->constrained(); // order item
 
             $table->string('sku');
             $table->unsignedInteger('quantity');
