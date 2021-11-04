@@ -2,13 +2,12 @@
 
 namespace App\Http\Resources\Api\v1;
 
-use App\Models\Basket;
-use App\Models\ProductAttributeValue;
-use App\Models\ProductVariation;
+
+use App\Models\ProductProperty;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
 
-class BasketResource extends JsonResource
+class ProductPropertyResource extends JsonResource
 {
     /**
      * Transform the resource into an array.
@@ -18,14 +17,15 @@ class BasketResource extends JsonResource
      */
     public function toArray($request)
     {
+
         /**
-         * @var Basket $this
+         * @var ProductProperty $this
          */
         return [
             "id" => $this->id,
-            'product' => new ProductVariationResource($this->product),
-            "quantity" => $this->quantity,
-            "sum" => $this->sum,
+            "name" => $this->name,
+            "image" => $this->image_url,
+            "variations" => ProductVariationResource::collection($this->variations) ?? null,
         ];
     }
 }

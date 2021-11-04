@@ -3,6 +3,7 @@
 namespace App\Services\Orders;
 
 use App\Models\Basket;
+use App\Models\Setting;
 use App\Models\Order;
 use App\Models\OrderItem;
 use App\Models\ProductVariation;
@@ -18,7 +19,7 @@ class OrderService
     {
         return Order::query()
             ->latest('id')
-            ->where('user_id',$user_id)
+            ->where('user_id', $user_id)
             ->paginate(config('app.per_page'));
     }
 
