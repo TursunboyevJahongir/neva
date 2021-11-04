@@ -58,8 +58,8 @@ class OrderService
         $basket->user_id = $order['user_id'];
         $basket->product_variation_id = $productVariation->id;
         $basket->quantity = $qty;
-$basket->save();
-        $this->calc(Basket::query()->where('id','=',$basket->id), $order);
+        $basket->save();
+        $this->calc(Basket::query()->where('id', '=', $basket->id), $order);
         $basket->delete();
         $order['price_delivery'] = $this->calcDelivery($order['items']);
         $order['total_price'] += $order['price_delivery'];

@@ -50,7 +50,6 @@ class OrderController extends ApiController
         ];
     }
 
-
     /**
      * @param OrderRequest $request
      * @return \Illuminate\Http\JsonResponse
