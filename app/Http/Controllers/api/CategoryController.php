@@ -39,6 +39,10 @@ class CategoryController extends ApiController
     }
 
     /**
+     * @param Category $id
+     * @param ProductService $data
+     * @param Request $request
+     * @return JsonResponse
      * @throws Exception
      */
     public function show(Category $id, ProductService $data, Request $request): JsonResponse

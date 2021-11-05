@@ -23,13 +23,8 @@ class OrderRequest extends FormRequest
     {
         return [
             'phone' => ['nullable', new PhoneRule()],
-            'name' => 'nullable|string',
-//            'city' => 'nullable|string',
-//            'region' => 'nullable|string',
-            'street' => 'nullable|string',
-//            'shop_id' => 'nullable|integer',
+            'full_name' => 'nullable|string',
             'quantity' => 'nullable|integer',
-//            'sum' => 'nullable|integer',
             'method' => 'nullable'
         ];
     }

@@ -150,6 +150,9 @@ class AuthController extends ApiController
      *     )
      *  )
      * )
+     * @param RegistrationRequest $request
+     * @param SmsService $smsService
+     * @return JsonResponse
      */
     public function Registration(RegistrationRequest $request, SmsService $smsService): JsonResponse
     {
@@ -184,7 +187,7 @@ class AuthController extends ApiController
             }
             return $this->error(__('sms.invalid_code'));
         } catch (\Throwable $e) {
-            return $this->error($e->getMessage());
+            return $this->error($e->getMessage(), null, $e->getCode());
         }
     }
 
@@ -200,7 +203,7 @@ class AuthController extends ApiController
             $smsService->sendConfirm($request->json('phone'));
             return $this->success(__('sms.confirmation_sent', ['attribute' => $request->json('phone')]));
         } catch (\Throwable $e) {
-            return $this->error($e->getMessage());
+            return $this->error($e->getMessage(), null, $e->getCode());
         }
     }
 

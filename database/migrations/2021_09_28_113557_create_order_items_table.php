@@ -17,11 +17,9 @@ class CreateOrderItemsTable extends Migration
             $table->id();
 
             $table->foreignId('order_id')
-                ->constrained()
-                ->cascadeOnDelete();
+                ->constrained();
             $table->foreignId('shop_id')
-                ->constrained()
-                ->cascadeOnDelete();
+                ->constrained();
 
             $table->foreignId('product_variation_id')
                 ->nullable()
@@ -32,7 +30,6 @@ class CreateOrderItemsTable extends Migration
             $table->unsignedInteger('quantity');
             $table->unsignedDouble('sum');
             $table->unsignedDouble('price');
-
             $table->timestamps();
         });
     }

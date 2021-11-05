@@ -17,24 +17,20 @@ class CreateOrdersTable extends Migration
         Schema::create('orders', function (Blueprint $table) {
             $table->id();
             $table->foreignId('user_id')
-                ->nullable()
-                ->constrained()
-                ->cascadeOndelete();
-
+                ->constrained();
+            $table->foreignId('address_id')
+                ->constrained();
+            $table->foreignId('user_coupon_id')
+                ->constrained();
             $table->unsignedInteger('quantity');
             $table->unsignedDouble('total_price');
             $table->unsignedDouble('price_delivery');
             $table->string('delivery');
-            $table->string('status')->default(Order::STATUS_NEW);
-            $table->string('name')->nullable();
+            $table->string('full_name')->nullable();
             $table->string('phone')->nullable();
-            $table->string('email')->nullable();
-            $table->string('location')->nullable();
-            $table->string('address')->nullable();
-            $table->string('city')->nullable();
-            $table->string('street')->nullable();
             $table->text('note')->nullable();
             $table->text('comment')->nullable();
+            $table->enum('status', \App\Enums\OrderStatusEnum::toArray())->default(\App\Enums\OrderStatusEnum::NEW);
             $table->timestamps();
         });
     }
