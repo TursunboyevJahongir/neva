@@ -9,7 +9,6 @@ use App\Models\Order;
 use App\Models\ProductVariation;
 use App\Services\Orders\OrderService;
 use App\Services\Page\PageService;
-use App\Services\Payments\InvoiceService;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
@@ -29,7 +28,7 @@ class OrderController extends ApiController
     /**
      * Display a listing of the resource.
      *
-     * @return Response
+     * @return \Illuminate\Http\Response
      */
     public function index()
     {
@@ -42,13 +41,13 @@ class OrderController extends ApiController
         return [
             'name' => $request['name'] ?? Auth::user()->full_name,
             'phone' => $request['phone']?? Auth::user()->phone,
-            'location' => $request['location'],
-            'city' => $request['city']?? Auth::user()->full_name,
+            'location' => $request['location'] ?? Auth::user()->main_address->location,
+            'city' => $request['city'],
             'region' => $request['region'],
-            'address' => $request['street']?? Auth::user()->address,
+            'address' => $request['address']?? Auth::user()->main_address->address,
             'street' => $request['street']?? Auth::user()->full_name,
             'comment' => $request['comment'],
-            'delivery' => 'idcourier',
+            'delivery' => $request['delivery'],
         ];
     }
 
@@ -60,6 +59,7 @@ class OrderController extends ApiController
      */
     public function store(OrderRequest $request): JsonResponse
     {
+        abort_if(!auth()->check(), 403);
         $orders = $this->orders->setOrderBasket();
         $this->orders->save($this->saveData($request)+$orders, $orders['items']);
         return $this->success(__('messages.success'));

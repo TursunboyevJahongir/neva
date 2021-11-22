@@ -41,4 +41,8 @@ class UserCoupons extends Model
     {
         return $this->belongsTo(User::class);
     }
+    public function scopeActive($q)
+    {
+        return $q->where('used', '=', false)->where('end_at', '>=', now());
+    }
 }

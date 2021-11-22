@@ -23,15 +23,9 @@ class BasketResource extends JsonResource
          */
         return [
             "id" => $this->id,
-//            "product" => [
-//                "id" => $this->product->product->id,
-//                'name' => $this->product->product->name,
-//                'price' => $this->product->price,
-//                'image' => $this->product->image->image_url,
-//                'attributes' => ProductAttributesResource::collection(ProductAttributeValue::whereIn('id', $this->product->product_attribute_value_ids)->get()),
-//            ],
             'product' => new ProductVariationResource($this->product),
             "quantity" => $this->quantity,
+            "sum" => $this->sum,
         ];
     }
 }

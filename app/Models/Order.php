@@ -15,13 +15,16 @@ class Order extends Model
         'user_id',
         'user_coupon_id',
         'address_id',
-        'sale_price',
-        'total_price',
+        'quantity',
+        'sum',
+        'status',
         'full_name',
         'phone',
-        'note',
+        'address',
         'comment',
-        'status',
+        'total_price',
+        'price_delivery',
+        'delivery',
 
     ];
 
@@ -33,5 +36,12 @@ class Order extends Model
     public function items(): HasMany
     {
         return $this->hasMany(OrderItem::class, 'order_id', 'id');
+    }
+
+
+
+
+    public function scopeFilterByDate($query, $date)
+    {
     }
 }

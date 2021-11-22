@@ -21,14 +21,13 @@ class CreateOrderItemsTable extends Migration
             $table->foreignId('shop_id')
                 ->constrained();
 
-            $table->foreignId('variation_property_id')
+            $table->foreignId('product_variation_id')
                 ->constrained(); // order item
 
             $table->string('sku');
             $table->unsignedInteger('quantity');
             $table->unsignedDouble('sum');
             $table->unsignedDouble('price');
-            $table->unsignedDouble('percent')->nullable();
 
             $table->timestamps();
         });

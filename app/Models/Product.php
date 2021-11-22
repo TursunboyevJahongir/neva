@@ -68,7 +68,7 @@ class Product extends Model
     ];
 
     protected $with = [
-        'variations'
+        'properties'
     ];
 
 //    public function productAttributes()
@@ -78,12 +78,12 @@ class Product extends Model
 
     public function single()
     {
-        return $this->hasOne(ProductVariation::class, 'product_id', 'id');
+        return $this->hasOne(ProductProperty::class, 'product_id', 'id');
     }
 
-    public function variations(): HasMany
+    public function properties(): HasMany
     {
-        return $this->hasMany(ProductVariation::class, 'product_id', 'id');
+        return $this->hasMany(ProductProperty::class, 'product_id', 'id');
     }
 
     public function comments(): HasMany

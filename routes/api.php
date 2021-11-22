@@ -60,6 +60,7 @@ Route::middleware('verify.device_headers')->prefix('v1')->group(static function 
 //        Route::delete('comment/{id}', [CommentController::class, 'destroy'])->where(['id' => '[0-9]+']);
 
         Route::get('/basket', [BasketController::class, 'index']);
+        Route::get('/checked-basket', [BasketController::class, 'checked']);
         Route::post('/basket', [BasketController::class, 'store']);
         Route::delete('/basket', [BasketController::class, 'delete']);
 

@@ -2,7 +2,7 @@
 
 namespace App\Http\Requests\api;
 
-use App\Models\VariationProperty;
+use App\Models\ProductProperty;
 use App\Rules\PhoneRule;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Support\Facades\Auth;
@@ -25,13 +25,21 @@ class OrderRequest extends FormRequest
             'product_id' => 'required,exists:variation_properties,id',
             'quantity' => ['required', 'integer',
                 function ($attribute, $value, $fail) {
-                    $product = VariationProperty::query()->find($this->product_id);
+                    $product = ProductProperty::query()->find($this->product_id);
 
                     if ($product->quantity < $value) {
                         $fail(__('messages.not_enough_product'));
                     }
                 }],
             'phone' => ['nullable', new PhoneRule()],
+            'name' => 'nullable|string',
+//            'city' => 'nullable|string',
+//            'region' => 'nullable|string',
+            'street' => 'nullable|string',
+//            'shop_id' => 'nullable|integer',
+            'quantity' => 'nullable|integer',
+//            'sum' => 'nullable|integer',
+            'method' => 'nullable'
         ];
     }
 }
