@@ -20,8 +20,8 @@ class CreateOrdersTable extends Migration
                 ->constrained();
             $table->foreignId('address_id')
                 ->constrained();
-            $table->foreignId('user_coupon_id')
-                ->constrained();
+//            $table->foreignId('user_coupon_id')
+//                ->constrained();
             $table->unsignedInteger('quantity');
             $table->unsignedDouble('total_price');
             $table->unsignedDouble('price_delivery');

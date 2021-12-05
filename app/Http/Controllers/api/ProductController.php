@@ -6,9 +6,15 @@ use App\Http\Controllers\ApiController;
 
 use App\Http\Request;
 use App\Http\Resources\Api\PaginationResourceCollection;
+use App\Http\Resources\Api\v1\ProductAttributesResource;
+use App\Http\Resources\Api\v1\ProductAttributeValueResource;
 use App\Http\Resources\Api\v1\ProductResource;
 use App\Http\Resources\Api\v1\ProductShowResource;
+use App\Http\Resources\Api\v1\ProductVariationResource;
 use App\Models\Product;
+use App\Models\ProductAttribute;
+use App\Models\ProductAttributeValue;
+use App\Models\ProductVariation;
 use App\Services\Product\ProductService;
 use Exception;
 use Illuminate\Http\JsonResponse;
@@ -30,6 +36,7 @@ class ProductController extends ApiController
     {
         $this->service->historyView($id->id);
         return $this->success(__('messages.success'), new ProductShowResource($id));
+//        return $this->success(__('messages.success'), ProductAttributesResource::collection(ProductAttribute::query()->get()));
     }
 
     /**

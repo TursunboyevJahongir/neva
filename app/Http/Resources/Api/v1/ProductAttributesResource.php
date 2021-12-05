@@ -2,6 +2,7 @@
 
 namespace App\Http\Resources\Api\v1;
 
+use App\Models\ProductAttribute;
 use App\Models\ProductAttributeValue;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
@@ -17,11 +18,11 @@ class ProductAttributesResource extends JsonResource
     public function toArray($request)
     {
         /**
-         * @var ProductAttributeValue $this
+         * @var ProductAttribute $this
          */
         return [
-            "name" => $this->attribute->name,
-            "value" => $this->name,
+            "name" => $this->name,
+            "value" => ProductAttributeValueResource::collection($this->values)
         ];
     }
 }
