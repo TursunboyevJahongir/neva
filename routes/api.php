@@ -55,9 +55,9 @@ Route::middleware('verify.device_headers')->prefix('v1')->group(static function 
         Route::put('/kids/{id}', [KidController::class, 'update']);
         Route::delete('/kids/{id}', [KidController::class, 'delete']);
 
-        Route::post('/comment', [CommentController::class, 'store']);
-        Route::put('comment/{id}', [CommentController::class, 'edit'])->where(['id' => '[0-9]+']);
-        Route::delete('comment/{id}', [CommentController::class, 'destroy'])->where(['id' => '[0-9]+']);
+//        Route::post('/comment', [CommentController::class, 'store']);
+//        Route::put('comment/{id}', [CommentController::class, 'edit'])->where(['id' => '[0-9]+']);
+//        Route::delete('comment/{id}', [CommentController::class, 'destroy'])->where(['id' => '[0-9]+']);
 
         Route::get('/basket', [BasketController::class, 'index']);
         Route::get('/checked-basket', [BasketController::class, 'checked']);

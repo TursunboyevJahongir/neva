@@ -74,12 +74,6 @@ class AuthController extends ApiController
     {
         try {
             $smsService->sendConfirm($request->validated()['phone']);
-//            Firebase::query()->firstOrCreate(
-//                [
-//                    'user_id' => $user->id,
-//                    'fcm_token' => $request->validated()['firebase']
-//                ],
-//            );
             return $this->success(__('sms.confirmation_sent', ['attribute' => $request->validated()['phone']]));
         } catch (\Throwable $e) {
             return $this->error($e->getMessage());
