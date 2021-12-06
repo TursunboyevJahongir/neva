@@ -28,7 +28,6 @@ class CreateOrderItemsTable extends Migration
             $table->unsignedInteger('quantity');
             $table->unsignedDouble('sum');
             $table->unsignedDouble('price');
-
             $table->timestamps();
         });
     }

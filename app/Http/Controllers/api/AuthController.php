@@ -203,7 +203,7 @@ class AuthController extends ApiController
             $smsService->sendConfirm($request->json('phone'));
             return $this->success(__('sms.confirmation_sent', ['attribute' => $request->json('phone')]));
         } catch (\Throwable $e) {
-            return $this->error($e->getMessage());
+            return $this->error($e->getMessage(), null, $e->getCode());
         }
     }
 
